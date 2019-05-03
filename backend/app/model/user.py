@@ -6,9 +6,9 @@ class User(UserMixin, db.Model):
     __tablename__ = 'User'
     
     uid = db.Column(db.Integer, primary_key = True, autoincrement = True)
-    name = db.Column(db.String(64), nullable = False, unique = True)
+    user_name = db.Column(db.String(64), nullable = False, unique = True)
     password_hash = db.Column(db.String(256), nullable = False)
-    isTeacher = db.Column(db.Boolean(), nullable = False, default = False)
+    is_teacher = db.Column(db.Boolean(), nullable = False, default = False)
 	
     def __repr__(self):
         return self.name
