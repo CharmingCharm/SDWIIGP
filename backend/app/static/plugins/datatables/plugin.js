@@ -3,6 +3,6 @@ require.config({
         'datatables': ['jquery','core'],
     },
     paths: {
-        'datatables': 'static/plugins/datatables/datatables.min',
+        'datatables': '/static/plugins/datatables/datatables.min',
     }
 });
