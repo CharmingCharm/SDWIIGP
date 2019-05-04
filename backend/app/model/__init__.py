@@ -1,4 +1,6 @@
 from .user import User
+from .problem import Problem
+from .submission import Submission
 from .usergroup import UserGroup
 from app.extension import db
 
