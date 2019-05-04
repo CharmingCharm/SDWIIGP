@@ -11,12 +11,12 @@ auth = Blueprint('auth', __name__)
 def login():
     form = FormLogin()
     if form.validate_on_submit():
-        name = form.name.data
+        name = form.userName.data
         user = User.query.filter(User.user_name == name).first()
         if not user:
-            flash('没有此用户')
+            flash('No such user')
         elif not user.verify_password(form.password.data):
-            flash('密码错误')
+            flash('Wrong password')
         else:
             login_user(user, remember = form.remember.data)
             # flash('登录成功')
