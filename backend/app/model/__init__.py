@@ -7,6 +7,7 @@ from .tag import Tag
 from .test import Test
 from .testset import TestSet
 from app.extension import db
+from sqlalchemy import DateTime, Numeric
 
 UserInGroup = db.Table(
     'user_in_group',
@@ -31,3 +32,21 @@ ProblemInTask = db.Table(
     db.Column('task_id', db.Integer, db.ForeignKey('task.task_id'), primary_key = True),
     db.Column('pid', db.Integer, db.ForeignKey('problem.pid'), primary_key = True)
 )
+
+def convert_datetime(value):
+    if value:
+        return value.strftime("%Y-%m-%d %H:%M:%S")
+    else:
+        return ""
+
+def serialize(model):
+    result = {}
+    for col in model.__table__.columns:
+        if isinstance(col.type, Numeric):
+            value = float(getattr(model, col.name))
+        elif isinstance(col.type, DateTime):
+            value = convert_datetime(getattr(model, col.name))
+        else:
+            value = getattr(model, col.name)
+        result[col.name] = value
+    return result
