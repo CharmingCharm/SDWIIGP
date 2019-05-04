@@ -13,3 +13,6 @@ class Tag(UserMixin, db.Model):
         backref = db.backref('tags', lazy = 'dynamic'),
         lazy = 'dynamic'
     )
+
+    def __repr__(self):
+        return self.tag_name
