@@ -1,0 +1,9 @@
+{% macro level_to_tag(level) -%}
+    {% if level == 1 %}
+    <span class="tag tag-green">1</span>
+    {% elif level == 2 %}
+    <span class="tag tag-orange">2</span>
+    {% else %}
+    <span class="tag tag-gray-dark">3</span>
+    {% endif %}
+{%- endmacro %}
