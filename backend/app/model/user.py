@@ -3,7 +3,7 @@ from app.extension import db, login_manager
 from flask_login import UserMixin
 
 class User(UserMixin, db.Model):
-    __tablename__ = 'User'
+    __tablename__ = 'user'
     
     uid = db.Column(db.Integer, primary_key = True, autoincrement = True)
     user_name = db.Column(db.String(64), nullable = False, unique = True)

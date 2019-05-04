@@ -5,7 +5,7 @@ from .usergroup import UserGroup
 from app.extension import db
 
 UserInGroup = db.Table(
-	'UserInGroup',
-	db.Column('uid', db.Integer, db.ForeignKey('User.uid'), primary_key = True),
-	db.Column('gid', db.Integer, db.ForeignKey('UserGroup.gid'), primary_key = True)
+	'user_in_group',
+	db.Column('uid', db.Integer, db.ForeignKey('user.uid'), primary_key = True),
+	db.Column('gid', db.Integer, db.ForeignKey('user_group.gid'), primary_key = True)
 )

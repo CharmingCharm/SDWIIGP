@@ -2,7 +2,7 @@ from app.extension import db
 from flask_login import UserMixin
 
 class UserGroup(UserMixin, db.Model):
-	__tablename__ = 'UserGroup'
+	__tablename__ = 'user_group'
 
 	gid = db.Column(db.Integer, primary_key = True, autoincrement = True)
 	group_name = db.Column(db.String(64), nullable = False)
@@ -10,7 +10,7 @@ class UserGroup(UserMixin, db.Model):
 
 	users = db.relationship(
 		'User',
-		secondary = 'UserInGroup',
+		secondary = 'user_in_group',
 		backref = db.backref('groups', lazy = 'dynamic'),
 		lazy = 'dynamic'
 	)
