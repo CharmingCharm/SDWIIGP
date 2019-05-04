@@ -1,9 +1,11 @@
 from .main import main
 from .auth import auth
+from .api import api
 
 BLUEPRINTS = (
     (main, ''),
-    (auth, '/auth')
+    (auth, '/auth'),
+    (api, '/api')
 )
 
 def config_blueprint(app):

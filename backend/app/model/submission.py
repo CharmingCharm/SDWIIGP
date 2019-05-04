@@ -8,8 +8,8 @@ class Submission(UserMixin, db.Model):
     sid = db.Column(db.Integer(), primary_key = True, autoincrement = True)
     pid = db.Column(db.Integer(), db.ForeignKey('problem.pid'))
     uid = db.Column(db.Integer(), db.ForeignKey('user.uid'))
-    score = db.Column(db.DECIMAL(6,2), nullable = True)
-    code = db.Column(db.Text(), nullable = False)
+    score = db.Column(db.Text, nullable = True)
+    code = db.Column(db.Text, nullable = False)
     is_solution = db.Column(db.Boolean(), default = False, nullable = False)
     date_time = db.Column(db.DateTime(), nullable = False, default = datetime.now)
 
