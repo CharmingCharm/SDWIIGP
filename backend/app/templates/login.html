@@ -1,73 +1,87 @@
-<!DOCTYPE html>
-
-<head>
-    <title>Login - UIC Calendar</title>
-    <link rel="stylesheet" href="/static/bootstrap.min.css">
-    <style>
-        .container {
-            margin-top: 30px;
-        }
-
-        .row {
-            margin-top: 10px;
-            margin-bottom: 10px;
-        }
-    </style>
-</head>
-
-<body>
-<div class="row justify-content-md-center">
-    {% for message in get_flashed_messages() %}
-        <div class="alert alert-success alert-dismissible" role="alert">
-            <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span
-                    aria-hidden="true">&times;</span></button>
-            <strong>{{ message }}</strong>
-        </div>
-    {% endfor %}
-    <div class="col-md-4">
-        <div class="card bg-primary text-white">
-            <div class="card-header">
-                <h5 class="card-title">Login - UIC Calendar</h5>
-            </div>
-            <div class="card-body">
-                <form accept-charset="UTF-8" role="form" action="{{ url_for('auth.login') }}" method="post">
-                    <fieldset>
-                        <div class="form-group">
-                            <div class="input-group">
-                                <span class="input-group-addon"></span>
-                                <input type="text" placeholder="Username" name="name" class="form-control">
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <div class="input-group">
-                                <span class="input-group-addon"></span>
-                                <input type="password" placeholder="Password" name="password" class="form-control"
-                                       value="">
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col">
-                                <!-- Message shows here -->
-                                <strong>{{ message }}</strong>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-lg-12">
-                                <input class="btn btn-lg btn-dark btn-block" type="submit" value="Login">
-                            </div>
-                        </div>
-                        {{ form.csrf_token }}
-                    </fieldset>
-                </form>
-                <div class="row">
-                    <div class="col-lg-12">
-                        <a href="{{ url_for('main.home') }}">
-                            <button class="btn btn-lg btn-light btn-block">Back</button>
-                        </a>
-                    </div>
+<!doctype html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <meta http-equiv="Content-Language" content="en" />
+    <meta name="msapplication-TileColor" content="#2d89ef">
+    <meta name="theme-color" content="#4188c9">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="MobileOptimized" content="320">
+    <link rel="icon" href="./favicon.ico" type="image/x-icon"/>
+    <link rel="shortcut icon" type="image/x-icon" href="./favicon.ico" />
+    <!-- Generated: 2019-04-04 16:55:45 +0200 -->
+    <title>Login - tabler.github.io - a responsive, flat and full featured admin template</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,300i,400,400i,500,500i,600,600i,700,700i&amp;subset=latin-ext">
+    <script src="/static/assets/js/require.min.js"></script>
+    <script>
+      requirejs.config({
+          baseUrl: '.'
+      });
+    </script>
+    <!-- Dashboard Core -->
+    <link href="/static/assets/css/dashboard.css" rel="stylesheet" />
+    <script src="/static/assets/js/dashboard.js"></script>
+    <!-- c3.js Charts Plugin -->
+    <link href="/static/assets/plugins/charts-c3/plugin.css" rel="stylesheet" />
+    <script src="/static/assets/plugins/charts-c3/plugin.js"></script>
+    <!-- Google Maps Plugin -->
+    <link href="/static/assets/plugins/maps-google/plugin.css" rel="stylesheet" />
+    <script src="/static/assets/plugins/maps-google/plugin.js"></script>
+    <!-- Input Mask Plugin -->
+    <script src="/static/assets/plugins/input-mask/plugin.js"></script>
+    <!-- Datatables Plugin -->
+    <script src="/static/assets/plugins/datatables/plugin.js"></script>
+  </head>
+  <body class="">
+    <div class="page">
+      <div class="page-single">
+        <div class="container">
+          <div>
+            <h1 align="center">Online Judge</h1>
+          </div>
+          <div class="row">
+            <div class="col col-login mx-auto">
+              <div class="text-center mb-6">
+                <img src="./demo/brand/tabler.svg" class="h-6" alt="">
+              </div>
+              <form class="card" action="{{ url_for('auth.login') }}" method="post">
+                <div class="card-body p-6">
+                  <div class="card-title">Login to your account</div>
+                  <div class="form-group">
+                    <label class="form-label">Username</label>
+                    <input class="form-control" name="userName" placeholder="Username">
+                  </div>
+                  <div class="form-group">
+                    <label class="form-label">Password</label>
+                    <input type="password" class="form-control" name="password" placeholder="Password" value="">
+                  </div>
+                  <div class="form-group">
+                    {% for message in get_flashed_messages() %}
+                      <strong style="color: red;">{{ message }}</strong>
+                    {% endfor %}
+                  </div>
+                  <div class="form-group">
+                    <label class="custom-control custom-checkbox">
+                      <input type="checkbox" name="remember" class="custom-control-input" />
+                      <span class="custom-control-label">Remember me</span>
+                    </label>
+                  </div>
+                  <div class="form-footer">
+                    <button type="submit" class="btn btn-primary btn-block">Sign in</button>
+                  </div>
                 </div>
+                {{ form.csrf_token }}
+              </form>
             </div>
+          </div>
         </div>
+      </div>
     </div>
-</div>
-</body>
+  </body>
+</html>
