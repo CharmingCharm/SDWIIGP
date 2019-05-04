@@ -12,7 +12,7 @@ def login():
     form = FormLogin()
     if form.validate_on_submit():
         name = form.name.data
-        user = User.query.filter(User.name == name).first()
+        user = User.query.filter(User.user_name == name).first()
         if not user:
             flash('没有此用户')
         elif not user.verify_password(form.password.data):
