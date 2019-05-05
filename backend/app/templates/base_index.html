@@ -21,11 +21,11 @@
 									</span>
 								</a>
 								<div class="dropdown-menu dropdown-menu-right dropdown-menu-arrow">
-									<a class="dropdown-item" href="#">
+									<a class="dropdown-item" href="{{ url_for('auth.profile') }}">
 										<i class="dropdown-icon fe fe-user"></i> Profile
 									</a>
 									<div class="dropdown-divider"></div>
-									<a class="dropdown-item" href="#">
+									<a class="dropdown-item" href="{{ url_for('auth.logout') }}">
 										<i class="dropdown-icon fe fe-log-out"></i> Sign out
 									</a>
 								</div>
@@ -52,7 +52,7 @@
 									<a href="javascript:void(0)" class="nav-link" data-toggle="dropdown"><i
 											class="fe fe-user"></i> Admin</a>
 									<div class="dropdown-menu dropdown-menu-arrow">
-										<a href="./profile.html" class="dropdown-item ">User</a>
+										<a href="{{ url_for('admin.user') }}" class="dropdown-item ">User</a>
 									</div>
 								</li>
 							</ul>
@@ -70,12 +70,12 @@
 									</a>
 								</li>
 								<li class="nav-item">
-									<a href="#" class="nav-link {% if navbar_active == 'task' %}active{% endif %}">
+									<a href="{{ url_for('task.task') }}" class="nav-link {% if navbar_active == 'task' %}active{% endif %}">
 										<i class="fa fa-tasks"></i> Task
 									</a>
 								</li>
 								<li class="nav-item">
-									<a href="#" class="nav-link {% if navbar_active == 'status' %}active{% endif %}">
+									<a href="{{ url_for('status.status') }}" class="nav-link {% if navbar_active == 'status' %}active{% endif %}">
 										<i class="fe fe-bar-chart"></i> Status
 									</a>
 								</li>

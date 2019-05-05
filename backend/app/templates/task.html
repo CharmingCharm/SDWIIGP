@@ -1,0 +1,48 @@
+{% extends 'base_index.html' %}
+{% set page_title = 'Task' %}
+{% set navbar_active = 'task' %}
+
+<style>
+  td{
+    height:60px; 
+    font-size: 20px;
+  }
+</style>
+
+{% block page_content %}
+  <div class="my-3 my-md-5">
+    <div class="container">
+      <div class="page-header">
+        <h1 class="page-title">
+          Task
+        </h1>
+      </div>
+      <div class="card">
+        <table class="table card-table">
+          <thead>
+            <tr>
+              <th>Task ID</th>
+              <th>Task name</th>
+              <th>Deadline</th>
+              <th>Status</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>1</td>
+              <td><a href="#">Workshop project V1</a></td>
+              <td>2019-5-5 23:55</td>
+              <td><span class="tag tag-green">Available</span></td>
+            </tr>
+            <tr>
+              <td>2</td>
+              <td><a href="#">Database Assignment 2</a></td>
+              <td>2018-12-1 23:55</td>
+              <td><span class="tag tag-red">End</span></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+{% endblock %}

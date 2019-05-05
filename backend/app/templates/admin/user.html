@@ -1,0 +1,57 @@
+{% extends 'base_index.html' %}
+{% set page_title = 'User' %}
+
+<style>
+  td>.form-control{
+    width: 200px;
+  }
+</style>
+
+{% block page_content %}
+  <div class="my-3 my-md-5">
+    <div class="container">
+      <div class="page-header">
+        <h1 class="page-title">
+          User admin
+        </h1>
+      </div>
+      <div class="card">
+        <table class="table card-table">
+          <thead>
+            <tr>
+              <th>User ID</th>
+              <th>User name</th>
+              <th>Position</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td style="font-size: 20px;">1</td>
+              <td><input class="form-control" value="root"></td>
+              <td>
+                <select role="button" class="btn btn-secondary">
+                  <option class="dropdown-item" selected>Teacher</option>
+                  <option class="dropdown-item">Student</option>
+                </select>
+              </td>
+              <td><a href="#" class="btn btn-pill btn-danger">delete</a></td>
+            </tr>
+            <tr>
+              <td style="font-size: 20px;">2</td>
+              <td><input class="form-control" value="lala"></td>
+              <td>
+                <select role="button" class="btn btn-secondary">
+                  <option class="dropdown-item">Teacher</option>
+                  <option class="dropdown-item" selected>Student</option>
+                </select>
+              </td>
+              <td><a href="#" class="btn btn-pill btn-danger">delete</a></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
