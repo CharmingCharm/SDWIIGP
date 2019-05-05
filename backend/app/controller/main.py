@@ -10,3 +10,8 @@ main = Blueprint('main', __name__)
 @login_required
 def home():
     return render_template('home.html')
+
+@main.route('/status', methods = ['GET', 'POST'])
+@login_required
+def status():
+    return render_template('status.html')

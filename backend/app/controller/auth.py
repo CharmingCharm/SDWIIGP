@@ -3,6 +3,7 @@ from flask import Blueprint, flash, render_template, redirect, url_for, current_
 from app.extension import db
 from app.model import User
 from app.form import FormLogin
+from app.form import FormProfile
 from flask_login import login_user, logout_user, current_user, login_required
 
 auth = Blueprint('auth', __name__)
@@ -31,4 +32,13 @@ def logout():
 @auth.route('/profile')
 @login_required
 def profile():
+    form = FormProfile()
+    if form:
+        if form.validate_on_submit():
+            uid = form.uid.data
+            userName = form.userName.data
+            user = User.query.filter(User.uid == uid).first()
+            user.user_name = userName
+            if form.password.data and user.verify_password(form.oldPassword.data) and form.password.data == form.checkPassword.data:
+                user.password = form.password.data
     return render_template('profile.html')
