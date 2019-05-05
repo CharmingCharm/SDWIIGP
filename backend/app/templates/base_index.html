@@ -17,7 +17,7 @@
 								<a href="#" class="nav-link pr-0 leading-none" data-toggle="dropdown">
 									<span class="avatar" id="base_username_short">UN</span>
 									<span class="ml-2 d-none d-lg-block">
-										<span class="text-default" id="base_username">User Name</span>
+										<span class="text-default" id="base_username"></span>
 									</span>
 								</a>
 								<div class="dropdown-menu dropdown-menu-right dropdown-menu-arrow">
@@ -32,6 +32,11 @@
 										<i class="dropdown-icon fe fe-log-out"></i> Sign out
 									</a>
 								</div>
+								<script>
+									require(['jquery'], function ($) {
+										$('#base_username').html(currentUser.user_name);
+									});
+								</script>
 							</div>
 						</div>
 						<a href="#" class="header-toggler d-lg-none ml-3 ml-lg-0" data-toggle="collapse"
@@ -135,17 +140,7 @@
 	</div>
 
 	<script type="text/javascript">
-
-		require(['jquery'], function ($) {
-			// 获取用户信息
-			$.get("{{ url_for('api.get_user') }}", function(data){
-				var currentUser = $.parseJSON(data);
-				$('#base_username').html(currentUser.user_name);
-			});
-		});
-
 		{% block page_script %}{% endblock %}
-	
 	</script>
 </body>
 

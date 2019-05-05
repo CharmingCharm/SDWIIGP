@@ -34,4 +34,20 @@
 	<script src="{{ url_for('static', filename='plugins/input-mask/plugin.js') }}"></script>
 	<!-- Datatables Plugin -->
 	<script src="{{ url_for('static', filename='plugins/datatables/plugin.js') }}"></script>
+
+	<script>
+		// Get currentUser
+		var currentUser;
+		require(['jquery'], function ($) {
+			$.ajax({
+				type: "GET",
+				async: false,
+				url: "{{ url_for('api.get_user') }}",
+				dataType: "json",
+				success: function (data) {
+					currentUser = data;
+				},
+			});
+		});
+	</script>
 </head>
