@@ -15,26 +15,26 @@
           <div class="card-body">
             <div class="card-body text-center">
               <img class="card-profile-img" src="#">
-              <h3 class="mb-3">Charm</h3>
+              <h3 class="mb-3" id="userName"></h3>
               <hr>
             </div>
             <div class="row">
               <div class="col-md-5">
                 <div class="form-group">
                   <label class="form-label">User ID</label>
-                  <input type="text" class="form-control" disabled="" value="1">
+                  <input type="text" class="form-control" disabled="" id="userID">
                 </div>
               </div>
               <div class="col-sm-6 col-md-3">
                 <div class="form-group">
                   <label class="form-label">Username</label>
-                  <input type="text" class="form-control" placeholder="Username" name="userName" value="Charm">
+                  <input type="text" class="form-control" placeholder="Username" id="changeUserName">
                 </div>
               </div>
               <div class="col-sm-6 col-md-4">
                 <div class="form-group">
                   <label class="form-label">Position</label>
-                  <input type="email" class="form-control" disabled="" value="Student">
+                  <input type="text" class="form-control" disabled="" id="position">
                 </div>
               </div>
               <div class="col-sm-6 col-md-6">
@@ -67,4 +67,16 @@
     </div>
   </div>
 </div>
+<script>
+  require(['jquery'], function ($) {
+    $('#userName').html(currentUser.user_name);
+    $('#changeUserName').val(currentUser.user_name);
+    $('#userID').val(currentUser.uid);
+    if(currentUser.is_teacher){
+      $('#position').val("Teacher");
+    } else {
+      $('#position').val("Student");
+    }
+  });
+</script>
  {% endblock %}
