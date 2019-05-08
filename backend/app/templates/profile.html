@@ -2,78 +2,81 @@
 {% set page_title = 'profile' %}
 
 {% block page_content %}
-  <div class="row" style="padding: 0px 200px;">
+<div class="row" style="padding: 0px 200px;">
     <div class="page-header">
-      <h1 class="page-title">
-        Edit Profile
-      </h1>
+        <h1 class="page-title">
+            Edit Profile
+        </h1>
     </div>
     <div class="col-lg-12">
-      <form class="card">
-        <div class="card-body">
-          <div class="card-body text-center">
-            <img class="card-profile-img" src="#">
-            <h3 class="mb-3" id="userName"></h3>
-            <hr>
-          </div>
-          <div class="row">
-            <div class="col-md-5">
-              <div class="form-group">
-                <label class="form-label">User ID</label>
-                <input type="text" class="form-control" disabled="" id="userID">
-              </div>
+        <form class="card">
+            <div class="card-body">
+                <div class="card-body text-center">
+                    <img class="card-profile-img" src="#">
+                    <h3 class="mb-3" id="userName"></h3>
+                    <hr>
+                </div>
+                <div class="row">
+                    <div class="col-md-5">
+                        <div class="form-group">
+                            <label class="form-label">User ID</label>
+                            <input type="text" class="form-control" disabled="" id="userID">
+                        </div>
+                    </div>
+                    <div class="col-sm-6 col-md-3">
+                        <div class="form-group">
+                            <label class="form-label">Username</label>
+                            <input type="text" class="form-control" placeholder="Username" name="userName"
+                                id="changeUserName">
+                        </div>
+                    </div>
+                    <div class="col-sm-6 col-md-4">
+                        <div class="form-group">
+                            <label class="form-label">Position</label>
+                            <input type="text" class="form-control" disabled="" id="position">
+                        </div>
+                    </div>
+                    <div class="col-sm-6 col-md-6">
+                        <div class="form-group">
+                            <label class="form-label">New Password</label>
+                            <input type="password" class="form-control" placeholder="new password" name="password">
+                            <label class="form-label text-green">(If you don't want to change, don't need to input
+                                here)</label>
+                        </div>
+                    </div>
+                    <div class="col-sm-6 col-md-6">
+                        <div class="form-group">
+                            <label class="form-label">Check password</label>
+                            <input type="password" class="form-control" placeholder="check password"
+                                name="checkPassword">
+                        </div>
+                    </div>
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label class="form-label">Old password</label>
+                            <input type="password" class="form-control" placeholder="old password">
+                            <label class="form-label text-green">(If you don't want to change your password, don't need
+                                to input here)</label>
+                        </div>
+                    </div>
+                </div>
             </div>
-            <div class="col-sm-6 col-md-3">
-              <div class="form-group">
-                <label class="form-label">Username</label>
-                <input type="text" class="form-control" placeholder="Username" name="userName" id="changeUserName">
-              </div>
+            <div class="card-footer text-right">
+                <button type="submit" class="btn btn-primary">Update Profile</button>
             </div>
-            <div class="col-sm-6 col-md-4">
-              <div class="form-group">
-                <label class="form-label">Position</label>
-                <input type="text" class="form-control" disabled="" id="position">
-              </div>
-            </div>
-            <div class="col-sm-6 col-md-6">
-              <div class="form-group">
-                <label class="form-label">New Password</label>
-                <input type="password" class="form-control" placeholder="new password" name="password">
-                <label class="form-label text-green">(If you don't want to change, don't need to input here)</label>
-              </div>
-            </div>
-            <div class="col-sm-6 col-md-6">
-              <div class="form-group">
-                <label class="form-label">Check password</label>
-                <input type="password" class="form-control" placeholder="check password" name="checkPassword">
-              </div>
-            </div>
-            <div class="col-md-12">
-              <div class="form-group">
-                <label class="form-label">Old password</label>
-                <input type="password" class="form-control" placeholder="old password">
-                <label class="form-label text-green">(If you don't want to change your password, don't need to input here)</label>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="card-footer text-right">
-          <button type="submit" class="btn btn-primary">Update Profile</button>
-        </div>
-      </form>
+        </form>
     </div>
-  </div>
+</div>
 <script>
-  require(['jquery'], function ($) {
-    $('#userName').html(currentUser.user_name);
-    $('#changeUserName').val(currentUser.user_name);
-    $('#userID').val(currentUser.uid);
-    if(currentUser.is_teacher){
-      $('#position').val("Teacher");
-    } else {
-      $('#position').val("Student");
-    }
-  });
+    require(['jquery'], function ($) {
+        $('#userName').html(currentUser.user_name);
+        $('#changeUserName').val(currentUser.user_name);
+        $('#userID').val(currentUser.uid);
+        if (currentUser.is_teacher) {
+            $('#position').val("Teacher");
+        } else {
+            $('#position').val("Student");
+        }
+    });
 </script>
- {% endblock %}
- 
+{% endblock %}
