@@ -23,14 +23,3 @@ def show(pid):
     problem_dict = serialize(problem)
     problem_dict['tags'] = [serialize(s) for s in problem.tags.all()]
     return render_template('problem/problem.html', problem = problem_dict)
-
-@problem.route('/edit/<pid>', methods = ['GET', 'POST'])
-@login_required
-def edit(pid):
-    if not current_user.is_teacher:
-        return 'You are not allowed to edit!'
-    form = FormProblem()
-    problem = Problem.query.filter_by(pid = pid).first()
-    problem_dict = serialize(problem)
-    problem_dict['tags'] = [serialize(s) for s in problem.tags.all()]
-    return render_template('problem/edit.html', form = form, problem = problem_dict, tags = [serialize(t) for t in Tag.query.all()])
