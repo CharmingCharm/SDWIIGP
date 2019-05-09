@@ -17,7 +17,7 @@
 								<a href="#" class="nav-link pr-0 leading-none" data-toggle="dropdown">
 									<span class="avatar" id="base_username_short">UN</span>
 									<span class="ml-2 d-none d-lg-block">
-										<span class="text-default" id="base_username"></span>
+										<span class="text-default" id="base_username">{{ current_user.user_name }}</span>
 									</span>
 								</a>
 								<div class="dropdown-menu dropdown-menu-right dropdown-menu-arrow">
@@ -30,9 +30,11 @@
 									</a>
 								</div>
 								<script>
+									/*
 									require(['jquery'], function ($) {
 										$('#base_username').html(currentUser.user_name);
 									});
+									*/
 								</script>
 							</div>
 						</div>

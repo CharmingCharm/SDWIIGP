@@ -1,3 +1,8 @@
+from flask import render_template as render
+from flask_login import current_user
+def render_template(template, **kwargs):
+    return render(template, current_user = current_user, **kwargs)
+
 from .main import main
 from .auth import auth
 from .api import api
