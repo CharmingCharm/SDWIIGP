@@ -1,9 +1,31 @@
 {% macro level_to_tag(level) -%}
-    {% if level == 1 %}
-    <span class="tag tag-green">1</span>
-    {% elif level == 2 %}
-    <span class="tag tag-orange">2</span>
-    {% else %}
-    <span class="tag tag-gray-dark">3</span>
-    {% endif %}
+	{% if level == 1 %}
+	<span class="tag tag-green">1</span>
+	{% elif level == 2 %}
+	<span class="tag tag-orange">2</span>
+	{% else %}
+	<span class="tag tag-gray-dark">3</span>
+	{% endif %}
+{%- endmacro %}
+
+{% macro render_field(field, div_class = '') -%}
+	<div class="form-group {{ div_class }}">
+		{% if field.type == 'BooleanField' %}
+
+		<label class="custom-control custom-checkbox">
+			{{ field(class = 'custom-control-input') }}
+			<span class="custom-control-label">{{ field.label.text }}</span>
+		</label>
+		
+		{% else %}
+
+			{{ field.label(class = 'form-label') }}
+			{{ field(class = 'form-control', placeholder = field.label.text) }}
+
+		{% endif %}
+
+		{% for error in field.errors %}
+		<span class="text-danger small" style="display:inline-block">{{ error }}</span>
+		{% endfor %}
+	</div>
 {%- endmacro %}

@@ -1,8 +1,64 @@
 <!doctype html>
 <html lang="en" dir="ltr">
-{% include 'base_head.html' %}
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport"
+		content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+	<meta http-equiv="X-UA-Compatible" content="ie=edge">
+	<meta http-equiv="Content-Language" content="en" />
+	<meta name="msapplication-TileColor" content="#2d89ef">
+	<meta name="theme-color" content="#4188c9">
+	<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+	<meta name="apple-mobile-web-app-capable" content="yes">
+	<meta name="mobile-web-app-capable" content="yes">
+	<meta name="HandheldFriendly" content="True">
+	<meta name="MobileOptimized" content="320">
+	<link rel="icon" href="/favicon.ico" type="image/x-icon" />
+	<link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
+	<!-- Generated: 2019-04-04 16:55:45 +0200 -->
+	<title>{{ page_title }} - Python Online Judge System</title>
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+	<link rel="stylesheet"
+		href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,300i,400,400i,500,500i,600,600i,700,700i&amp;subset=latin-ext">
+	<script src="{{ url_for('static', filename='js/require.min.js') }}"></script>
+	<script>
+		requirejs.config({
+			baseUrl: '.'
+		});
+	</script>
+	<!-- Dashboard Core -->
+	<link href="{{ url_for('static', filename='css/dashboard.css') }}" rel="stylesheet" />
+	<script src="{{ url_for('static', filename='js/dashboard.js') }}"></script>
+	<!-- c3.js Charts Plugin -->
+	<link href="{{ url_for('static', filename='plugins/charts-c3/plugin.css') }}" rel="stylesheet" />
+	<script src="{{ url_for('static', filename='plugins/charts-c3/plugin.js') }}"></script>
+	<!-- Input Mask Plugin -->
+	<script src="{{ url_for('static', filename='plugins/input-mask/plugin.js') }}"></script>
+	<!-- Datatables Plugin -->
+	<script src="{{ url_for('static', filename='plugins/datatables/plugin.js') }}"></script>
+
+	<script>
+		// Get currentUser
+		/*
+		var currentUser;
+		require(['jquery'], function ($) {
+			$.ajax({
+				type: "GET",
+				async: false,
+				url: "{{ url_for('api.get_user') }}",
+				dataType: "json",
+				success: function (data) {
+					currentUser = data;
+				},
+			});
+		});
+		*/
+	</script>
+</head>
 
 <body class="">
+	{% block body_content %}
 	<div class="page">
 		<div class="flex-fill">
 			<div class="header py-4">
@@ -17,7 +73,8 @@
 								<a href="#" class="nav-link pr-0 leading-none" data-toggle="dropdown">
 									<span class="avatar" id="base_username_short">UN</span>
 									<span class="ml-2 d-none d-lg-block">
-										<span class="text-default" id="base_username">{{ current_user.user_name }}</span>
+										<span class="text-default"
+											id="base_username">{{ current_user.user_name }}</span>
 									</span>
 								</a>
 								<div class="dropdown-menu dropdown-menu-right dropdown-menu-arrow">
@@ -62,22 +119,26 @@
 						<div class="col-lg order-lg-first">
 							<ul class="nav nav-tabs border-0 flex-column flex-lg-row">
 								<li class="nav-item">
-									<a href="{{ url_for('main.home') }}" class="nav-link {% if navbar_active == 'home' %}active{% endif %}">
+									<a href="{{ url_for('main.home') }}"
+										class="nav-link {% if navbar_active == 'home' %}active{% endif %}">
 										<i class="fe fe-home"></i> Home
 									</a>
 								</li>
 								<li class="nav-item">
-									<a href="{{ url_for('problem.problemset') }}" class="nav-link {% if navbar_active == 'problemset' %}active{% endif %}">
+									<a href="{{ url_for('problem.problemset') }}"
+										class="nav-link {% if navbar_active == 'problemset' %}active{% endif %}">
 										<i class="fa fa-files-o"></i> Problem Set
 									</a>
 								</li>
 								<li class="nav-item">
-									<a href="{{ url_for('task.task') }}" class="nav-link {% if navbar_active == 'task' %}active{% endif %}">
+									<a href="{{ url_for('task.task') }}"
+										class="nav-link {% if navbar_active == 'task' %}active{% endif %}">
 										<i class="fa fa-tasks"></i> Task
 									</a>
 								</li>
 								<li class="nav-item">
-									<a href="{{ url_for('main.status') }}" class="nav-link {% if navbar_active == 'status' %}active{% endif %}">
+									<a href="{{ url_for('main.status') }}"
+										class="nav-link {% if navbar_active == 'status' %}active{% endif %}">
 										<i class="fe fe-bar-chart"></i> Status
 									</a>
 								</li>
@@ -131,9 +192,12 @@
 			</div>
 		</footer>
 	</div>
+	{% endblock %}
 
-	<script type="text/javascript">
-		{% block page_script %}{% endblock %}
+	{% include 'base_flash_toast.html' %}
+
+	<script>
+		{% block page_script %} {% endblock %}
 	</script>
 </body>
 

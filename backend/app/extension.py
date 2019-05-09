@@ -27,5 +27,6 @@ def config_extension(app):
     login_manager.login_view = 'auth.login'
 
     # 需要登录时的提示信息
-    login_manager.login_message = '请先登录'
+    login_manager.login_message = 'Please login first'
+    login_manager.login_message_category = 'info'
     login_manager.session_protection = 'strong'

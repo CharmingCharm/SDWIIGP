@@ -1,0 +1,29 @@
+<div class="position-fixed d-flex w-100 p-4 align-items-center flex-column" style="top:0">
+	{% for (category, message) in get_flashed_messages(with_categories = True) if not category == 'form' %}
+	<div class="toast" role="alert" aria-live="assertive" aria-atomic="true" data-delay="3000">
+		<div class="toast-header">
+			{% if category == 'info' %}
+			<div class="w-4 h-4 bg-info rounded mr-2"></div>
+			<strong class="mr-auto">Nofitication</strong>
+			{% elif category == 'warning' %}
+			<div class="w-4 h-4 bg-warning rounded mr-2"></div>
+			<strong class="mr-auto">Warning</strong>
+			{% elif category == 'error' %}
+			<div class="w-4 h-4 bg-danger rounded mr-2"></div>
+			<strong class="mr-auto">Error</strong>
+			{% endif %}
+			<button type="button" class="ml-2 mb-1 close" data-dismiss="toast" aria-label="Close">
+			</button>
+		</div>
+		<div class="toast-body">
+			{{ message }}
+		</div>
+	</div>
+	{% endfor %}
+</div>
+
+<script>
+	require(['jquery', 'bootstrap'], function ($) {
+		$('.toast').toast('show');
+	});
+</script>

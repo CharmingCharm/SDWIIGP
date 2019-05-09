@@ -13,7 +13,7 @@
             <div class="card-body">
                 <div class="card-body text-center">
                     <img class="card-profile-img" src="#">
-                    <h3 class="mb-3" id="userName"></h3>
+                    <h3 class="mb-3" id="user_name"></h3>
                     <hr>
                 </div>
                 <div class="row">
@@ -26,7 +26,7 @@
                     <div class="col-sm-6 col-md-3">
                         <div class="form-group">
                             <label class="form-label">Username</label>
-                            <input type="text" class="form-control" placeholder="Username" name="userName"
+                            <input type="text" class="form-control" placeholder="Username" name="user_name"
                                 id="changeUserName">
                         </div>
                     </div>
@@ -69,7 +69,7 @@
 </div>
 <script>
     require(['jquery'], function ($) {
-        $('#userName').html(currentUser.user_name);
+        $('#user_name').html(currentUser.user_name);
         $('#changeUserName').val(currentUser.user_name);
         $('#userID').val(currentUser.uid);
         if (currentUser.is_teacher) {
