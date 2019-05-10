@@ -24,7 +24,7 @@ def config_extension(app):
     # patch_request_class(app,size=None)
 
     # 指定登录的端点
-    login_manager.login_view = 'auth.login'
+    login_manager.login_view = 'user.login'
 
     # 需要登录时的提示信息
     login_manager.login_message = 'Please login first'

@@ -24,6 +24,10 @@ class User(UserMixin, db.Model):
     @password.setter
     def password(self, password):
         self.password_hash = generate_password_hash(password, method='pbkdf2:sha256')
+
+    @property
+    def position(self):
+        return 'Teacher' if self.is_teacher else 'Student'
     
     def verify_password(self, password):
         return check_password_hash(self.password_hash, password)
