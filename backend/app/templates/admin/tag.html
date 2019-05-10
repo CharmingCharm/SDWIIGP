@@ -1,0 +1,46 @@
+{% extends 'base_index.html' %}
+{% set page_title = 'Admin_tag' %}
+{% set navbar_active = 'admin_tag' %}
+
+{% block page_content %}
+<div class="page-header">
+    <h1 class="page-title">
+        Admin Tags
+    </h1>
+</div>
+<div class="row row-cards">
+    <div class="col-lg-12">
+        <div class="card">
+            <div class="card-body">
+                <div id="tags" class="tags">
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    require(['jquery'], function ($) {
+        function removeTag(id) {
+            $("#" + id + ">a").click(function () {
+                $("#" + id).remove();
+            });
+        }
+
+        $(document).ready(function () {
+            var tags = ["Very Basic", "Stupid", "ooo"];
+            var text = "";
+            for (var num = 0; num < tags.length; num++) {
+                text += "<span class=\"tag\" id=\"" +
+                    (num + 1) + "\">" +
+                    tags[num] +
+                    "<a href=\"#\" class=\"tag-addon\"><i class=\"fe fe-x\"></i></a></span>";
+            }
+            document.getElementById("tags").innerHTML = text;
+            for (var num = 1; num <= tags.length; num++) {
+                removeTag(String(num));
+            }
+        });
+    });
+</script>
+{% endblock %}

@@ -23,3 +23,8 @@ def problem(pid):
     problem_dict = serialize(problem)
     problem_dict['tags'] = [serialize(s) for s in problem.tags.all()]
     return render_template('problem/edit.html', form = form, problem = problem_dict, tags = [serialize(t) for t in Tag.query.all()])
+
+@admin.route('/tag', methods = ['GET', 'POST'])
+@login_required
+def tag():
+    return render_template('admin/tag.html')
