@@ -5,68 +5,72 @@
 {% import 'base_macros.html' as macros %}
 
 {% block page_content %}
-<form role="form" method="post" action=".">
-    <div class="row">
-        <div class="col-lg-9">
-            <div class="card">
-                <div class="card-body">
-                    <div class="form-group">
-                        <label class="form-label">Title</label>
-                        <input type="text" class="form-control" name="title" placeholder="Input the title" value="{{ form.title.data or problem.title }}">
-                    </div>
-                    <div class="form-group">
-                        <label class="form-label">Description</label>
-                        <textarea class="form-control" name="description" rows="10"
-                            placeholder="Input the description..">{{ form.description.data or problem.description }}</textarea>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="col-lg-3">
-            <div class="card">
-                <div class="card-header">
-                    <h3 class="card-title">Information</h3>
-                    <div class="card-options">
-                        <a href="#" class="card-options-collapse" data-toggle="card-collapse"><i
-                                class="fe fe-chevron-up"></i></a>
-                    </div>
-                </div>
-                <table class="table card-table">
-                    <tr>
-                        <td>Problem ID</td>
-                        <td class="text-right">{{ problem.pid }}</td>
-                    </tr>
-                    <tr>
-                        <td>Level</td>
-                        <td class="text-right">
-                            <select class="custom-select" name="level">
-                                <option value="1" {% if (form.level.data or problem.level) == 1 %}selected{% endif %}>1</option>
-                                <option value="2" {% if (form.level.data or problem.level) == 2 %}selected{% endif %}>2</option>
-                                <option value="3" {% if (form.level.data or problem.level) == 3 %}selected{% endif %}>3</option>
-                            </select>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td colspan="2">
-                            <p>Tags</p>
-                            <div class="selectgroup selectgroup-pills">
-                                {% for tag in tags %}
-                                <label class="selectgroup-item">
-                                    <input type="checkbox" name="tags" value="{{ tag.tag_id }}"
-                                        class="selectgroup-input" {% if tag in problem.tags %}checked{% endif %}>
-                                    <span class="selectgroup-button">{{ tag.tag_name }}</span>
-                                </label>
-                                {% endfor %}
-                            </div>
-                        </td>
-                    </tr>
-                </table>
-            </div>
-        </div>
-        <div class="col-12" align="center">
-            <input type="submit" value="Save" class="btn btn-pill btn-azure btn-lg" >
-        </div>
-    </div>
+<form role="form" method="post">
+	{{ form.csrf_token }}
+	<div class="row">
+		<div class="col-lg-9">
+			<div class="card">
+				<div class="card-body">
+					{{ macros.render_field(form.title) }}
+					{{ macros.render_field(form.description, rows = "15") }}
+				</div>
+			</div>
+		</div>
+		<div class="col-lg-3">
+			<div class="card">
+				<div class="card-header">
+					<h3 class="card-title">Information</h3>
+					<div class="card-options">
+						<a href="#" class="card-options-collapse" data-toggle="card-collapse"><i
+								class="fe fe-chevron-up"></i></a>
+					</div>
+				</div>
+				<table class="table card-table">
+					<tr>
+						<td>Problem ID</td>
+						<td class="text-right">{{ problem.pid }}</td>
+					</tr>
+					<tr>
+						<td>Level</td>
+						<td class="text-right">
+							{{ form.level(class = 'custom-select') }}
+						</td>
+					</tr>
+					<tr>
+						<td colspan="2">
+							<p>Tags</p>
+							<div class="tags">
+								{% for tag in form.tags %}
+								<a href="javascript:void(0)" value="{{ tag.data }}"
+									class="tag problem_tag{% if tag.checked %} tag-azure{% endif %}">{{ tag.label.text }}</a>
+								{% endfor %}
+							</div>
+							{{ form.tags(class = 'd-none') }}
+							<script>
+								require(['jquery'], function ($) {
+									$('.problem_tag').click(function () {
+										if ($(this).hasClass('tag-azure')) {
+											$(this).removeClass('tag-azure');
+											$("#tags > [value='" + $(this).attr('value') + "']").each(function () {
+												$(this).remove();
+											});
+										}
+										else {
+											$(this).addClass('tag-azure');
+											$("#tags").append('<option value="' + $(this).attr('value') + '" selected></option>');
+										}
+									});
+								});
+							</script>
+						</td>
+					</tr>
+				</table>
+			</div>
+		</div>
+		<div class="col-12" align="center">
+			<button type="submit" class="btn btn-pill btn-azure btn-lg">{{ form.submit.label.text }}</button>
+		</div>
+	</div>
 </form>
 
 {% endblock %}

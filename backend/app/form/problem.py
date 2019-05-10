@@ -1,11 +1,27 @@
 from flask_login import current_user
 from flask_wtf import FlaskForm
-from wtforms import StringField, PasswordField, SubmitField, BooleanField, SelectField
+from wtforms import StringField, SubmitField, SelectField, TextAreaField, SelectMultipleField
+from wtforms.ext.sqlalchemy.fields import QuerySelectMultipleField
 from wtforms.validators import DataRequired, EqualTo, ValidationError
+from flask import request
+from app.model import Problem, Tag
+
 
 class FormProblem(FlaskForm):
-    title = StringField('Title', validators = [DataRequired(message = '标题不能为空')])
-    description = StringField('Description', validators = [DataRequired(message = '题目描述不能为空')])
-    level = SelectField('Level', coerce = int, choices = [(k, k) for k in range(1, 4)])
-    remember = BooleanField('记住我', default = False)
-    submit = SubmitField('登录')
+	def query_factory():
+		return Tag.query.all()
+
+	title = StringField('Title', validators=[DataRequired(message='Title is required')])
+	description = TextAreaField('Description', validators=[DataRequired(message='Description is required')])
+	level = SelectField('Level', coerce=int, choices=[(k, k) for k in range(1, 4)])
+	tags = QuerySelectMultipleField('Tags', query_factory=query_factory)
+	# tags = SelectMultipleField('Tags', coerce=int, choices=[(k, k) for k in range(1, 4)])
+	submit = SubmitField('Save')
+
+	def __init__(self, problem, *args, **kwargs):
+		super().__init__(*args, **kwargs)
+		if request.method == 'GET':
+			self.title.data = problem.title
+			self.description.data = problem.description
+			self.level.data = problem.level
+			self.tags.data = problem.tags.all()

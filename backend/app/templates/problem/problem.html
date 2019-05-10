@@ -11,7 +11,7 @@
 			<div class="card-body">
 				<div class="text-wrap p-lg-4">
 					<h2 class="mt-0 mb-4">{{ problem.title }}</h2>
-					<p>{{ problem.description }}</p>
+					<p>{{ problem.description|replace('\r','')|replace('\n','<br>')|safe }}</p>
 				</div>
 				<form method="post" action="{{ url_for('problem.show', pid = problem.pid) }}">
 					<div class="col-12" align="center">

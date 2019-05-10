@@ -6,7 +6,7 @@
 
 {% block page_content %}
 <div class="row row-cards row-deck">
-	<div class="col-md-9">
+	<div class="col-lg-9">
 		<div class="card">
 			<div class="card-header">
 				<h3 class="card-title">Problem Set</h3>
@@ -48,14 +48,14 @@
 			</div>
 		</div>
 	</div>
-	<div class="col-md-3">
+	<div class="col-lg-3">
 		<div class="card">
 			<div class="card-header">
 				<h3 class="card-title">Tags</h3>
 			</div>
 			<div class="card-body tags">
 				{% for tag in tags %}
-				<a href="#" class="tag tag-rounded tag-azure">{{ tag.tag_name }}</a>
+				<a href="#" class="tag tag-rounded">{{ tag.tag_name }}</a>
 				{% endfor %}
 			</div>
 		</div>

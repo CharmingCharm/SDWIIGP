@@ -16,3 +16,7 @@ class Tag(UserMixin, db.Model):
 
     def __repr__(self):
         return self.tag_name
+
+    @property
+    def id(self):
+        return self.tag_id
