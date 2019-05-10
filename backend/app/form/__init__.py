@@ -1,3 +1,2 @@
-from .user import FormLogin
+from .user import FormLogin, FormProfile
 from .problem import FormProblem
-from .profile import FormProfile
