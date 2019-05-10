@@ -14,7 +14,8 @@ class User(UserMixin, db.Model):
         return self.name
 	
     # Flask-Login需要
-    def get_id(self):
+    @property
+    def id(self):
         return self.uid
     
     @property
