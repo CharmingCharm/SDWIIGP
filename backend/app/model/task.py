@@ -13,3 +13,10 @@ class Task(db.Model):
         backref = db.backref('tasks', lazy = 'dynamic'),
         lazy = 'dynamic'
     )
+
+    groups = db.relationship(
+        'UserGroup',
+        secondary = 'task_for_user_group',
+        backref = db.backref('tasks', lazy = 'dynamic'),
+        lazy = 'dynamic'
+    )

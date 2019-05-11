@@ -33,6 +33,12 @@ ProblemInTask = db.Table(
 	db.Column('pid', db.Integer, db.ForeignKey('problem.pid'), primary_key = True)
 )
 
+TaskForUserGroup = db.Table(
+	'task_for_user_group',
+	db.Column('gid', db.Integer, db.ForeignKey('user_group.gid'), primary_key = True),
+	db.Column('task_id', db.Integer, db.ForeignKey('task.task_id'), primary_key = True)
+)
+
 def convert_datetime(value):
 	if value:
 		return value.strftime("%Y-%m-%d %H:%M:%S")

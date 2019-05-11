@@ -22,6 +22,16 @@
 	{{ field.label(class = 'form-label') }}
 	{{ field(class = 'form-control custom-select') }}
 
+	{% elif field.type == "TextAreaField" %}
+
+	{{ field.label(class = 'form-label') }}
+
+	{% if field.data %}
+	{{ field(class = 'form-control', value = field.data, **kwargs) }}
+	{% else %}
+	{{ field(class = 'form-control', placeholder = field.label.text, **kwargs) }}
+	{% endif %}
+
 	{% else %}
 
 	{{ field.label(class = 'form-label') }}

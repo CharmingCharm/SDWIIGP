@@ -1,0 +1,68 @@
+{% extends 'base_index.html' %}
+{% set page_title = user_group.gid|string ~ '. ' ~ user_group.group_name %}
+{% set navbar_active = '' %}
+
+{% import 'base_macros.html' as macros %}   
+
+{% block page_content %}
+<form role="form" method="post">
+    {{ form.csrf_token }}
+    <div class="row">
+        <div class="col-lg-7">
+            <div class="card">
+                <div class="card-body">
+                    <table class="table card-table">
+                        <thead>
+                            <tr>
+                                <th>User ID</th>
+                                <th>User name</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for user in user_group.users %}
+                            <tr>
+                                <td>{{ user.uid }}</td>
+                                <td>{{ user.user_name }}</td>
+                                <td><button class="btn btn-pill btn-danger">Delete</button></td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-5">
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">Information</h3>
+                    <div class="card-options">
+                        <a href="#" class="card-options-collapse" data-toggle="card-collapse"><i
+                                class="fe fe-chevron-up"></i></a>
+                    </div>
+                </div>
+                <table class="table card-table">
+                    <tr>
+                        <td>Group ID</td>
+                        <td class="text-right">{{ user_group.gid }}</td>
+                    </tr>
+                    <tr>
+                        <td>Group name</td>
+                        <td class="text-right">
+                            {{ form.group_name(class = 'form-control', value = form.group_name.data) }}</td>
+                    </tr>
+                    <tr>
+                        <td colspan="2">
+                            {{ macros.render_field(form.description) }}
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+        <div class="col-12" align="center">
+            <button type="submit" class="btn btn-pill btn-azure btn-lg">submit</button>
+        </div>
+    </div>
+</form>
+
+{% endblock %}

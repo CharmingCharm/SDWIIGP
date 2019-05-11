@@ -1,0 +1,40 @@
+{% extends 'base_index.html' %}
+{% set page_title = 'User group list' %}
+
+{% block page_content %}
+<div class="page-header">
+    <h1 class="page-title">
+        User group admin
+    </h1>
+</div>
+<div class="card">
+    <table class="table card-table">
+        <thead>
+            <tr>
+                <th>User Group ID</th>
+                <th>Group name</th>
+                <th>Number of members</th>
+                <th></th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for group in user_groups %}
+            <form role="form" method="post">
+                <tr>
+                    <td style="font-size: 20px;">{{ group.gid }}</td>
+                    <td>{{ group.group_name }}</td>
+                    {% for user in group.users %}
+                        {% if loop.first %}
+                        <td>{{ loop.length }}</td>
+                        {% endif %}
+                    {% endfor %}
+                    <td><a href="{{ url_for('admin.userGroupDetail', gid = group.gid) }}" class="btn btn-pill btn-primary">Modify</a></td>
+                    <td><input type="button" class="btn btn-pill btn-danger" value="Delete"/></td>
+                </tr>
+            </form>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

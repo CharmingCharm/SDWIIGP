@@ -1,7 +1,7 @@
 from flask import Blueprint, current_app, redirect, url_for, flash, request, render_template_string
 from flask_login import current_user, login_required
-from app.form import FormProblem
-from app.model import serialize, Problem, Tag
+from app.form import FormProblem, FormUserGroup
+from app.model import serialize, Problem, Tag, UserGroup
 from . import render_template
 from app.extension import db
 
@@ -34,8 +34,26 @@ def problem(pid):
 		problem = serialize(problem, 'pid', 'title')
 	)
 
-
 @admin.route('/tag', methods = ['GET', 'POST'])
 @login_required
 def tag():
 	return render_template('admin/tag.html')
+
+@admin.route('/userGroup', methods = ['GET', 'POST'])
+@login_required
+def userGroup():
+	user_groups = UserGroup.query.all()
+	group_array = []
+	for group in user_groups:
+		group_array.append(UserGroup.query.filter_by(gid = group.gid).first())
+	print(group_array[0].users)
+	return render_template('admin/user_group_list.html', user_groups = group_array)
+
+@admin.route('/userGroup/<gid>', methods = ['GET', 'POST'])
+@login_required
+def userGroupDetail(gid):
+	form = FormUserGroup()
+	user_group = UserGroup.query.filter_by(gid = gid).first()
+	form.group_name.data = user_group.group_name
+	form.description.data = user_group.description
+	return render_template('admin/group_detail.html', user_group = user_group, form = form)
