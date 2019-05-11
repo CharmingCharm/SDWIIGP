@@ -27,7 +27,7 @@ def user():
 			form.users.append_entry(data=userForm)
 	return render_template('admin/user.html', form = form)
 
-@admin.route('/problem/<pid>', methods = ['GET', 'POST'])
+@admin.route('/problem/<int:pid>', methods = ['GET', 'POST'])
 @login_required
 def problem(pid):
 	if not current_user.is_teacher:
@@ -64,7 +64,7 @@ def userGroup():
 	print(group_array[0].users)
 	return render_template('admin/user_group_list.html', user_groups = group_array)
 
-@admin.route('/userGroup/<gid>', methods = ['GET', 'POST'])
+@admin.route('/userGroup/<int:gid>', methods = ['GET', 'POST'])
 @login_required
 def userGroupDetail(gid):
 	form = FormUserGroup()

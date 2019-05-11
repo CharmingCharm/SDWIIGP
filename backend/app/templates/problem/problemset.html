@@ -10,6 +10,25 @@
 		<div class="card">
 			<div class="card-header">
 				<h3 class="card-title">Problem Set</h3>
+				<div class="card-options">
+					<form id="filter_form" method="post">
+						<div class="input-group">
+							<input type="text" class="form-control form-control-sm" placeholder="Search title"
+								id="title" name="title" value="{{ filter_title }}">
+							<span class="input-group-btn ml-2">
+								<button class="btn btn-sm btn-default" type="submit">
+									<span class="fe fe-search"></span>
+								</button>
+								{% if filter_title %}
+								<a href="javascript:void(0)" id="clear_filter_title" class="btn btn-sm btn-default">
+									<span class="fe fe-x"></span>
+								</a>
+								{% endif %}
+							</span>
+						</div>
+						<input type="hidden" id="tag_id" name="tag_id" value="{{ filter_tag_id }}">
+					</form>
+				</div>
 			</div>
 			<div class="table-responsive">
 				<table class="table card-table table-vcenter text-nowrap datatable">
@@ -27,11 +46,14 @@
 						{% for problem in problems %}
 						<tr>
 							<td><span class="tag tag-green">AC</span></td>
-							<td><a href="{{ url_for('problem.show', pid = problem.pid) }}" class="text-inherit">{{ problem.pid }}</a></td>
-							<td><a href="{{ url_for('problem.show', pid = problem.pid) }}" class="text-inherit">{{ problem.title }}</a></td>
+							<td><a href="{{ url_for('problem.show', pid = problem.pid) }}"
+									class="text-inherit">{{ problem.pid }}</a></td>
+							<td><a href="{{ url_for('problem.show', pid = problem.pid) }}"
+									class="text-inherit">{{ problem.title }}</a></td>
 							<td>{{ macros.level_to_tag(problem.level) }}</td>
 							<td>50%</td>
-							<td class="text-right"><a href="{{ url_for('admin.problem', pid = problem.pid) }}" class="btn btn-sm text-inherit"><i class="fe fe-edit"></i></a></td>
+							<td class="text-right"><a href="{{ url_for('admin.problem', pid = problem.pid) }}"
+									class="btn btn-sm text-inherit"><i class="fe fe-edit"></i></a></td>
 						</tr>
 						{% endfor %}
 					</tbody>
@@ -52,13 +74,40 @@
 		<div class="card">
 			<div class="card-header">
 				<h3 class="card-title">Tags</h3>
+				{% if filter_tag_id %}
+				<div class="card-options">
+					<a href="javascript:void(0)" id="clear_filter_tag" class="btn btn-secondary btn-sm">
+						Disable Filter
+					</a>
+				</div>
+				{% endif %}
 			</div>
 			<div class="card-body tags">
 				{% for tag in tags %}
-				<a href="#" class="tag tag-rounded">{{ tag.tag_name }}</a>
+				<a href="javascript:void(0)" value="{{ tag.tag_id }}"
+					class="add_filter_tag tag tag-rounded{% if tag.tag_id|string == filter_tag_id %} tag-azure{% endif %}">{{ tag.tag_name }}</a>
 				{% endfor %}
 			</div>
 		</div>
 	</div>
+
+	<script>
+		require(['jquery'], function ($) {
+			$(document).ready(function () {
+				$('#clear_filter_title').click(function () {
+					$('#title').val('');
+					$('#filter_form').submit();
+				});
+				$('#clear_filter_tag').click(function () {
+					$('#tag_id').val('');
+					$('#filter_form').submit();
+				});
+				$('.add_filter_tag').click(function () {
+					$('#tag_id').val($(this).attr('value'));
+					$('#filter_form').submit();
+				});
+			});
+		});
+	</script>
 </div>
 {% endblock %}

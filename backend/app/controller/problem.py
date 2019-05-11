@@ -10,16 +10,25 @@ problem = Blueprint('problem', __name__)
 @problem.route('/', methods = ['GET', 'POST'])
 @login_required
 def problemset():
-    return render_template(
-        'problem/problemset.html',
-        problems = [serialize(prob) for prob in Problem.query.all()],
-        tags = [serialize(tag) for tag in Tag.query.all()]
-    )
+	problems = Problem.query
+	filter_tag_id = request.values.get('tag_id')
+	filter_title = request.values.get('title')
+	if filter_tag_id:
+		problems = problems.join(Problem.tags).filter(Tag.tag_id == filter_tag_id)
+	if filter_title:
+		problems = problems.filter(Problem.title.ilike("%{0}%".format(filter_title)))
+	return render_template(
+		'problem/problemset.html',
+		problems = [serialize(prob) for prob in problems.all()],
+		tags = [serialize(tag) for tag in Tag.query.all()],
+		filter_tag_id = filter_tag_id if filter_tag_id else '',
+		filter_title = filter_title if filter_title else '',
+	)
 
-@problem.route('/<pid>', methods = ['GET', 'POST'])
+@problem.route('/<int:pid>', methods = ['GET', 'POST'])
 @login_required
 def show(pid):
-    problem = Problem.query.filter_by(pid = pid).first()
-    problem_dict = serialize(problem)
-    problem_dict['tags'] = [serialize(s) for s in problem.tags.all()]
-    return render_template('problem/problem.html', problem = problem_dict)
+	problem = Problem.query.filter_by(pid = pid).first()
+	problem_dict = serialize(problem)
+	problem_dict['tags'] = [serialize(s) for s in problem.tags.all()]
+	return render_template('problem/problem.html', problem = problem_dict)
