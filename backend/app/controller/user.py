@@ -2,8 +2,7 @@ from flask import Blueprint, flash, render_template, redirect, url_for, current_
 
 from app.extension import db
 from app.model import User
-from app.form import FormLogin
-from app.form import FormProfile
+from app.form import FormLogin, FormProfile
 from flask_login import login_user, logout_user, current_user, login_required
 
 user = Blueprint('user', __name__)
@@ -43,19 +42,10 @@ def logout():
 @login_required
 def profile():
 	form = FormProfile()
-	user = User.query.filter(User.uid == current_user.uid).first()
-	if form.password.data:
-		if form.validate_on_submit():
-			form.uid.data = user.get_id()
-			form.user_name.data = user.user_name
-			form.position.data = user.position
-			if form.password.data and user.verify_password(form.old_password.data) and form.password.data == form.check_password.data:
-				user.password = form.password.data
-				flash('Success!', 'success')
-			else:
-				flash('Error!', 'error')
-	else:
-		form.uid.data = user.get_id()
-		form.user_name.data = user.user_name
-		form.position.data = "Teacher" if user.is_teacher else "Student"
+	if form.validate_on_submit():
+		if form.password.data and current_user.verify_password(form.old_password.data) and form.password.data == form.check_password.data:
+			current_user.password = form.password.data
+			flash('Password change is successful!', 'success')
+		else:
+			flash('Fail to change password! Please check the inputs.', 'error')
 	return render_template('profile.html', form = form)

@@ -1,5 +1,5 @@
 {% extends 'base_index.html' %}
-{% set page_title = 'profile' %}
+{% set page_title = 'My Profile' %}
 
 {% import 'base_macros.html' as macros %}
 
@@ -19,14 +19,17 @@
 			</div>
 			<hr>
 			<div class="row">
-				<div class="col-md-5">
-					{{ macros.render_field(form.uid) }}
+				<div class="col-sm-6">
+					<div class="form-group">
+						<label class="form-label">User ID</label>
+						<div class="form-control-plaintext">{{ current_user.uid }}</div>
+					</div>
 				</div>
-				<div class="col-md-3">
-					{{ macros.render_field(form.user_name) }}
-				</div>
-				<div class="col-md-4">
-					{{ macros.render_field(form.position) }}
+				<div class="col-sm-6">
+					<div class="form-group">
+						<label class="form-label">Position</label>
+						<div class="form-control-plaintext">{{ current_user.position }}</div>
+					</div>
 				</div>
 			</div>
 			<div class="row">

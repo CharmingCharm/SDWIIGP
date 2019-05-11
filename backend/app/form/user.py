@@ -12,10 +12,10 @@ class FormLogin(FlaskForm):
     submit = SubmitField('Login')
 
 class FormProfile(FlaskForm):
-    uid = IntegerField('User ID', render_kw = {'disabled':''})
-    user_name = StringField('Username', render_kw = {'disabled':''})
-    position = StringField('User\'s Position', render_kw = {'disabled':''})
-    # position = SelectField('User\'s position', choices = [("Teacher", "Teacher"), ("Student", "Student")], render_kw = {'disabled':''})
+    # uid = IntegerField('User ID', render_kw = {'disabled':''})
+    # user_name = StringField('Username', render_kw = {'disabled':''})
+    # position = StringField('User\'s Position', render_kw = {'disabled':''})
+    # position = SelectField('User\'s Position', choices = [("Teacher", "Teacher"), ("Student", "Student")], render_kw = {'disabled':''})
     password = PasswordField('New Password')
     check_password = PasswordField('Confirm New Password')
     old_password = PasswordField('Old Password')
