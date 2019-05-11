@@ -7,6 +7,8 @@
     }
 </style>
 
+{% import 'base_macros.html' as macros %}
+
 {% block page_content %}
 <div class="page-header">
     <h1 class="page-title">
@@ -14,6 +16,7 @@
     </h1>
 </div>
 <div class="card">
+
     <table class="table card-table">
         <thead>
             <tr>
@@ -24,29 +27,24 @@
             </tr>
         </thead>
         <tbody>
-            <tr>
-                <td style="font-size: 20px;">1</td>
-                <td><input class="form-control" value="root"></td>
-                <td>
-                    <select role="button" class="btn btn-secondary">
-                        <option class="dropdown-item" selected>Teacher</option>
-                        <option class="dropdown-item">Student</option>
-                    </select>
-                </td>
-                <td><a href="#" class="btn btn-pill btn-danger">delete</a></td>
-            </tr>
-            <tr>
-                <td style="font-size: 20px;">2</td>
-                <td><input class="form-control" value="lala"></td>
-                <td>
-                    <select role="button" class="btn btn-secondary">
-                        <option class="dropdown-item">Teacher</option>
-                        <option class="dropdown-item" selected>Student</option>
-                    </select>
-                </td>
-                <td><a href="#" class="btn btn-pill btn-danger">delete</a></td>
-            </tr>
+            {% for user in form.users %}
+
+            <form role="form" method="post">
+                {{ form.csrf_token }}
+                <tr>
+                    <td name="uid" style="font-size: 20px;">{{ user.uid.data.data }}</td>
+                    <td><input class="form-control" name="user_name" style='width: 200px;'
+                            value="{{ user.user_name.data.data }}"></td>
+                    <td>{{ user.position(class='form-control', style='width: 100px;') }}
+                    </td>
+                    <td><button type="submit" class="btn btn-pill btn-primary">Modify</button></td>
+                    <td><a href="#" class="btn btn-pill btn-danger">Delete</a></td>
+                </tr>
+            </form>
+
+            {% endfor %}
         </tbody>
     </table>
+
 </div>
 {% endblock %}

@@ -1,7 +1,7 @@
 from flask import Blueprint, current_app, redirect, url_for, flash, request, render_template_string
 from flask_login import current_user, login_required
-from app.form import FormProblem, FormUserGroup
-from app.model import serialize, Problem, Tag, UserGroup
+from app.form import FormProblem, FormUserGroup, FormUsers, FormUserSingle
+from app.model import serialize, Problem, Tag, UserGroup, User
 from . import render_template
 from app.extension import db
 
@@ -10,7 +10,22 @@ admin = Blueprint('admin', __name__)
 @admin.route('/user')
 @login_required
 def user():
-	return render_template('admin/user.html')
+	form = FormUsers()
+	users = User.query.all()
+	if form.users.__len__():
+		for num in range(form.users.__len__()):
+			user = User.query.filter_by(uid = userForm.uid.data)
+			userForm = form.__getitem__(num)
+			user.user_name = userForm.user_name.data
+			user.is_teacher = True if userForm.position.data == 'Teacher' else False
+	else:
+		for user in users:
+			userForm = FormUserSingle()
+			userForm.uid.data = user.uid
+			userForm.user_name.data = user.user_name
+			userForm.position = 'Teacher' if user.is_teacher else 'Student'
+			form.users.append_entry(data=userForm)
+	return render_template('admin/user.html', form = form)
 
 @admin.route('/problem/<pid>', methods = ['GET', 'POST'])
 @login_required
