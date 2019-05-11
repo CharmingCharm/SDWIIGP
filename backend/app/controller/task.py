@@ -11,7 +11,6 @@ tasks = Blueprint('task', __name__)
 @login_required
 def task():
     tasks = [serialize(task) for task in Task.query.all()]
-    print("ooooo")
     for task in tasks:
         task['deadline'] = datetime.strptime(task['deadline'], '%Y-%m-%d %H:%M:%S')
     return render_template('task.html',tasks = tasks,now = datetime.now())
