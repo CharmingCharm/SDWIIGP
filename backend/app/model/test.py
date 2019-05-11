@@ -1,7 +1,6 @@
-from flask_login import UserMixin
 from app.extension import db
 
-class Test(UserMixin, db.Model):
+class Test(db.Model):
     __tablename__ = 'test'
 
     test_id = db.Column(db.Integer(), primary_key = True, autoincrement = True)

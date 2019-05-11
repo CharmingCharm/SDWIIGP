@@ -1,7 +1,6 @@
-from flask_login import UserMixin
 from app.extension import db
 
-class Tag(UserMixin, db.Model):
+class Tag(db.Model):
     __tablename__ = 'tag'
 
     tag_id = db.Column(db.Integer(), primary_key = True, autoincrement = True)

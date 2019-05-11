@@ -1,7 +1,6 @@
 from app.extension import db
-from flask_login import UserMixin
 
-class UserGroup(UserMixin, db.Model):
+class UserGroup(db.Model):
 	__tablename__ = 'user_group'
 
 	gid = db.Column(db.Integer, primary_key = True, autoincrement = True)

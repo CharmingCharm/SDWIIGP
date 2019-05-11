@@ -1,7 +1,6 @@
 from app.extension import db
-from flask_login import UserMixin
 
-class Problem(UserMixin, db.Model):
+class Problem(db.Model):
     __tablename__ = 'problem'
 
     pid = db.Column(db.Integer(), primary_key = True, autoincrement = True)

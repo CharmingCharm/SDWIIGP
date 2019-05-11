@@ -1,7 +1,6 @@
 from app.extension import db
-from flask_login import UserMixin
 
-class Task(UserMixin, db.Model):
+class Task(db.Model):
     __tablename__ = 'task'
 
     task_id = db.Column(db.Integer(), primary_key = True, autoincrement = True)
