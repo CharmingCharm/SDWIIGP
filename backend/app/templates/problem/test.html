@@ -1,0 +1,14 @@
+{% extends 'base_index.html' %}
+{% set page_title = test.test_id|string ~ '. ' ~ test.code %}
+{% set navbar_active = 'testset' %}
+
+{% import 'base_macros.html' as macros %}
+
+{% block page_content %}
+<form method="post" action="{{ url_for('test.show', test_id = test.test_id) }}">
+	{% include 'problem/base_problem.html' %}
+	<div class="col-12" align="center">
+		<a href="#" class="btn btn-pill btn-azure btn-lg">Submit</a>
+	</div>
+</form>
+{% endblock %}

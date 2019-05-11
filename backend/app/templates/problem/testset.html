@@ -1,0 +1,64 @@
+{% extends 'base_index.html' %}
+{% set page_title = 'Test Set' %}
+{% set navbar_active = 'testset' %}
+
+{% import 'base_macros.html' as macros %}
+
+{% block page_content %}
+<div class="row row-cards row-deck">
+	<div class="col-lg-9">
+		<div class="card">
+			<div class="card-header">
+				<h3 class="card-title">Test Set</h3>
+			</div>
+			<div class="table-responsive">
+				<table class="table card-table table-vcenter text-nowrap datatable">
+					<thead>
+						<tr>
+							<th>Status</th>
+							<th>#</th>
+							<th>Title</th>
+							<th>Level</th>
+							<th>AC Rate</th>
+							<th></th>
+						</tr>
+					</thead>
+					<tbody>
+						{% for test in tests %}
+						<tr>
+							<td><span class="tag tag-green">AC</span></td>
+							<td><a href="{{ url_for('test.show', test_id = test.test_id) }}" class="text-inherit">{{ test.test_id }}</a></td>
+							<td><a href="{{ url_for('test.show', test_id = test.test_id) }}" class="text-inherit">{{ test.score }}</a></td>
+							<td>{{ macros.level_to_tag(problem.level) }}</td>
+							<td>50%</td>
+							<td class="text-right"><a href="{{ url_for('admin.test', test_id = test.test_id) }}" class="btn btn-sm text-inherit"><i class="fe fe-edit"></i></a></td>
+						</tr>
+						{% endfor %}
+					</tbody>
+				</table>
+				<script>
+					require(['datatables', 'jquery'], function (datatable, $) {
+						$('.datatable').DataTable({
+							"lengthChange": false,
+							"searching": false,
+							"pageLength": 20,
+						});
+					});
+				</script>
+			</div>
+		</div>
+	</div>
+	<div class="col-lg-3">
+		<div class="card">
+			<div class="card-header">
+				<h3 class="card-title">Tags</h3>
+			</div>
+			<div class="card-body tags">
+				{% for tag in tags %}
+				<a href="#" class="tag tag-rounded">{{ tag.tag_name }}</a>
+				{% endfor %}
+			</div>
+		</div>
+	</div>
+</div>
+{% endblock %}
