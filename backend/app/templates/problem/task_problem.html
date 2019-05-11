@@ -1,0 +1,30 @@
+{% extends 'base_index.html' %}
+{% set page_title = task.task_id|string ~ '. ' ~ task.task_name %}
+{% set navbar_active = 'task' %}
+
+{% import 'base_macros.html' as macros %}
+
+{% block page_content %}
+<div class="row">
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-body">
+                <div class="text-wrap p-lg-4">
+                    <h2 class="mt-0 mb-4">Description</h2>
+                    <p>lalalallalallalallallallalalallalalalalalallala</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<form method="post">
+    {% for problem in task.problems %}
+
+    {% include 'problem/base_problem.html' %}
+
+    {% endfor %}
+	<div class="col-12" align="center">
+		<a href="#" class="btn btn-pill btn-azure btn-lg">Submit</a>
+	</div>
+</form>
+{% endblock %}

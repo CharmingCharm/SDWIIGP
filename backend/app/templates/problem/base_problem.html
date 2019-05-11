@@ -1,0 +1,45 @@
+<div class="row">
+    <div class="col-md-9">
+        <div class="card">
+            <div class="card-body">
+                <div class="text-wrap p-lg-4">
+                    <h2 class="mt-0 mb-4">{{ problem.title }}</h2>
+                    <p>{{ problem.description|replace('\r','')|replace('\n','<br>')|safe }}</p>
+                </div>
+                <div class="col-12" align="center">
+                    <textarea rows="20" class="form-control" placeholder="Input your code here"></textarea>
+                </div>
+                <br>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card">
+            <div class="card-header">
+                <h3 class="card-title">Information</h3>
+                <div class="card-options">
+                    <a href="#" class="card-options-collapse" data-toggle="card-collapse"><i
+                            class="fe fe-chevron-up"></i></a>
+                </div>
+            </div>
+            <table class="table card-table">
+                <tr>
+                    <td>Problem ID</td>
+                    <td class="text-right">{{ problem.pid }}</td>
+                </tr>
+                <tr>
+                    <td>Level</td>
+                    <td class="text-right">{{ macros.level_to_tag(problem.level) }}</td>
+                </tr>
+                <tr>
+                    <td>Tags</td>
+                    <td class="tags text-right">
+                        {% for tag in problem.tags %}
+                        <span class="tag tag-rounded tag-azure">{{ tag.tag_name }}</span>
+                        {% endfor %}
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </div>
+</div>
