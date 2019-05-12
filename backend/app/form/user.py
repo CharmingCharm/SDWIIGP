@@ -1,6 +1,6 @@
 from flask_login import current_user
 from flask_wtf import FlaskForm
-from wtforms import StringField, PasswordField, SubmitField, BooleanField, IntegerField, SelectField, FormField, FieldList
+from wtforms import StringField, PasswordField, SubmitField, BooleanField, IntegerField, SelectField, FormField, FieldList, SubmitField
 from wtforms.validators import DataRequired, EqualTo, ValidationError
 
 from app.model import User
@@ -22,9 +22,10 @@ class FormProfile(FlaskForm):
     submit = SubmitField('Update Profile')
 
 class FormUserSingle(FlaskForm):
-    uid = StringField('User ID', render_kw = {'disabled':''})
+    uid = StringField('User ID', render_kw = {'readonly':'expression(this.readOnly=false)'})
     user_name = StringField('Username')
     position = SelectField('User\'s position', choices = [("Teacher", "Teacher"), ("Student", "Student")])
+    changeID = SubmitField()
 
 class FormUsers(FlaskForm):
     users = FieldList(FormField(FormUserSingle))

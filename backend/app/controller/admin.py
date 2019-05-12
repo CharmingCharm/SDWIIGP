@@ -7,22 +7,24 @@ from app.extension import db
 
 admin = Blueprint('admin', __name__)
 
-@admin.route('/user')
+@admin.route('/user', methods = ['GET', 'POST'])
 @login_required
 def user():
 	form = FormUsers()
 	users = User.query.all()
 	if form.users.__len__():
 		for num in range(form.users.__len__()):
-			user = User.query.filter_by(uid = userForm.uid.data)
-			userForm = form.__getitem__(num)
-			user.user_name = userForm.user_name.data
-			user.is_teacher = True if userForm.position.data == 'Teacher' else False
+			userForm = form.users.__getitem__(num)
+			if userForm.changeID.data:
+				user = User.query.filter_by(uid = userForm.uid.data).first()
+				user.user_name = userForm.user_name.data
+				user.is_teacher = True if userForm.position.data == 'Teacher' else False
+				flash('Success!','success')
 	else:
 		for user in users:
 			userForm = FormUserSingle()
-			userForm.uid.data = user.uid
-			userForm.user_name.data = user.user_name
+			userForm.uid = user.uid
+			userForm.user_name = user.user_name
 			userForm.position = 'Teacher' if user.is_teacher else 'Student'
 			form.users.append_entry(data=userForm)
 	return render_template('admin/user.html', form = form)
