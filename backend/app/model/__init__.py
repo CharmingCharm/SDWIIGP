@@ -11,7 +11,7 @@ from sqlalchemy import DateTime, Numeric
 
 UserInGroup = db.Table(
 	'user_in_group',
-	db.Column('uid', db.Integer, db.ForeignKey('user.uid'), primary_key = True),
+	db.Column('uid', db.Integer, db.ForeignKey('user.uid', ondelete = 'CASCADE'), primary_key = True),
 	db.Column('gid', db.Integer, db.ForeignKey('user_group.gid'), primary_key = True)
 )
 

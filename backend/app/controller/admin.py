@@ -11,22 +11,36 @@ admin = Blueprint('admin', __name__)
 @login_required
 def user():
 	form = FormUsers()
-	users = User.query.all()
+	if form.addID.data and form.new_user_name.data and form.new_position.data:
+		if User.query.filter_by(user_name = form.new_user_name.data).first():
+			flash(form.new_user_name.data + ' is exist, change your name!','error')
+		else:
+			db.session.add(User(user_name=form.new_user_name.data,
+								password=form.new_user_name.data,
+								is_teacher=True if form.new_position.data == 'Teacher' else False))
+			db.session.commit()
+			flash('Success!','success')
+	
 	if form.users.__len__():
-		for num in range(form.users.__len__()):
-			userForm = form.users.__getitem__(num)
+		while form.users.__len__() > 0:
+			userForm = form.users.pop_entry()
 			if userForm.changeID.data:
 				user = User.query.filter_by(uid = userForm.uid.data).first()
 				user.user_name = userForm.user_name.data
 				user.is_teacher = True if userForm.position.data == 'Teacher' else False
 				flash('Success!','success')
-	else:
-		for user in users:
-			userForm = FormUserSingle()
-			userForm.uid = user.uid
-			userForm.user_name = user.user_name
-			userForm.position = 'Teacher' if user.is_teacher else 'Student'
-			form.users.append_entry(data=userForm)
+			elif userForm.deleteID.data:
+				User.query.filter_by(uid = userForm.uid.data).delete()
+				flash('Delete successfully!','success')
+
+	users = User.query.all()
+	for user in users:
+		userForm = FormUserSingle()
+		userForm.uid = user.uid
+		userForm.user_name = user.user_name
+		userForm.position = 'Teacher' if user.is_teacher else 'Student'
+		form.users.append_entry(data=userForm)
+
 	return render_template('admin/user.html', form = form)
 
 @admin.route('/problem/<int:pid>', methods = ['GET', 'POST'])

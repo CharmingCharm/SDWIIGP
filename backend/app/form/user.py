@@ -26,6 +26,10 @@ class FormUserSingle(FlaskForm):
     user_name = StringField('Username')
     position = SelectField('User\'s position', choices = [("Teacher", "Teacher"), ("Student", "Student")])
     changeID = SubmitField()
+    deleteID = SubmitField()
 
 class FormUsers(FlaskForm):
     users = FieldList(FormField(FormUserSingle))
+    new_user_name = StringField('Username', render_kw = {'value':'new user'})
+    new_position = SelectField('User\'s position', choices = [("Teacher", "Teacher"), ("Student", "Student")], render_kw = {'value':'Teacher'})
+    addID = SubmitField()
