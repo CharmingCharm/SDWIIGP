@@ -7,34 +7,35 @@
         User group admin
     </h1>
 </div>
-<div class="card">
-    <table class="table card-table">
-        <thead>
-            <tr>
-                <th>User Group ID</th>
-                <th>Group name</th>
-                <th>Number of members</th>
-                <th></th>
-                <th></th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for group in user_groups %}
-            <form role="form" method="post">
+<form role="form" method="post" name="form" action="{{ url_for('admin.userGroup') }}">
+    {{ form.hidden_tag() }}
+    {{ form.csrf_token }}
+    <div class="card">
+        <table class="table card-table">
+            <thead>
                 <tr>
-                    <td style="font-size: 20px;">{{ group.gid }}</td>
-                    <td>{{ group.group_name }}</td>
-                    {% for user in group.users %}
-                        {% if loop.first %}
-                        <td>{{ loop.length }}</td>
-                        {% endif %}
-                    {% endfor %}
-                    <td><a href="{{ url_for('admin.userGroupDetail', gid = group.gid) }}" class="btn btn-pill btn-primary">Modify</a></td>
-                    <td><input type="button" class="btn btn-pill btn-danger" value="Delete"/></td>
+                    <th>User Group ID</th>
+                    <th>Group name</th>
+                    <th>Number of members</th>
+                    <th></th>
+                    <th></th>
                 </tr>
-            </form>
-            {% endfor %}
-        </tbody>
-    </table>
+            </thead>
+            <tbody>
+                {% for group in form.groups %}
+
+                <tr>
+                    <td style="font-size: 20px;">{{ group.gid(class='form-control', style='width: 70px;') }}</td>
+                    <td>{{ group.group_name.data }}</td>
+                    <td>{{ group.number.data }}</td>
+                    <td><a href="{{ url_for('admin.userGroupDetail', gid = group.gid.data) }}"
+                            class="btn btn-pill btn-primary">Modify</a></td>
+                    <td>{{ group.deleteID(class="btn btn-pill btn-danger", value="Delete") }}</td>
+                </tr>
+
+                {% endfor %}
+            </tbody>
+        </table>
+</form>
 </div>
 {% endblock %}

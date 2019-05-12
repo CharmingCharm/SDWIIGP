@@ -2,7 +2,7 @@
 {% set page_title = user_group.gid|string ~ '. ' ~ user_group.group_name %}
 {% set navbar_active = '' %}
 
-{% import 'base_macros.html' as macros %}   
+{% import 'base_macros.html' as macros %}
 
 {% block page_content %}
 <form role="form" method="post">
@@ -20,7 +20,7 @@
                             </tr>
                         </thead>
                         <tbody>
-                            {% for user in user_group.users %}
+                            {% for user in group.users %}
                             <tr>
                                 <td>{{ user.uid }}</td>
                                 <td>{{ user.user_name }}</td>
@@ -29,8 +29,11 @@
                             {% endfor %}
                         </tbody>
                     </table>
+
                 </div>
             </div>
+            <button class="btn btn-pill btn-success" data-toggle="modal" data-target="#myModal" type="button">Add
+                User</button>
         </div>
         <div class="col-lg-5">
             <div class="card">
@@ -64,5 +67,37 @@
         </div>
     </div>
 </form>
+
+
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <form>
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title" id="myModalLabel">Add a user to the group</h4>
+                    <a class="close" data-dismiss="modal" aria-hidden="true"></a>
+                </div>
+                <div class="form-group modal-body">
+                    {{ form.new_user_name.label }}
+                    <div class="row gutters-xs">
+                        <div class="col">
+                            {{ form.new_user_name(class='form-control') }}
+                        </div>
+                        <span class="col-auto">
+                            <button class="btn btn-secondary" type="button">
+                                <i class="fe fe-search"></i>
+                            </button>
+                        </span>
+                    </div>
+                    {{ form }}
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                    {{ form.addID(class="btn btn-primary", value='Add') }}
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
 
 {% endblock %}

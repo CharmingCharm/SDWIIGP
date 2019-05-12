@@ -1,13 +1,21 @@
 from flask_login import current_user
 from flask_wtf import FlaskForm
-from wtforms import StringField, PasswordField, SubmitField, BooleanField, IntegerField, SelectField, TextAreaField
+from wtforms import StringField, PasswordField, SubmitField, BooleanField, IntegerField, SelectField, TextAreaField, FieldList, FormField
 from wtforms.validators import DataRequired, EqualTo, ValidationError
 
 from app.model import User
 
-class FormGroupList(FlaskForm):
-    gid = IntegerField('Username')
-
 class FormUserGroup(FlaskForm):
+    gid = IntegerField('Username', render_kw = {'readonly':'expression(this.readOnly=false)'})
     group_name = StringField('Group name')
+    number = IntegerField('Number of members')
     description = TextAreaField('Decription', render_kw = {'rows': 6})
+    add_user = StringField('Username')
+    deleteID = SubmitField()
+
+    new_user_name = StringField('New username')
+    addID = SubmitField()
+
+
+class FormGroupList(FlaskForm):
+    groups = FieldList(FormField(FormUserGroup))

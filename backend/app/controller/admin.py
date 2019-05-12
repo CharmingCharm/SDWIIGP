@@ -1,6 +1,6 @@
 from flask import Blueprint, current_app, redirect, url_for, flash, request, render_template_string
 from flask_login import current_user, login_required
-from app.form import FormProblem, FormUserGroup, FormUsers, FormUserSingle
+from app.form import FormProblem, FormUserGroup, FormUsers, FormUserSingle, FormGroupList
 from app.model import serialize, Problem, Tag, UserGroup, User
 from . import render_template
 from app.extension import db
@@ -73,12 +73,24 @@ def tag():
 @admin.route('/userGroup', methods = ['GET', 'POST'])
 @login_required
 def userGroup():
+	form = FormGroupList()
+	if form.groups.__len__():
+		print(form.groups.__getitem__(0).group_name)
+		while form.groups.__len__() > 0:
+			groupForm = form.groups.pop_entry()
+			print(groupForm.deleteID.data)
+			if groupForm.deleteID.data:
+				UserGroup.query.filter_by(gid = groupForm.gid.data).delete()
+				flash('Delete successfully!','success')
+
 	user_groups = UserGroup.query.all()
-	group_array = []
 	for group in user_groups:
-		group_array.append(UserGroup.query.filter_by(gid = group.gid).first())
-	print(group_array[0].users)
-	return render_template('admin/user_group_list.html', user_groups = group_array)
+		groupForm = FormUserGroup()
+		groupForm.gid = group.gid
+		groupForm.group_name = group.group_name
+		groupForm.number = group.users.count()
+		form.groups.append_entry(groupForm)
+	return render_template('admin/user_group_list.html', form = form)
 
 @admin.route('/userGroup/<int:gid>', methods = ['GET', 'POST'])
 @login_required
@@ -87,4 +99,7 @@ def userGroupDetail(gid):
 	user_group = UserGroup.query.filter_by(gid = gid).first()
 	form.group_name.data = user_group.group_name
 	form.description.data = user_group.description
+
+	# if form.addID.data:
+	# 	User.query.filter(User.user_name.like('%%' + form.new_user_name.data + '%%')).all()
 	return render_template('admin/group_detail.html', user_group = user_group, form = form)
