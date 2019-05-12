@@ -20,9 +20,9 @@
 									<span class="fe fe-search"></span>
 								</button>
 								{% if filter_title %}
-								<a href="javascript:void(0)" id="clear_filter_title" class="btn btn-sm btn-default">
+								<button class="btn btn-sm btn-default" type="button" id="clear_filter_title">
 									<span class="fe fe-x"></span>
-								</a>
+								</button>
 								{% endif %}
 							</span>
 						</div>
@@ -76,9 +76,9 @@
 				<h3 class="card-title">Tags</h3>
 				{% if filter_tag_id %}
 				<div class="card-options">
-					<a href="javascript:void(0)" id="clear_filter_tag" class="btn btn-secondary btn-sm">
-						Disable Filter
-					</a>
+					<button id="clear_filter_tag" class="btn btn-secondary btn-sm">
+						<span class="fe fe-x"></span>
+					</button>
 				</div>
 				{% endif %}
 			</div>
