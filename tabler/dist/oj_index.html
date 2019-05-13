@@ -1,0 +1,359 @@
+<!doctype html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <meta http-equiv="Content-Language" content="en" />
+    <meta name="msapplication-TileColor" content="#2d89ef">
+    <meta name="theme-color" content="#4188c9">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="MobileOptimized" content="320">
+    <link rel="icon" href="./favicon.ico" type="image/x-icon"/>
+    <link rel="shortcut icon" type="image/x-icon" href="./favicon.ico" />
+    <!-- Generated: 2019-04-04 16:55:45 +0200 -->
+    <title>Homepage - tabler.github.io - a responsive, flat and full featured admin template</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,300i,400,400i,500,500i,600,600i,700,700i&amp;subset=latin-ext">
+    <script src="./assets/js/require.min.js"></script>
+    <script>
+      requirejs.config({
+          baseUrl: '.'
+      });
+    </script>
+    <!-- Dashboard Core -->
+    <link href="./assets/css/dashboard.css" rel="stylesheet" />
+    <script src="./assets/js/dashboard.js"></script>
+    <!-- c3.js Charts Plugin -->
+    <link href="./assets/plugins/charts-c3/plugin.css" rel="stylesheet" />
+    <script src="./assets/plugins/charts-c3/plugin.js"></script>
+    <!-- Google Maps Plugin -->
+    <link href="./assets/plugins/maps-google/plugin.css" rel="stylesheet" />
+    <script src="./assets/plugins/maps-google/plugin.js"></script>
+    <!-- Input Mask Plugin -->
+    <script src="./assets/plugins/input-mask/plugin.js"></script>
+    <!-- Datatables Plugin -->
+    <script src="./assets/plugins/datatables/plugin.js"></script>
+  </head>
+  <body class="">
+    <div class="page">
+      <div class="flex-fill">
+        <div class="header py-4">
+          <div class="container">
+            <div class="d-flex">
+              <a class="header-brand" href="./index.html">
+                <h1>Online Judge</h1>
+              </a>
+              <div class="d-flex order-lg-2 ml-auto">
+                <div class="dropdown d-none d-md-flex">
+                  <a class="nav-link icon" data-toggle="dropdown">
+                    <i class="fe fe-bell"></i>
+                    <span class="nav-unread"></span>
+                  </a>
+                  <div class="dropdown-menu dropdown-menu-right dropdown-menu-arrow">
+                    <a href="#" class="dropdown-item d-flex">
+                      <span class="avatar mr-3 align-self-center" style="background-image: url(demo/faces/male/41.jpg)"></span>
+                      <div>
+                        <strong>Nathan</strong> pushed new commit: Fix page load performance issue.
+                        <div class="small text-muted">10 minutes ago</div>
+                      </div>
+                    </a>
+                    <a href="#" class="dropdown-item d-flex">
+                      <span class="avatar mr-3 align-self-center" style="background-image: url(demo/faces/female/1.jpg)"></span>
+                      <div>
+                        <strong>Alice</strong> started new task: Tabler UI design.
+                        <div class="small text-muted">1 hour ago</div>
+                      </div>
+                    </a>
+                    <a href="#" class="dropdown-item d-flex">
+                      <span class="avatar mr-3 align-self-center" style="background-image: url(demo/faces/female/18.jpg)"></span>
+                      <div>
+                        <strong>Rose</strong> deployed new version of NodeJS REST Api V3
+                        <div class="small text-muted">2 hours ago</div>
+                      </div>
+                    </a>
+                    <div class="dropdown-divider"></div>
+                    <a href="#" class="dropdown-item text-center">Mark all as read</a>
+                  </div>
+                </div>
+              </div>
+              <a href="#" class="header-toggler d-lg-none ml-3 ml-lg-0" data-toggle="collapse" data-target="#headerMenuCollapse">
+                <span class="header-toggler-icon"></span>
+              </a>
+            </div>
+          </div>
+        </div>
+        <div class="header collapse d-lg-flex p-0" id="headerMenuCollapse">
+          <div class="container">
+            <div class="row align-items-center">
+              <div class="col-lg-3 ml-auto">
+                <form class="input-icon my-3 my-lg-0">
+                  <input type="search" class="form-control header-search" placeholder="Search&hellip;" tabindex="1">
+                  <div class="input-icon-addon">
+                    <i class="fe fe-search"></i>
+                  </div>
+                </form>
+              </div>
+              <div class="col-lg order-lg-first">
+                <ul class="nav nav-tabs border-0 flex-column flex-lg-row">
+                  <li class="nav-item">
+                    <a href="./index.html" class="nav-link active"><i class="fe fe-home"></i> Home</a>
+                  </li>
+                  <li class="nav-item">
+                    <a href="./register.html" class="nav-link" data-toggle="dropdown"><i class="fe fe-box"></i> Register</a>
+                  </li>
+                  <li class="nav-item dropdown">
+                    <a href="./login.html" class="nav-link" data-toggle="dropdown"><i class="fe fe-calendar"></i> Login</a>
+                  </li>
+                  <li class="nav-item dropdown">
+                    <a href="javascript:void(0)" class="nav-link" data-toggle="dropdown"><i class="fe fe-file"></i> Problem List</a>
+                    <div class="dropdown-menu dropdown-menu-arrow">
+                        <a href="./problem.html" class="dropdown-item ">All problems</a>
+                      <a href="./problem1.html" class="dropdown-item ">Type1 problems</a>
+                      <a href="./problem2.html" class="dropdown-item ">Type2 problems</a>
+                      <a href="./problem3.html" class="dropdown-item ">Type3 problems</a>
+                      <a href="./problem4.html" class="dropdown-item ">Type4 problems</a>
+                    </div>
+                  </li>
+                  <li class="nav-item dropdown">
+                    <a href="./forget-password.html" class="nav-link"><i class="fe fe-check-square"></i> Change Password</a>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="my-3 my-md-5">
+          <div class="container">
+            <div class="page-header">
+              <h1 class="page-title">
+                Home page
+              </h1>
+            </div>
+            <div class="row row-cards">
+              <div class="col-lg-6">
+                <div class="card">
+                  <div class="card-header">
+                    <h3 class="card-title">Language usage ranking</h3>
+                  </div>
+                  <div id="chart-development-activity" style="height: 10rem"></div>
+                </div>
+                <script>
+                  require(['c3', 'jquery'], function(c3, $) {
+                  	$(document).ready(function(){
+                  		var chart = c3.generate({
+                  			bindto: '#chart-development-activity', // id of chart wrapper
+                  			data: {
+                  				columns: [
+                  				    // each columns data
+                  					['data1', 0, 5, 1, 2, 7, 5, 6, 8, 24, 7, 12, 5, 6, 3, 2, 2, 6, 30, 10, 10, 15, 14, 47, 65, 55]
+                  				],
+                  				type: 'area', // default type of chart
+                  				groups: [
+                  					[ 'data1', 'data2', 'data3']
+                  				],
+                  				colors: {
+                  					'data1': tabler.colors["blue"]
+                  				},
+                  				names: {
+                  				    // name of each serie
+                  					'data1': 'Purchases'
+                  				}
+                  			},
+                  			axis: {
+                  				y: {
+                  					padding: {
+                  						bottom: 0,
+                  					},
+                  					show: false,
+                  						tick: {
+                  						outer: false
+                  					}
+                  				},
+                  				x: {
+                  					padding: {
+                  						left: 0,
+                  						right: 0
+                  					},
+                  					show: false
+                  				}
+                  			},
+                  			legend: {
+                  				position: 'inset',
+                  				padding: 0,
+                  				inset: {
+                                      anchor: 'top-left',
+                  					x: 20,
+                  					y: 8,
+                  					step: 10
+                  				}
+                  			},
+                  			tooltip: {
+                  				format: {
+                  					title: function (x) {
+                  						return '';
+                  					}
+                  				}
+                  			},
+                  			padding: {
+                  				bottom: 0,
+                  				left: -1,
+                  				right: -1
+                  			},
+                  			point: {
+                  				show: false
+                  			}
+                  		});
+                  	});
+                  });
+                </script>
+              </div>
+              <div class="col-md-6">
+                <div class="alert alert-primary">Are you in trouble? <a href="./docs/index.html" class="alert-link">Read our documentation</a> to know how to use.</div>
+              </div>
+            </div>
+            <div class="card-header">
+                <h2 class="card-title">The latest information bulletin</h2>
+              </div>
+            <div class="row row-cards row-deck">
+              <div class="col-lg-6">
+                <div class="card card-aside">
+                  <a href="#" class="card-aside-column" style="background-image: url(./demo/photos/david-klaasen-54203-500.jpg)"></a>
+                  <div class="card-body d-flex flex-column">
+                    <h4><a href="#">How to learn python</a></h4>
+                    <div class="text-muted">You should study python at every class and then do not try to sleep...</div>
+                    <div class="d-flex align-items-center pt-5 mt-auto">
+                      <div class="avatar avatar-md mr-3" style="background-image: url(./demo/faces/female/18.jpg)"></div>
+                      <div>
+                        <a href="./profile.html" class="text-default">Virgil</a>
+                        <small class="d-block text-muted">3 days ago</small>
+                      </div>
+                      <div class="ml-auto text-muted">
+                        <a href="javascript:void(0)" class="icon d-none d-md-inline-block ml-3"><i class="fe fe-heart mr-1"></i></a>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-lg-6">
+                <div class="card card-aside">
+                  <a href="#" class="card-aside-column" style="background-image: url(./demo/photos/david-marcu-114194-500.jpg)"></a>
+                  <div class="card-body d-flex flex-column">
+                    <h4><a href="#">Well, Teacher want to let students study more easier</a></h4>
+                    <div class="text-muted">Resently, the teachers of CST want their students to study more easier...</div>
+                    <div class="d-flex align-items-center pt-5 mt-auto">
+                      <div class="avatar avatar-md mr-3" style="background-image: url(./demo/faces/male/16.jpg)"></div>
+                      <div>
+                        <a href="./profile.html" class="text-default">Peter Richards</a>
+                        <small class="d-block text-muted">3 days ago</small>
+                      </div>
+                      <div class="ml-auto text-muted">
+                        <a href="javascript:void(0)" class="icon d-none d-md-inline-block ml-3"><i class="fe fe-heart mr-1"></i></a>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="bottombar js-bottombar" style="display: none">
+            <a href="#" class="bottombar-close js-bottombar-close">
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-x"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+            </a>
+            <div class="container position-relative d-flex align-items-center">
+              <a href="https://gumroad.com/l/tabler-email?utm_source=demo" class="bottombar-image">
+                <picture>
+                  <source srcset="https://tabler.io/img/bottombar.webp" type="image/webp">
+                  <source srcset="https://tabler.io/img/bottombar.png" type="image/jpeg">
+                  <img src="https://tabler.io/img/bottombar.png" alt="">
+                </picture>
+              </a>
+              <div class="d-lg-flex flex-fill align-items-center">
+                <div class="mr-2">
+                  50 eye-catching templates tested in 90+ email clients. Compose your own, mobile optimized email message in less than 5 minutes!
+                </div>
+                <div class=" ml-auto mt-2 mt-lg-0">
+                  <a href="https://gumroad.com/l/tabler-email?utm_source=demo" class="btn btn-sm btn-green text-nowrap" target="_blank">More info</a>
+                </div>
+              </div>
+            </div>
+          </div>
+          <script>
+            require(['jquery'], function () {
+            	$(document).ready(function () {
+            
+            		function setCookie(name,value,days) {
+            			var expires = "";
+            			if (days) {
+            				var date = new Date();
+            				date.setTime(date.getTime() + (days*24*60*60*1000));
+            				expires = "; expires=" + date.toUTCString();
+            			}
+            			document.cookie = name + "=" + (value || "")  + expires + "; path=/";
+            		}
+            
+            		function getCookie(name) {
+            			var nameEQ = name + "=";
+            			var ca = document.cookie.split(';');
+            			for(var i=0;i < ca.length;i++) {
+            				var c = ca[i];
+            				while (c.charAt(0)==' ') c = c.substring(1,c.length);
+            				if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length,c.length);
+            			}
+            			return null;
+            		}
+            
+            		if (!getCookie('bottombar-hidden')) {
+            			$('.js-bottombar').show();
+            		}
+            
+            		$('.js-bottombar-close').on('click', function (e) {
+            			$('.js-bottombar').hide();
+            			setCookie('bottombar-hidden', 1, 7);
+            
+            			e.preventDefault();
+            			return false;
+            		});
+            	});
+            });
+          </script>
+        </div>
+      </div>
+      <div class="footer">
+        <div class="container">
+          <div class="row">
+              <div class="row">
+                <div class="col-6 col-md-3">
+                  <ul class="list-unstyled mb-0">
+                    <li><a href="#">First link</a></li>
+                    <li><a href="#">Second link</a></li>
+                  </ul>
+                </div>
+                <div class="col-6 col-md-3">
+                  <ul class="list-unstyled mb-0">
+                    <li><a href="#">Third link</a></li>
+                    <li><a href="#">Fourth link</a></li>
+                  </ul>
+                </div>
+                <div class="col-6 col-md-3">
+                  <ul class="list-unstyled mb-0">
+                    <li><a href="#">Fifth link</a></li>
+                    <li><a href="#">Sixth link</a></li>
+                  </ul>
+                </div>
+                <div class="col-6 col-md-3">
+                  <ul class="list-unstyled mb-0">
+                    <li><a href="#">Other link</a></li>
+                    <li><a href="#">Last link</a></li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
