@@ -4,7 +4,7 @@ class Tag(db.Model):
     __tablename__ = 'tag'
 
     tag_id = db.Column(db.Integer(), primary_key = True, autoincrement = True)
-    tag_name = db.Column(db.String(64), nullable = False)
+    tag_name = db.Column(db.String(64), nullable = False, unique = True)
 
     problems = db.relationship(
         'Problem',
