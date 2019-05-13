@@ -2,12 +2,13 @@
 	'info' : {'color':'azure', 'text':'Notification'},
 	'warning' : {'color':'warning', 'text':'Warning'},
 	'error' : {'color':'red-light', 'text':'Error'},
-	'success' : {'color':'lime', 'text':'Success'}
+	'success' : {'color':'lime', 'text':'Success'},
+	'message' : {'color':'azure', 'text':'Notification'},
 } %}
 
-<div class="position-fixed d-flex w-100 p-4 align-items-center flex-column" style="top:0">
-	{% for (category, message) in get_flashed_messages(with_categories = True) if not category == 'form' %}
-	<div class="toast" role="alert" aria-live="assertive" aria-atomic="true" data-delay="3000">
+<div class="position-fixed d-flex w-100 p-4 align-items-center flex-column" style="top: 0; pointer-events: none">
+	{% for (category, message) in get_flashed_messages(with_categories = True) if not category == 'plain' %}
+	<div class="toast" style="pointer-events: auto" role="alert" aria-live="assertive" aria-atomic="true" data-delay="4000">
 		<div class="toast-header bg-{{categories[category]['color']}}">
 			<strong class="mr-auto text-dark">{{ categories[category]['text'] }}</strong>
 			<button type="button" class="ml-2 mb-1 close" data-dismiss="toast" aria-label="Close"></button>
