@@ -108,12 +108,14 @@
 						<div class="col-lg-3 ml-auto">
 							<ul class="nav nav-tabs border-0 flex-column flex-lg-row" style="float: right;">
 								<li class="nav-item dropdown">
-									<a href="javascript:void(0)" class="nav-link" data-toggle="dropdown"><i
-											class="fe fe-user"></i> Admin</a>
+									<a href="javascript:void(0)"
+										class="nav-link {% if navbar_active == 'admin' %}active{% endif %}"
+										data-toggle="dropdown"><i class="fe fe-user"></i> Admin</a>
 									<div class="dropdown-menu dropdown-menu-arrow">
 										<a href="{{ url_for('admin.user') }}" class="dropdown-item ">Users</a>
 										<a href="{{ url_for('admin.tag') }}" class="dropdown-item ">Tags</a>
-										<a href="{{ url_for('admin.userGroup') }}" class="dropdown-item ">User groups</a>
+										<a href="{{ url_for('admin.userGroup') }}" class="dropdown-item ">
+											User Groups</a>
 										<a href="#" class="dropdown-item ">Tests</a>
 									</div>
 								</li>
