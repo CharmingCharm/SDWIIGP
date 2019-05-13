@@ -1,4 +1,4 @@
-from flask import Blueprint, current_app, redirect, url_for, flash, request, render_template_string
+from flask import Blueprint, current_app, redirect, url_for, flash, request, json
 from flask_login import current_user, login_required
 from app.form import FormProblem, FormUserGroup, FormUsers, FormUserSingle, FormGroupList
 from app.model import serialize, Problem, Tag, UserGroup, User
@@ -68,7 +68,37 @@ def problem(pid):
 @admin.route('/tag', methods = ['GET', 'POST'])
 @login_required
 def tag():
-	return render_template('admin/tag.html')
+	return render_template('admin/tag.html', tags = [serialize(tag) for tag in Tag.query.all()])
+
+@admin.route('/add_tag', methods = ['POST'])
+@login_required
+def add_tag():
+	if not current_user.is_teacher:
+		return 'unauthorized'
+	
+	tag_name = request.values.get('tag_name')
+	if Tag.query.filter(Tag.tag_name == tag_name).count() > 0:
+		flash('There is already a tag with the same name!', 'error')
+		return 'error'
+	db.session.add(Tag(tag_name = tag_name))
+	flash('Adding tag is successful!', 'success')
+	return 'success'
+
+@admin.route('/delete_tag', methods = ['POST'])
+@login_required
+def delete_tag():
+	if not current_user.is_teacher:
+		return 'unauthorized'
+
+	tag_id = request.values.get('tag_id')
+	tag = Tag.query.filter(Tag.tag_id == tag_id)
+	if tag.count() == 0:
+		flash('There is no tag with the same id!', 'error')
+		return 'error'
+	tag = tag.first()
+	db.session.delete(tag)
+	flash('Deleting tag is successful!', 'success')
+	return 'success'
 
 @admin.route('/userGroup', methods = ['GET', 'POST'])
 @login_required

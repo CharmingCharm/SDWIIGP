@@ -1,46 +1,69 @@
 {% extends 'base_index.html' %}
-{% set page_title = 'Admin_tag' %}
-{% set navbar_active = 'admin_tag' %}
+{% set page_title = 'Manage Tags' %}
+{% set navbar_active = 'admin' %}
 
 {% block page_content %}
 <div class="page-header">
-    <h1 class="page-title">
-        Admin Tags
-    </h1>
+	<h1 class="page-title">
+		Tags
+	</h1>
 </div>
-<div class="row row-cards">
-    <div class="col-lg-12">
-        <div class="card">
-            <div class="card-body">
-                <div id="tags" class="tags">
-                </div>
-            </div>
-        </div>
-    </div>
+<div class="row">
+	<div class="col-lg-12">
+		<div class="card">
+			<div class="card-body">
+				<div class="text-wrap p-2">
+					<div id="tags" class="tags">
+						{% for tag in tags %}
+						<span class="tag">
+							<span class="tag_name" value="{{ tag.tag_id }}">{{ tag.tag_name }}</span>
+							<a href="javascript:void(0)" class="tag_delete tag-addon">
+								<i class="fe fe-x"></i>
+							</a>
+						</span>
+						{% endfor %}
+					</div>
+					<hr />
+					<div class="row">
+						<div class="col-lg-5">
+							<h3>Add new tag</h3>
+							<div class="input-group">
+								<input type="text" id="new_tag_name" class="form-control" placeholder="New tag name">
+								<span class="input-group-append">
+									<button class="btn btn-primary" id="add_tag">Add</button>
+								</span>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
 </div>
 
 <script>
-    require(['jquery'], function ($) {
-        function removeTag(id) {
-            $("#" + id + ">a").click(function () {
-                $("#" + id).remove();
-            });
-        }
+	require(['jquery'], function ($) {
+		$(document).ready(function () {
+			$('.tag_delete').click(function () {
+				$.post(
+					"{{ url_for('admin.delete_tag') }}",
+					{ tag_id : $(this).parent().find('.tag_name').attr('value') },
+					function () {
+						window.location.reload();
+					}
+				);
+			});
 
-        $(document).ready(function () {
-            var tags = ["Very Basic", "Stupid", "ooo"];
-            var text = "";
-            for (var num = 0; num < tags.length; num++) {
-                text += "<span class=\"tag\" id=\"" +
-                    (num + 1) + "\">" +
-                    tags[num] +
-                    "<a href=\"#\" class=\"tag-addon\"><i class=\"fe fe-x\"></i></a></span>";
-            }
-            document.getElementById("tags").innerHTML = text;
-            for (var num = 1; num <= tags.length; num++) {
-                removeTag(String(num));
-            }
-        });
-    });
+			$('#add_tag').click(function () {
+				$.post(
+					"{{ url_for('admin.add_tag') }}",
+					{ tag_name : $('#new_tag_name').val() },
+					function () {
+						window.location.reload();
+					}
+				);
+			});
+		});
+	});
 </script>
 {% endblock %}
