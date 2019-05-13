@@ -10,8 +10,6 @@ class UserGroup(db.Model):
 	users = db.relationship(
 		'User',
 		secondary = 'user_in_group',
-		backref = db.backref('groups', lazy = 'dynamic', cascade = 'all, delete', passive_deletes = True),
-		lazy = 'dynamic',
-		cascade = 'all, delete',
-		passive_deletes = True
+		backref = db.backref('groups', lazy = 'dynamic'),
+		lazy = 'dynamic'
 	)
