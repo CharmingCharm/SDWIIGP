@@ -1,4 +1,4 @@
-from flask import Blueprint, current_app, redirect, url_for, flash, request, json
+from flask import Blueprint, current_app, redirect, url_for, flash, request, json, abort
 from flask_login import current_user, login_required
 from app.form import FormProblem, FormUserGroup, FormUsers, FormUserSingle, FormGroupList
 from app.model import serialize, Problem, Tag, UserGroup, User
@@ -98,6 +98,22 @@ def delete_tag():
 	tag = tag.first()
 	db.session.delete(tag)
 	flash('Deleting tag is successful!', 'success')
+	return 'success'
+
+@admin.route('/change_tag', methods = ['POST'])
+@login_required
+def change_tag():
+	if not current_user.is_teacher:
+		return 'unauthorized'
+
+	tag_id = request.values.get('tag_id')
+	tag = Tag.query.filter(Tag.tag_id == tag_id)
+	if tag.count() == 0:
+		flash('There is no tag with the same id!', 'error')
+		return 'error'
+	tag = tag.first()
+	tag.tag_name = request.values.get('tag_name')
+	flash('Changing tag is successful!', 'success')
 	return 'success'
 
 @admin.route('/userGroup', methods = ['GET', 'POST'])
