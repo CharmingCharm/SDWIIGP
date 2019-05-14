@@ -106,6 +106,7 @@
 				<div class="container">
 					<div class="row align-items-center">
 						<div class="col-lg-3 ml-auto">
+							{% if current_user.is_teacher %}
 							<ul class="nav nav-tabs border-0 flex-column flex-lg-row" style="float: right;">
 								<li class="nav-item dropdown">
 									<a href="javascript:void(0)"
@@ -120,6 +121,7 @@
 									</div>
 								</li>
 							</ul>
+							{% endif %}
 						</div>
 						<div class="col-lg order-lg-first">
 							<ul class="nav nav-tabs border-0 flex-column flex-lg-row">
