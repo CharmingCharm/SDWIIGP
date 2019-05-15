@@ -1,7 +1,7 @@
-from flask import Blueprint, current_app, redirect, url_for, flash, request, json, abort
+from flask import Blueprint, current_app, redirect, url_for, flash, request, json, abort, jsonify
 from flask_login import current_user, login_required
 from app.form import FormProblem, FormUserGroup, FormUsers, FormUserSingle, FormGroupList
-from app.model import serialize, Problem, Tag, UserGroup, User
+from app.model import serialize, Problem, Tag, UserGroup, User, UserInGroup
 from . import render_template
 from app.extension import db
 
@@ -124,7 +124,6 @@ def userGroup():
 		print(form.groups.__getitem__(0).group_name)
 		while form.groups.__len__() > 0:
 			groupForm = form.groups.pop_entry()
-			print(groupForm.deleteID.data)
 			if groupForm.deleteID.data:
 				UserGroup.query.filter_by(gid = groupForm.gid.data).delete()
 				flash('Delete successfully!','success')
@@ -145,7 +144,38 @@ def userGroupDetail(gid):
 	user_group = UserGroup.query.filter_by(gid = gid).first()
 	form.group_name.data = user_group.group_name
 	form.description.data = user_group.description
-
+	form.number.data = user_group.users.count()
+	#if form.addID.data:
+		
 	# if form.addID.data:
 	# 	User.query.filter(User.user_name.like('%%' + form.new_user_name.data + '%%')).all()
 	return render_template('admin/group_detail.html', user_group = user_group, form = form)
+
+@admin.route('/search_new_user', methods = ['POST'])
+@login_required
+def search_new_user():
+	if not current_user.is_teacher:
+		return 'unauthorized'
+
+	new_user_name = request.values.get('new_user_name')
+	users = User.query.filter(User.user_name.like('%%' + new_user_name + '%%')).all()
+	user_array = []
+	for user in users:
+		user_array.append({'uid':user.uid, 'user_name':user.user_name})
+	return jsonify({'user': user_array})
+
+@admin.route('/add_new_user', methods = ['POST'])
+@login_required
+def add_new_user():
+	if not current_user.is_teacher:
+		return 'unauthorized'
+
+	new_uid = request.values.get('user_id')
+	gid = request.values.get('group_id')
+	if UserInGroup.query(uid = uid, gid = gid).count() > 0:
+		flash('The user is already in the group!', 'error')
+		return 'error'
+	db.session.add(UserInGroup(uid = new_uid, gid = gid))
+	db.session.commit()
+	flash('Success!', 'success')
+	return redirect("url_for('admin.userGroupDetail')")

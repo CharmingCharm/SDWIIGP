@@ -20,7 +20,7 @@
                             </tr>
                         </thead>
                         <tbody>
-                            {% for user in group.users %}
+                            {% for user in user_group.users %}
                             <tr>
                                 <td>{{ user.uid }}</td>
                                 <td>{{ user.user_name }}</td>
@@ -66,11 +66,7 @@
             <button type="submit" class="btn btn-pill btn-azure btn-lg">submit</button>
         </div>
     </div>
-</form>
-
-
-<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-    <form>
+    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
@@ -78,26 +74,81 @@
                     <a class="close" data-dismiss="modal" aria-hidden="true"></a>
                 </div>
                 <div class="form-group modal-body">
-                    {{ form.new_user_name.label }}
+                    <label>New username</label>
                     <div class="row gutters-xs">
                         <div class="col">
-                            {{ form.new_user_name(class='form-control') }}
+                            <input type='text' class='form-control' id='search'>
                         </div>
                         <span class="col-auto">
-                            <button class="btn btn-secondary" type="button">
+                            <a href="javascript:void(0)" class="btn btn-secondary" role="button" id="searchButton">
                                 <i class="fe fe-search"></i>
-                            </button>
+                            </a>
                         </span>
                     </div>
-                    {{ form }}
+                    <div class="row gutters-xs">
+                        <table class="table card-table">
+                            <thead>
+                                <tr>
+                                    <th>User ID</th>
+                                    <th>Username</th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody id="refresh">
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-                    {{ form.addID(class="btn btn-primary", value='Add') }}
                 </div>
             </div>
         </div>
-    </form>
-</div>
+    </div>
+</form>
 
+
+<script>
+    require(['jquery', 'bootstrap'], function ($) {
+        $(document).ready(function () {
+            $('#searchButton').click(function () {
+                var url = "{{ url_for('admin.search_new_user') }}";
+                var data = { new_user_name: $('#search').val() };
+                $.ajax({
+                    type: "post",
+                    async: false, //同步请求
+                    url: url,
+                    data: data,
+                    timeout: 1000,
+                    success: function (users) {
+                        var text = "";
+                        for (var row = 0; row < users.user.length; row++) {
+                            text += "<tr>"
+                            text += "<td>" + users.user[row]['uid'] + "</td>";
+                            text += "<td>" + users.user[row]['user_name'] + "</td>";
+                            text += "<td><a href=\"javascript:void(0)\" class=\"btn btn-azure addUser\" role=\"button\" value=\""+users.user[row]['uid']+"\">Add</a></td>";
+                            text += "</tr>"
+                        }
+                        $("#refresh").html(text);//要刷新的div
+                    },
+                    error: function () {
+                        alert("Error");
+                    }
+                });
+            });
+            
+            $('.addUser').click(function () {
+                $.post(
+                    "{{ url_for('admin.add_new_user') }}",
+                    { user_id: $(this).val(), group_id: {{ user_group.gid }}},
+                    function () {
+                        alert("lala");
+                        window.location.reload();
+                    }
+                );
+            });
+        });
+    });
+
+</script>
 {% endblock %}

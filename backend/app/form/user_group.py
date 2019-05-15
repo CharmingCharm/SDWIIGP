@@ -13,9 +13,7 @@ class FormUserGroup(FlaskForm):
     add_user = StringField('Username')
     deleteID = SubmitField()
 
-    new_user_name = StringField('New username')
     addID = SubmitField()
-
 
 class FormGroupList(FlaskForm):
     groups = FieldList(FormField(FormUserGroup))
