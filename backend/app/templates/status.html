@@ -1,7 +1,7 @@
 {% extends 'base_index.html' %}
 {% set page_title = 'Status' %}
 {% set navbar_active = 'status' %}
-
+{% import 'base_macros.html' as macros %}
 {% block page_content %}
 <div class="page-header">
     <h1 class="page-title">
@@ -33,5 +33,6 @@
 
         </tbody>
     </table>
+    {{ macros.my_paginate(pagination,'main.status') }}
 </div>
 {% endblock %}

@@ -8,14 +8,14 @@ from datetime import datetime
 tasks = Blueprint('task', __name__)
 
 @tasks.route('/', methods = ['GET', 'POST'])
+@tasks.route('/<int:page>', methods = ['GET', 'POST'])
 @login_required
-def task():
-    tasks = [serialize(task) for task in Task.query.all()]
-    for task in tasks:
-        task['deadline'] = datetime.strptime(task['deadline'], '%Y-%m-%d %H:%M:%S')
-    return render_template('task.html',tasks = tasks,now = datetime.now())
+def task(page = 1):
+    pagination = Task.query.paginate(page=page,per_page=5)
+    tasks = pagination.items
+    return render_template('task.html',tasks = tasks,now = datetime.now(), pagination = pagination)
 
-@tasks.route('/<task_id>', methods = ['GET', 'POST'])
+@tasks.route('/show/<task_id>', methods = ['GET', 'POST'])
 @login_required
 def show(task_id):
     task = Task.query.filter_by(task_id = task_id).first()

@@ -1,6 +1,8 @@
 {% extends 'base_index.html' %}
 {% set page_title = 'User group list' %}
 
+{% import 'base_macros.html' as macros %}
+
 {% block page_content %}
 <div class="page-header">
     <h1 class="page-title">
@@ -36,6 +38,7 @@
                 {% endfor %}
             </tbody>
         </table>
+        {{ macros.my_paginate(pagination,'admin.userGroup') }}
+    </div>
 </form>
-</div>
 {% endblock %}

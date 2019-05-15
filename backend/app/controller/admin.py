@@ -1,4 +1,5 @@
 from flask import Blueprint, current_app, redirect, url_for, flash, request, json, abort, jsonify
+from flask_paginate import Pagination, get_page_parameter
 from flask_login import current_user, login_required
 from app.form import FormProblem, FormUserGroup, FormUsers, FormUserSingle, FormGroupList
 from app.model import serialize, Problem, Tag, UserGroup, User, UserInGroup
@@ -8,8 +9,9 @@ from app.extension import db
 admin = Blueprint('admin', __name__)
 
 @admin.route('/user', methods = ['GET', 'POST'])
+@admin.route('/user/<int:page>', methods = ['GET', 'POST'])
 @login_required
-def user():
+def user(page = 1):
 	form = FormUsers()
 	if form.addID.data and form.new_user_name.data and form.new_position.data:
 		if User.query.filter_by(user_name = form.new_user_name.data).first():
@@ -33,7 +35,8 @@ def user():
 				User.query.filter_by(uid = userForm.uid.data).delete()
 				flash('Delete successfully!','success')
 
-	users = User.query.all()
+	pagination = User.query.paginate(page=page,per_page=5)
+	users = pagination.items
 	for user in users:
 		userForm = FormUserSingle()
 		userForm.uid = user.uid
@@ -41,7 +44,7 @@ def user():
 		userForm.position = 'Teacher' if user.is_teacher else 'Student'
 		form.users.append_entry(data=userForm)
 
-	return render_template('admin/user.html', form = form)
+	return render_template('admin/user.html', form = form, pagination = pagination)
 
 @admin.route('/problem/<int:pid>', methods = ['GET', 'POST'])
 @login_required
@@ -117,8 +120,9 @@ def change_tag():
 	return 'success'
 
 @admin.route('/userGroup', methods = ['GET', 'POST'])
+@admin.route('/userGroup/<int:page>', methods = ['GET', 'POST'])
 @login_required
-def userGroup():
+def userGroup(page = 1):
 	form = FormGroupList()
 	if form.groups.__len__():
 		print(form.groups.__getitem__(0).group_name)
@@ -128,14 +132,15 @@ def userGroup():
 				UserGroup.query.filter_by(gid = groupForm.gid.data).delete()
 				flash('Delete successfully!','success')
 
-	user_groups = UserGroup.query.all()
+	pagination = UserGroup.query.paginate(page=page,per_page=5)
+	user_groups = pagination.items
 	for group in user_groups:
 		groupForm = FormUserGroup()
 		groupForm.gid = group.gid
 		groupForm.group_name = group.group_name
 		groupForm.number = group.users.count()
 		form.groups.append_entry(groupForm)
-	return render_template('admin/user_group_list.html', form = form)
+	return render_template('admin/user_group_list.html', form = form, pagination = pagination)
 
 @admin.route('/userGroup/<int:gid>', methods = ['GET', 'POST'])
 @login_required
@@ -145,10 +150,6 @@ def userGroupDetail(gid):
 	form.group_name.data = user_group.group_name
 	form.description.data = user_group.description
 	form.number.data = user_group.users.count()
-	#if form.addID.data:
-		
-	# if form.addID.data:
-	# 	User.query.filter(User.user_name.like('%%' + form.new_user_name.data + '%%')).all()
 	return render_template('admin/group_detail.html', user_group = user_group, form = form)
 
 @admin.route('/search_new_user', methods = ['POST'])

@@ -13,10 +13,9 @@ def home():
     return render_template('home.html')
 
 @main.route('/status', methods = ['GET', 'POST'])
+@main.route('/status/<int:page>', methods = ['GET', 'POST'])
 @login_required
-def status():
-    submissions = [serialize(submission) for submission in Submission.query.all()]
-    sub_array = []
-    for sub in submissions:
-        sub_array.append(Submission.query.filter_by(sid = sub['sid']).first())
-    return render_template('status.html', submissions = sub_array)
+def status(page = 1):
+    pagination = Submission.query.paginate(page=page,per_page=5)
+    submissions = pagination.items
+    return render_template('status.html', submissions = submissions, pagination = pagination)

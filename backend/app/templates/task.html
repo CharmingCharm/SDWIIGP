@@ -1,7 +1,7 @@
 {% extends 'base_index.html' %}
 {% set page_title = 'Task' %}
 {% set navbar_active = 'task' %}
-
+{% import 'base_macros.html' as macros %}
 <style>
     td {
         height: 60px;
@@ -46,6 +46,7 @@
                     {% endfor %}
                 </tbody>
             </table>
+            {{ macros.my_paginate(pagination,'task.task') }}
         </div>
     </div>
 </div>
