@@ -1,3 +1,6 @@
+# Not ignore libraries
+!lib/
+
 logs
 *.log
 *.pid
