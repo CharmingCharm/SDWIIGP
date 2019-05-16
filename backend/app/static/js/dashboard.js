@@ -9,16 +9,31 @@ shim: {
 'core': ['bootstrap', 'jquery'],
 },
 paths: {
-'core': '/static/js/core',
-'jquery': '/static/js/vendors/jquery-3.2.1.min',
-'bootstrap': '/static/js/vendors/bootstrap.bundle.min',
-'sparkline': '/static/js/vendors/jquery.sparkline.min',
-'selectize': '/static/js/vendors/selectize.min',
-'tablesorter': '/static/js/vendors/jquery.tablesorter.min',
-'vector-map': '/static/js/vendors/jquery-jvectormap-2.0.3.min',
-'vector-map-de': '/static/js/vendors/jquery-jvectormap-de-merc',
-'vector-map-world': '/static/js/vendors/jquery-jvectormap-world-mill',
-'circle-progress': '/static/js/vendors/circle-progress.min',
+'core': 'js/core',
+'jquery': 'js/vendors/jquery-3.2.1.min',
+'bootstrap': 'js/vendors/bootstrap.bundle.min',
+'sparkline': 'js/vendors/jquery.sparkline.min',
+'selectize': 'js/vendors/selectize.min',
+'tablesorter': 'js/vendors/jquery.tablesorter.min',
+'vector-map': 'js/vendors/jquery-jvectormap-2.0.3.min',
+'vector-map-de': 'js/vendors/jquery-jvectormap-de-merc',
+'vector-map-world': 'js/vendors/jquery-jvectormap-world-mill',
+'circle-progress': 'js/vendors/circle-progress.min',
+'marked': "plugins/editormd/lib/marked.min",
+'prettify': "plugins/editormd/lib/prettify.min",
+'raphael': "plugins/editormd/lib/raphael.min",
+'underscore': "plugins/editormd/lib/underscore.min",
+'flowchart': "plugins/editormd/lib/flowchart.min",
+'jqueryflowchart': "plugins/editormd/lib/jquery.flowchart.min",
+'sequenceDiagram': "plugins/editormd/lib/sequence-diagram.min",
+'katex': "plugins/katex/katex.min",
+'codemirror': "plugins/editormd/lib/codemirror",
+'editormd': "plugins/editormd/editormd.amd.min", // Using Editor.md amd version for Require.js
+},
+map: {
+'*': {
+'css': 'plugins/require-css/css'
+}
 }
 });
 window.tabler = {
