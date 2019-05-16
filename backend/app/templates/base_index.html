@@ -24,7 +24,8 @@
 	<script src="{{ url_for('static', filename='js/require.min.js') }}"></script>
 	<script>
 		requirejs.config({
-			baseUrl: '.'
+			baseUrl: '/static',
+			waitSeconds: 30, // For Editor.md
 		});
 	</script>
 	<!-- Dashboard Core -->
@@ -54,6 +55,25 @@
 			});
 		});
 		*/
+
+		// Set global dependence variable for Editor.md
+		var editormd_deps = [
+			"editormd",
+			"plugins/editormd/languages/en",
+			"plugins/editormd/plugins/link-dialog/link-dialog",
+			"plugins/editormd/plugins/reference-link-dialog/reference-link-dialog",
+			"plugins/editormd/plugins/image-dialog/image-dialog",
+			"plugins/editormd/plugins/code-block-dialog/code-block-dialog",
+			"plugins/editormd/plugins/table-dialog/table-dialog",
+			"plugins/editormd/plugins/emoji-dialog/emoji-dialog",
+			"plugins/editormd/plugins/goto-line-dialog/goto-line-dialog",
+			"plugins/editormd/plugins/help-dialog/help-dialog",
+			"plugins/editormd/plugins/html-entities-dialog/html-entities-dialog",
+			"plugins/editormd/plugins/preformatted-text-dialog/preformatted-text-dialog",
+			"css!plugins/editormd/css/editormd.min",
+			"css!plugins/editormd/lib/codemirror/codemirror.min",
+			"css!plugins/katex/katex.min",
+		];
 	</script>
 </head>
 
