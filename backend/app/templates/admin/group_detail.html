@@ -126,21 +126,32 @@
                             text += "<tr>"
                             text += "<td>" + users.user[row]['uid'] + "</td>";
                             text += "<td>" + users.user[row]['user_name'] + "</td>";
-                            text += "<td><a href=\"javascript:void(0)\" class=\"btn btn-azure addUser\" role=\"button\" value=\""+users.user[row]['uid']+"\">Add</a></td>";
+                            text += "<td><a href=\"javascript:void(0)\" class=\"btn btn-azure addUser\" role=\"button\" value=\"" + users.user[row]['uid'] + "\">Add</a></td>";
                             text += "</tr>"
                         }
                         $("#refresh").html(text);//要刷新的div
+                        $('.addUser').click(function () {
+                            alert("yes");
+                            $.post(
+                                "{{ url_for('admin.add_new_user') }}",
+                                { user_id: $(this).attr('value'), group_id: {{ user_group.gid }}},
+                                function() {
+                                    alert("lala");
+                                    window.location.reload();
+                                }
+                            );
+                        });
                     },
                     error: function () {
                         alert("Error");
                     }
                 });
             });
-            
+
             $('.addUser').click(function () {
                 $.post(
                     "{{ url_for('admin.add_new_user') }}",
-                    { user_id: $(this).val(), group_id: {{ user_group.gid }}},
+                    { user_id: $(this).attr('value'), group_id: {{ user_group.gid }}},
                     function () {
                         alert("lala");
                         window.location.reload();

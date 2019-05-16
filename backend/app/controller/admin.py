@@ -142,7 +142,7 @@ def userGroup(page = 1):
 		form.groups.append_entry(groupForm)
 	return render_template('admin/user_group_list.html', form = form, pagination = pagination)
 
-@admin.route('/userGroup/<int:gid>', methods = ['GET', 'POST'])
+@admin.route('/userGroup/show/<int:gid>', methods = ['GET', 'POST'])
 @login_required
 def userGroupDetail(gid):
 	form = FormUserGroup()
@@ -172,11 +172,11 @@ def add_new_user():
 		return 'unauthorized'
 
 	new_uid = request.values.get('user_id')
+	new_user = User.query.filter_by(uid = new_uid).first()
 	gid = request.values.get('group_id')
-	if UserInGroup.query(uid = uid, gid = gid).count() > 0:
+	if new_user.groups.filter_by(gid = gid).count() > 0:
 		flash('The user is already in the group!', 'error')
 		return 'error'
-	db.session.add(UserInGroup(uid = new_uid, gid = gid))
-	db.session.commit()
+	new_user.groups.append(UserGroup.query.filter_by(gid = gid).first())
 	flash('Success!', 'success')
-	return redirect("url_for('admin.userGroupDetail')")
+	return redirect(url_for('admin.userGroupDetail'))
