@@ -1,6 +1,7 @@
 {% extends 'base_index.html' %}
 {% set page_title = 'Manage Tags' %}
 {% set navbar_active = 'admin' %}
+{% import 'base_macros.html' as macros %}
 
 {% block page_content %}
 <div class="page-header">
@@ -68,29 +69,7 @@
 	</div>
 </div>
 
-<div class="modal fade" id="modal_delete_tag" role="dialog" aria-labelledby="title_delete_tag" aria-hidden="true">
-	<div class="modal-dialog">
-		<div class="modal-content">
-			<div class="modal-header">
-				<h4 class="modal-title" id="title_delete_tag">Delete tag</h4>
-				<a class="close" data-dismiss="modal" aria-hidden="true"></a>
-			</div>
-			<div class="modal-body">
-				<h3 class="font-weight-normal text-danger">Are you sure to delete tag:</h3>
-				<h4 id="name_delete_tag"></h4>
-				<input type="hidden" id="id_delete_tag">
-			</div>
-			<div class="modal-footer justify-content-between">
-				<div class="d-flex">
-					<button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-				</div>
-				<div class="d-flex justify-content-end">
-					<button type="button" class="btn btn-danger" data-dismiss="modal" id="submit_delete_tag">Delete</button>
-				</div>
-			</div>
-		</div>
-	</div>
-</div>
+{{ macros.modal_delete('tag') }}
 
 <script>
 	require(['jquery', 'bootstrap'], function ($) {
