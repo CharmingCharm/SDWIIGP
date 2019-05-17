@@ -17,7 +17,7 @@ manager.add_command('runserver', Server(use_debugger = True))
 
 @manager.command
 def adduser(name, pwd, teacher):
-    is_teacher = True if teacher == 'true' else False
+    is_teacher = teacher == 'true'
     db.session.add(User(user_name = name, password = pwd, is_teacher = is_teacher))
     db.session.commit()
 

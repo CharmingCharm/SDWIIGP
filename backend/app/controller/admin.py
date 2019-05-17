@@ -19,7 +19,7 @@ def user(page = 1):
 		else:
 			db.session.add(User(user_name=form.new_user_name.data,
 								password=form.new_user_name.data,
-								is_teacher=True if form.new_position.data == 'Teacher' else False))
+								position=form.new_position.data))
 			db.session.commit()
 			flash('Success!','success')
 	
@@ -29,7 +29,7 @@ def user(page = 1):
 			if userForm.changeID.data:
 				user = User.query.filter_by(uid = userForm.uid.data).first()
 				user.user_name = userForm.user_name.data
-				user.is_teacher = True if userForm.position.data == 'Teacher' else False
+				user.positon = userForm.position.data
 				flash('Success!','success')
 			elif userForm.deleteID.data:
 				User.query.filter_by(uid = userForm.uid.data).delete()

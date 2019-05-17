@@ -30,6 +30,13 @@ class User(UserMixin, db.Model):
     def position(self):
         return 'Teacher' if self.is_teacher else 'Student'
     
+    @position.setter
+    def position(self, pos):
+        if type(pos) == bool:
+            self.is_teacher = pos
+        else:
+            self.is_teacher = pos == 'Teacher'
+    
     def verify_password(self, password):
         return check_password_hash(self.password_hash, password)
 
