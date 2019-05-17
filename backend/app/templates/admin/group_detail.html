@@ -5,37 +5,37 @@
 {% import 'base_macros.html' as macros %}
 
 {% block page_content %}
-<form role="form" method="post">
-    {{ form.csrf_token }}
-    <div class="row">
-        <div class="col-lg-7">
-            <div class="card">
-                <div class="card-body">
-                    <table class="table card-table">
-                        <thead>
-                            <tr>
-                                <th>User ID</th>
-                                <th>User name</th>
-                                <th></th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {% for user in user_group.users %}
-                            <tr>
-                                <td>{{ user.uid }}</td>
-                                <td>{{ user.user_name }}</td>
-                                <td><button class="btn btn-pill btn-danger">Delete</button></td>
-                            </tr>
-                            {% endfor %}
-                        </tbody>
-                    </table>
 
-                </div>
+<div class="row">
+    <div class="col-lg-7">
+        <div class="card">
+            <div class="card-body">
+                <table class="table card-table">
+                    <thead>
+                        <tr>
+                            <th>User ID</th>
+                            <th>User name</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for user in user_group.users %}
+                        <tr>
+                            <td>{{ user.uid }}</td>
+                            <td id="show_user_name-{{ user.uid }}">{{ user.user_name }}</td>
+                            <td><button class="btn btn-pill btn-danger delete" data-toggle="modal" data-target="#modal_delete_user" value="{{ user.uid }}">Delete</button></td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+
             </div>
-            <button class="btn btn-pill btn-success" data-toggle="modal" data-target="#myModal" type="button">Add
-                User</button>
         </div>
-        <div class="col-lg-5">
+        <button class="btn btn-pill btn-success" data-toggle="modal" data-target="#myModal" type="button">Add
+            User</button>
+    </div>
+    <div class="col-lg-5">
+        <form role="form" method="post" action="">
             <div class="card">
                 <div class="card-header">
                     <h3 class="card-title">Information</h3>
@@ -60,57 +60,100 @@
                         </td>
                     </tr>
                 </table>
+                <div class="col-12" align="center" style="margin-bottom: 20px;">
+                    <button type="submit" class="btn btn-pill btn-azure btn-lg">submit</button>
+                </div>
+            </div>
+        </form>
+    </div>
+ 
+</div>
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="add_user_in_group" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="myModalLabel">Add a user to the group</h4>
+                <a class="close" data-dismiss="modal" aria-hidden="true"></a>
+            </div>
+            <div class="form-group modal-body">
+                <label>New username</label>
+                <div class="row gutters-xs">
+                    <div class="col">
+                        <input type='text' class='form-control' id='search'>
+                    </div>
+                    <span class="col-auto">
+                        <a href="javascript:void(0)" class="btn btn-secondary" role="button" id="searchButton">
+                            <i class="fe fe-search"></i>
+                        </a>
+                    </span>
+                </div>
+                <div class="row gutters-xs">
+                    <table class="table card-table">
+                        <thead>
+                            <tr>
+                                <th>User ID</th>
+                                <th>Username</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody id="refresh">
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
             </div>
         </div>
-        <div class="col-12" align="center">
-            <button type="submit" class="btn btn-pill btn-azure btn-lg">submit</button>
-        </div>
     </div>
-    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="add_user_in_group" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h4 class="modal-title" id="myModalLabel">Add a user to the group</h4>
-                    <a class="close" data-dismiss="modal" aria-hidden="true"></a>
-                </div>
-                <div class="form-group modal-body">
-                    <label>New username</label>
-                    <div class="row gutters-xs">
-                        <div class="col">
-                            <input type='text' class='form-control' id='search'>
-                        </div>
-                        <span class="col-auto">
-                            <a href="javascript:void(0)" class="btn btn-secondary" role="button" id="searchButton">
-                                <i class="fe fe-search"></i>
-                            </a>
-                        </span>
-                    </div>
-                    <div class="row gutters-xs">
-                        <table class="table card-table">
-                            <thead>
-                                <tr>
-                                    <th>User ID</th>
-                                    <th>Username</th>
-                                    <th></th>
-                                </tr>
-                            </thead>
-                            <tbody id="refresh">
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-                <div class="modal-footer">
+</div>
+
+<div class="modal fade" id="modal_delete_user" role="dialog" aria-labelledby="delete_user" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Delete User</h4>
+                <a class="close" data-dismiss="modal" aria-hidden="true"></a>
+            </div>
+            <div class="modal-body">
+                <h3 class="font-weight-normal text-danger">Are you sure to delete user:</h3>
+                <h4 id="title_delete_user"></h4>
+            </div>
+            <div class="modal-footer justify-content-between">
+                <div class="d-flex">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
                 </div>
+                <div class="d-flex justify-content-end">
+                    <button type="button" class="btn btn-danger" data-dismiss="modal"
+                        id="submit_delete_user">Delete</button>
+                </div>
             </div>
         </div>
     </div>
-</form>
-
+</div>
 
 <script>
     require(['jquery', 'bootstrap'], function ($) {
         $(document).ready(function () {
+
+            $('.delete').click(function () {
+                $('#title_delete_user').html($("#show_user_name-" + $(this).val()).html());
+                $('#submit_delete_user').val($(this).val());
+            });
+
+            $('#submit_delete_user').click(function () {
+                $.post(
+                    "{{ url_for('admin.delete_user') }}",
+                    {
+                        uid: $(this).val(),
+                        gid: {{ user_group.gid }}
+                    },
+                    function () {
+                        window.location.reload();
+                    }
+                );
+            });
+
             $('#searchButton').click(function () {
                 var url = "{{ url_for('admin.search_new_user') }}";
                 var data = { new_user_name: $('#search').val() };

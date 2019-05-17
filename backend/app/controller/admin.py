@@ -105,3 +105,13 @@ def add_new_user():
 	new_user.groups.append(UserGroup.query.filter_by(gid = gid).first())
 	flash('Success!', 'success')
 	return redirect(url_for('admin.userGroupDetail', gid = gid))
+
+@admin.route('/delete_user', methods = ['POST'])
+@admin_required
+def delete_user():
+	uid = request.values.get('uid')
+	gid = request.values.get('gid')
+	delete_user = UserGroup.query.filter_by(gid = gid).first().users.filter_by(uid = uid).first()
+	db.session.delete(delete_user)
+	flash('Success!', 'success')
+	return redirect(url_for('admin.userGroupDetail', gid = gid))

@@ -10,10 +10,6 @@ class FormUserGroup(FlaskForm):
     group_name = StringField('Group name')
     number = IntegerField('Number of members')
     description = TextAreaField('Decription', render_kw = {'rows': 6})
-    add_user = StringField('Username')
-    deleteID = SubmitField()
-
-    addID = SubmitField()
 
 class FormGroupList(FlaskForm):
     groups = FieldList(FormField(FormUserGroup))
