@@ -15,7 +15,6 @@ def admin_required(f):
 	def decorated_function(*args, **kwargs):
 		if not current_user.is_teacher:
 			abort(403)
-		print('I am admin')
 		return f(*args, **kwargs)
 	return decorated_function
 
