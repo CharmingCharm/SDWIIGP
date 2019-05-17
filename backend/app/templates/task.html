@@ -1,53 +1,47 @@
 {% extends 'base_index.html' %}
-{% set page_title = 'Task' %}
+{% set page_title = task.task_id|string ~ '. ' ~ task.task_name %}
 {% set navbar_active = 'task' %}
+
 {% import 'base_macros.html' as macros %}
-<style>
-    td {
-        height: 60px;
-        font-size: 20px;
-    }
-</style>
 
 {% block page_content %}
-<div class="my-3 my-md-5">
-    <div class="container">
-        <div class="page-header">
-            <h1 class="page-title">
-                Task
-            </h1>
-        </div>
-        <div class="card">
+<div class="row row-cards">
+	<div class="col-lg-8">
+		<div class="card">
+			<div class="card-body">
+				<div class="text-wrap p-lg-4">
+					<h2 class="mt-0 mb-4">{{ task.task_name }}</h2>
+					<p>{{ task.description }}</p>
+				</div>
+			</div>
+		</div>
+	</div>
 
-            <table class="table card-table">
-                <thead>
-                    <tr>
-                        <th>Task ID</th>
-                        <th>Task name</th>
-                        <th>Deadline</th>
-                        <th>Status</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for task in tasks %}
-                    <tr>
-
-                        <td>{{ task.task_id }}</td>
-                        <td><a href="{{ url_for('task.show', task_id = task.task_id) }}">{{ task.task_name }}</a></td>
-                        <td>{{ task.deadline }}</td>
-
-                        {% if task.deadline > now %}
-                        <td><span class="tag tag-green">Available</span></td>
-                        {% else %}
-                        <td><span class="tag tag-red">End</span></td>
-                        {% endif %}
-
-                    </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
-            {{ macros.my_paginate(pagination,'task.task') }}
-        </div>
-    </div>
+	<div class="col-12">
+		<div class="card">
+			<div class="table-responsive">
+				<table class="table card-table table-vcenter text-nowrap">
+					<thead>
+						<tr>
+							<th>Status</th>
+							<th>#</th>
+							<th>Title</th>
+							<th>Level</th>
+						</tr>
+					</thead>
+					<tbody>
+						{% for problem in task.problems %}
+						<tr>
+							<td><span class="tag tag-green">AC</span></td>
+							<td><a href="{{ url_for('problem.show', pid = problem.pid) }}">{{ problem.pid }}</a></td>
+							<td><a href="{{ url_for('problem.show', pid = problem.pid) }}">{{ problem.title }}</a></td>
+							<td>{{ macros.level_to_tag(problem.level) }}</td>
+						</tr>
+						{% endfor %}
+					</tbody>
+				</table>
+			</div>
+		</div>
+	</div>
 </div>
 {% endblock %}

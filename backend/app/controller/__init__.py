@@ -17,7 +17,7 @@ def admin_required(f):
 from .main import main
 from .user import user
 from .api import api
-from .task import tasks
+from .task import task
 from .admin import admin
 from .problem import problem
 
@@ -26,7 +26,7 @@ BLUEPRINTS = (
 	(user, '/user'),
 	(api, '/api'),
 	(problem, '/problem'),
-	(tasks, '/task'),
+	(task, '/task'),
 	(admin, '/admin'),
 )
 

@@ -1,0 +1,82 @@
+{% extends 'base_index.html' %}
+{% set page_title = 'Task' %}
+{% set navbar_active = 'task' %}
+{% import 'base_macros.html' as macros %}
+
+{% block page_content %}
+<div class="card">
+	{% if current_user.is_teacher %}
+	<div class="card-header">
+		<a href="{{ url_for('task.new') }}" class="btn btn-sm btn-primary">New Task</a>
+	</div>
+	{% endif %}
+	<div class="table-responsive">
+		<table class="table card-table table-vcenter text-nowrap">
+			<thead>
+				<tr>
+					<th>Task ID</th>
+					<th>Task name</th>
+					<th>Deadline</th>
+					<th>Status</th>
+					{% if current_user.is_teacher %}<th></th>{% endif %}
+				</tr>
+			</thead>
+			<tbody>
+				{% for task in tasks %}
+				<tr>
+					<td class="task_id">{{ task.task_id }}</td>
+					<td><a href="{{ url_for('task.show', task_id = task.task_id) }}" class="task_name">{{ task.task_name }}</a></td>
+					<td>{{ task.deadline }}</td>
+
+					{% if task.deadline > now %}
+					<td><span class="tag tag-green">Available</span></td>
+					{% else %}
+					<td><span class="tag tag-red">End</span></td>
+					{% endif %}
+
+					{% if current_user.is_teacher %}
+					<td class="text-right">
+						<a href="{{ url_for('task.edit', task_id = task.task_id) }}" class="icon">
+							<i class="fe fe-edit"></i>
+						</a>
+						<a href="javascript:void(0)" data-toggle="modal" data-target="#modal_delete_task"
+							class="icon delete_task ml-1">
+							<i class="fe fe-x"></i>
+						</a>
+					</Td>
+					{% endif %}
+				</tr>
+				{% endfor %}
+			</tbody>
+		</table>
+		{{ macros.my_paginate(pagination,'task.tasklist') }}
+	</div>
+</div>
+
+{% if current_user.is_teacher %}
+{{ macros.modal_delete('task') }}
+{% endif %}
+
+<script>
+	require(['jquery'], function ($) {
+		$().ready(function () {
+			$('.delete_task').click(function () {
+				var task = $(this).parent().siblings();
+				$('#name_delete_task').html(task.find('.task_name').html());
+				$('#id_delete_task').val(task.find('.task_id').html());
+			});
+
+			$('#submit_delete_task').click(function () {
+				$.post(
+					"{{ url_for('task.delete') }}",
+					{ pid: $('#id_delete_task').val() },
+					function () {
+						window.location.reload();
+					}
+				);
+			});
+		});
+	});
+</script>
+
+{% endblock %}
