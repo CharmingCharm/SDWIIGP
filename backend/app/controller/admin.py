@@ -1,6 +1,7 @@
 from flask import Blueprint, current_app, redirect, url_for, flash, request, json, abort, jsonify
 from flask_paginate import Pagination, get_page_parameter
 from flask_login import current_user, login_required
+from functools import wraps
 from app.form import FormProblem, FormNewProblem, FormUserGroup, FormUsers, FormUserSingle, FormGroupList
 from app.model import serialize, Problem, Tag, UserGroup, User, UserInGroup
 from . import render_template
@@ -8,9 +9,19 @@ from app.extension import db
 
 admin = Blueprint('admin', __name__)
 
+def admin_required(f):
+	@login_required
+	@wraps(f)
+	def decorated_function(*args, **kwargs):
+		if not current_user.is_teacher:
+			abort(403)
+		print('I am admin')
+		return f(*args, **kwargs)
+	return decorated_function
+
 @admin.route('/user', methods = ['GET', 'POST'])
 @admin.route('/user/<int:page>', methods = ['GET', 'POST'])
-@login_required
+@admin_required
 def user(page = 1):
 	form = FormUsers()
 	if form.addID.data and form.new_user_name.data and form.new_position.data:
@@ -47,11 +58,8 @@ def user(page = 1):
 	return render_template('admin/user.html', form = form, pagination = pagination)
 
 @admin.route('/problem/<int:pid>', methods = ['GET', 'POST'])
-@login_required
+@admin_required
 def problem(pid):
-	if not current_user.is_teacher:
-		return 'You are not allowed to edit!'
-	
 	problem = Problem.query.filter_by(pid = pid).first()
 	form = FormProblem(problem)
 	if form.validate_on_submit():
@@ -69,7 +77,7 @@ def problem(pid):
 	)
 
 @admin.route('/problem/new', methods = ['GET', 'POST'])
-@login_required
+@admin_required
 def add_problem():
 	form = FormNewProblem()
 	if form.validate_on_submit():
@@ -83,16 +91,13 @@ def add_problem():
 	return render_template('problem/edit.html', form = form)
 
 @admin.route('/tag', methods = ['GET', 'POST'])
-@login_required
+@admin_required
 def tag():
 	return render_template('admin/tag.html', tags = [serialize(tag) for tag in Tag.query.all()])
 
 @admin.route('/add_tag', methods = ['POST'])
-@login_required
+@admin_required
 def add_tag():
-	if not current_user.is_teacher:
-		return 'unauthorized'
-	
 	tag_name = request.values.get('tag_name')
 	if Tag.query.filter(Tag.tag_name == tag_name).count() > 0:
 		flash('There is already a tag with the same name!', 'error')
@@ -102,11 +107,8 @@ def add_tag():
 	return 'success'
 
 @admin.route('/delete_tag', methods = ['POST'])
-@login_required
+@admin_required
 def delete_tag():
-	if not current_user.is_teacher:
-		return 'unauthorized'
-
 	tag_id = request.values.get('tag_id')
 	tag = Tag.query.filter(Tag.tag_id == tag_id)
 	if tag.count() == 0:
@@ -118,11 +120,8 @@ def delete_tag():
 	return 'success'
 
 @admin.route('/change_tag', methods = ['POST'])
-@login_required
+@admin_required
 def change_tag():
-	if not current_user.is_teacher:
-		return 'unauthorized'
-
 	tag_id = request.values.get('tag_id')
 	tag = Tag.query.filter(Tag.tag_id == tag_id)
 	if tag.count() == 0:
@@ -135,7 +134,7 @@ def change_tag():
 
 @admin.route('/userGroup', methods = ['GET', 'POST'])
 @admin.route('/userGroup/<int:page>', methods = ['GET', 'POST'])
-@login_required
+@admin_required
 def userGroup(page = 1):
 	form = FormGroupList()
 	if form.groups.__len__():
@@ -157,7 +156,7 @@ def userGroup(page = 1):
 	return render_template('admin/user_group_list.html', form = form, pagination = pagination)
 
 @admin.route('/userGroup/show/<int:gid>', methods = ['GET', 'POST'])
-@login_required
+@admin_required
 def userGroupDetail(gid):
 	form = FormUserGroup()
 	user_group = UserGroup.query.filter_by(gid = gid).first()
@@ -167,11 +166,8 @@ def userGroupDetail(gid):
 	return render_template('admin/group_detail.html', user_group = user_group, form = form)
 
 @admin.route('/search_new_user', methods = ['POST'])
-@login_required
+@admin_required
 def search_new_user():
-	if not current_user.is_teacher:
-		return 'unauthorized'
-
 	new_user_name = request.values.get('new_user_name')
 	users = User.query.filter(User.user_name.like('%%' + new_user_name + '%%')).all()
 	user_array = []
@@ -180,11 +176,8 @@ def search_new_user():
 	return jsonify({'user': user_array})
 
 @admin.route('/add_new_user', methods = ['POST'])
-@login_required
+@admin_required
 def add_new_user():
-	if not current_user.is_teacher:
-		return 'unauthorized'
-
 	new_uid = request.values.get('user_id')
 	new_user = User.query.filter_by(uid = new_uid).first()
 	gid = request.values.get('group_id')
