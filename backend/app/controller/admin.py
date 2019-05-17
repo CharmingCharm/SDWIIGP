@@ -104,4 +104,4 @@ def add_new_user():
 		return 'error'
 	new_user.groups.append(UserGroup.query.filter_by(gid = gid).first())
 	flash('Success!', 'success')
-	return redirect(url_for('admin.userGroupDetail'))
+	return redirect(url_for('admin.userGroupDetail', gid = gid))

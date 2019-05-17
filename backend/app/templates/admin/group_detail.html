@@ -66,7 +66,7 @@
             <button type="submit" class="btn btn-pill btn-azure btn-lg">submit</button>
         </div>
     </div>
-    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="add_user_in_group" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
@@ -116,7 +116,7 @@
                 var data = { new_user_name: $('#search').val() };
                 $.ajax({
                     type: "post",
-                    async: false, //同步请求
+                    async: false,
                     url: url,
                     data: data,
                     timeout: 1000,
@@ -126,17 +126,15 @@
                             text += "<tr>"
                             text += "<td>" + users.user[row]['uid'] + "</td>";
                             text += "<td>" + users.user[row]['user_name'] + "</td>";
-                            text += "<td><a href=\"javascript:void(0)\" class=\"btn btn-azure addUser\" role=\"button\" value=\"" + users.user[row]['uid'] + "\">Add</a></td>";
+                            text += "<td><a href=\"javascript:void(0)\"  data-dismiss=\"modal\" class=\"btn btn-azure addUser\" role=\"button\" value=\"" + users.user[row]['uid'] + "\">Add</a></td>";
                             text += "</tr>"
                         }
-                        $("#refresh").html(text);//要刷新的div
+                        $("#refresh").html(text);
                         $('.addUser').click(function () {
-                            alert("yes");
                             $.post(
                                 "{{ url_for('admin.add_new_user') }}",
                                 { user_id: $(this).attr('value'), group_id: {{ user_group.gid }}},
                                 function() {
-                                    alert("lala");
                                     window.location.reload();
                                 }
                             );
@@ -146,17 +144,6 @@
                         alert("Error");
                     }
                 });
-            });
-
-            $('.addUser').click(function () {
-                $.post(
-                    "{{ url_for('admin.add_new_user') }}",
-                    { user_id: $(this).attr('value'), group_id: {{ user_group.gid }}},
-                    function () {
-                        alert("lala");
-                        window.location.reload();
-                    }
-                );
             });
         });
     });
