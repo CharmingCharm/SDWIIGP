@@ -89,6 +89,20 @@ def add_problem():
 		return redirect(url_for('problem.problemset'))
 	return render_template('problem/edit.html', form = form)
 
+@admin.route('/delete_problem', methods = ['GET', 'POST'])
+@admin_required
+def delete_problem():
+	pid = request.values.get('pid')
+	if not pid:
+		abort(404)
+	problem = Problem.query.filter_by(pid = pid)
+	if problem.count() == 0:
+		flash('There is no problem with the same pid!', 'error')
+		return 'error'
+	db.session.delete(problem.first())
+	flash('Deleting problem is successful!', 'success')
+	return 'success'
+
 @admin.route('/tag', methods = ['GET', 'POST'])
 @admin_required
 def tag():

@@ -46,7 +46,9 @@
 							</span>
 						</div>
 					</div>
+					{% if current_user.is_teacher %}
 					<a href="{{ url_for('admin.add_problem') }}" class="btn btn-sm btn-secondary ml-1">New Problem</a>
+					{% endif %}
 				</div>
 				<div class="card-options">
 					<form id="filter_form" method="post">
@@ -85,15 +87,19 @@
 						<tr>
 							<td><span class="tag tag-green">AC</span></td>
 							<td><a href="{{ url_for('problem.show', pid = problem.pid) }}"
-									class="text-inherit">{{ problem.pid }}</a></td>
+									class="text-inherit problem_pid">{{ problem.pid }}</a></td>
 							<td><a href="{{ url_for('problem.show', pid = problem.pid) }}"
-									class="text-inherit">{{ problem.title }}</a></td>
+									class="text-inherit problem_title">{{ problem.title }}</a></td>
 							<td>{{ macros.level_to_tag(problem.level) }}</td>
 							<td>50%</td>
 							{% if current_user.is_teacher %}
 							<td class="text-right">
 								<a href="{{ url_for('admin.problem', pid = problem.pid) }}" class="icon">
 									<i class="fe fe-edit"></i>
+								</a>
+								<a href="javascript:void(0)" data-toggle="modal" data-target="#modal_delete_problem"
+									class="icon delete_problem">
+									<i class="fe fe-x"></i>
 								</a>
 							</td>
 							{% endif %}
@@ -135,6 +141,32 @@
 	</div>
 </div>
 
+<div class="modal fade" id="modal_delete_problem" role="dialog" aria-labelledby="title_delete_problem"
+	aria-hidden="true">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h4 class="modal-title" id="title_delete_problem">Delete problem</h4>
+				<a class="close" data-dismiss="modal" aria-hidden="true"></a>
+			</div>
+			<div class="modal-body">
+				<h3 class="font-weight-normal text-danger">Are you sure to delete problem:</h3>
+				<h4 id="name_delete_problem"></h4>
+				<input type="hidden" id="id_delete_problem">
+			</div>
+			<div class="modal-footer justify-content-between">
+				<div class="d-flex">
+					<button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+				</div>
+				<div class="d-flex justify-content-end">
+					<button type="button" class="btn btn-danger" data-dismiss="modal"
+						id="submit_delete_problem">Delete</button>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
 <script>
 	require(['jquery'], function ($) {
 		$().ready(function () {
@@ -163,6 +195,22 @@
 			$('.add_filter_tag').click(function () {
 				$('#tag_id').val($(this).attr('value'));
 				$('#filter_form').submit();
+			});
+
+			$('.delete_problem').click(function () {
+				var problem = $(this).parent().siblings();
+				$('#name_delete_problem').html(problem.find('.problem_title').html());
+				$('#id_delete_problem').val(problem.find('.problem_pid').html());
+			});
+
+			$('#submit_delete_problem').click(function () {
+				$.post(
+					"{{ url_for('admin.delete_problem') }}",
+					{ pid: $('#id_delete_problem').val() },
+					function () {
+						window.location.reload();
+					}
+				);
 			});
 		});
 	});
