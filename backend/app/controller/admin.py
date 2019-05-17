@@ -1,107 +1,12 @@
 from flask import Blueprint, current_app, redirect, url_for, flash, request, json, abort, jsonify
 from flask_paginate import Pagination, get_page_parameter
 from flask_login import current_user, login_required
-from functools import wraps
 from app.form import FormProblem, FormNewProblem, FormUserGroup, FormUsers, FormUserSingle, FormGroupList
 from app.model import serialize, Problem, Tag, UserGroup, User, UserInGroup
-from . import render_template
+from . import render_template, admin_required
 from app.extension import db
 
 admin = Blueprint('admin', __name__)
-
-def admin_required(f):
-	@login_required
-	@wraps(f)
-	def decorated_function(*args, **kwargs):
-		if not current_user.is_teacher:
-			abort(403)
-		return f(*args, **kwargs)
-	return decorated_function
-
-@admin.route('/user', methods = ['GET', 'POST'])
-@admin.route('/user/<int:page>', methods = ['GET', 'POST'])
-@admin_required
-def user(page = 1):
-	form = FormUsers()
-	if form.addID.data and form.new_user_name.data and form.new_position.data:
-		if User.query.filter_by(user_name = form.new_user_name.data).first():
-			flash(form.new_user_name.data + ' is exist, change your name!','error')
-		else:
-			db.session.add(User(user_name=form.new_user_name.data,
-								password=form.new_user_name.data,
-								position=form.new_position.data))
-			db.session.commit()
-			flash('Success!','success')
-	
-	if form.users.__len__():
-		while form.users.__len__() > 0:
-			userForm = form.users.pop_entry()
-			if userForm.changeID.data:
-				user = User.query.filter_by(uid = userForm.uid.data).first()
-				user.user_name = userForm.user_name.data
-				user.position = userForm.position.data
-				flash('Success!','success')
-			elif userForm.deleteID.data:
-				User.query.filter_by(uid = userForm.uid.data).delete()
-				flash('Delete successfully!','success')
-
-	pagination = User.query.paginate(page=page,per_page=5)
-	users = pagination.items
-	for user in users:
-		userForm = FormUserSingle()
-		userForm.uid = user.uid
-		userForm.user_name = user.user_name
-		userForm.position = 'Teacher' if user.is_teacher else 'Student'
-		form.users.append_entry(data=userForm)
-
-	return render_template('admin/user.html', form = form, pagination = pagination)
-
-@admin.route('/problem/<int:pid>', methods = ['GET', 'POST'])
-@admin_required
-def problem(pid):
-	problem = Problem.query.filter_by(pid = pid).first()
-	form = FormProblem(problem)
-	if form.validate_on_submit():
-		problem.title = form.title.data
-		problem.description = form.description.data
-		problem.level = form.level.data
-		problem.tags = form.tags.data
-		flash('Problem editing is successful', 'success')
-		return redirect(url_for('problem.problemset'))
-	
-	return render_template(
-		'problem/edit.html',
-		form = form,
-		problem = serialize(problem, 'pid', 'title')
-	)
-
-@admin.route('/problem/new', methods = ['GET', 'POST'])
-@admin_required
-def add_problem():
-	form = FormNewProblem()
-	if form.validate_on_submit():
-		db.session.add(Problem(
-			title = form.title.data,
-			description = form.description.data,
-			level = form.level.data,
-			tags = form.tags.data))
-		flash('Adding problem is successful!', 'success')
-		return redirect(url_for('problem.problemset'))
-	return render_template('problem/edit.html', form = form)
-
-@admin.route('/delete_problem', methods = ['GET', 'POST'])
-@admin_required
-def delete_problem():
-	pid = request.values.get('pid')
-	if not pid:
-		abort(404)
-	problem = Problem.query.filter_by(pid = pid)
-	if problem.count() == 0:
-		flash('There is no problem with the same pid!', 'error')
-		return 'error'
-	db.session.delete(problem.first())
-	flash('Deleting problem is successful!', 'success')
-	return 'success'
 
 @admin.route('/tag', methods = ['GET', 'POST'])
 @admin_required

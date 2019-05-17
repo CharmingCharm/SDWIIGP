@@ -1,5 +1,6 @@
 {% extends 'base_index.html' %}
 {% set page_title = 'User' %}
+{% set navbar_active = 'admin' %}
 
 <style>
 	td>.form-control {
@@ -15,16 +16,16 @@
 		User admin
 	</h1>
 </div>
-<form role="form" method="post" name="form" action="{{ url_for('admin.user') }}">
-	{{ form.hidden_tag() }}
+<form role="form" method="post" name="form" action="{{ url_for('user.admin') }}">
 	{{ form.csrf_token }}
-	<div class="card col-md-10 col-xs-10">
+	<div class="card">
 		<table class="table card-table">
 			<thead>
 				<tr>
 					<th>User ID</th>
 					<th>User name</th>
 					<th>Position</th>
+					<th></th>
 					<th></th>
 				</tr>
 			</thead>
@@ -42,7 +43,7 @@
 				{% endfor %}
 			</tbody>
 		</table>
-		{{ macros.my_paginate(pagination,'admin.user') }}
+		{{ macros.my_paginate(pagination,'user.admin') }}
 	</div>
 	<button class="btn btn-pill btn-success" data-toggle="modal" data-target="#myModal" type="button">Add User</button>
 	<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">

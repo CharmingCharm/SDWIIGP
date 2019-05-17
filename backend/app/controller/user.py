@@ -1,9 +1,10 @@
 from flask import Blueprint, flash, render_template, redirect, url_for, current_app, request, abort
-
+from flask import render_template as render_template_origin
 from app.extension import db
 from app.model import User
-from app.form import FormLogin, FormProfile
+from app.form import FormLogin, FormProfile, FormUsers, FormUserSingle
 from flask_login import login_user, logout_user, current_user, login_required
+from . import render_template, admin_required
 
 user = Blueprint('user', __name__)
 
@@ -31,7 +32,7 @@ def login():
 			if not is_safe_url(next):
 				return abort(400)
 			return redirect(next or url_for('main.home'))
-	return render_template('login.html', form = form)
+	return render_template_origin('login.html', form = form)
 
 @user.route('/logout')
 def logout():
@@ -49,3 +50,41 @@ def profile():
 		else:
 			flash('Fail to change password! Please check the inputs.', 'error')
 	return render_template('profile.html', form = form)
+
+@user.route('/admin', methods = ['GET', 'POST'])
+@user.route('/admin/<int:page>', methods = ['GET', 'POST'])
+@admin_required
+def admin(page = 1):
+	form = FormUsers()
+	if form.addID.data and form.new_user_name.data and form.new_position.data:
+		if User.query.filter_by(user_name = form.new_user_name.data).first():
+			flash(form.new_user_name.data + ' is exist, change your name!','error')
+		else:
+			db.session.add(User(user_name=form.new_user_name.data,
+								password=form.new_user_name.data,
+								position=form.new_position.data))
+			db.session.commit()
+			flash('Success!','success')
+	
+	if form.users.__len__():
+		while form.users.__len__() > 0:
+			userForm = form.users.pop_entry()
+			if userForm.changeID.data:
+				user = User.query.filter_by(uid = userForm.uid.data).first()
+				user.user_name = userForm.user_name.data
+				user.position = userForm.position.data
+				flash('Success!','success')
+			elif userForm.deleteID.data:
+				User.query.filter_by(uid = userForm.uid.data).delete()
+				flash('Delete successfully!','success')
+
+	pagination = User.query.paginate(page=page,per_page=5)
+	users = pagination.items
+	for user in users:
+		userForm = FormUserSingle()
+		userForm.uid = user.uid
+		userForm.user_name = user.user_name
+		userForm.position = 'Teacher' if user.is_teacher else 'Student'
+		form.users.append_entry(data=userForm)
+
+	return render_template('admin/user.html', form = form, pagination = pagination)

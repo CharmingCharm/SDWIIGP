@@ -47,7 +47,7 @@
 						</div>
 					</div>
 					{% if current_user.is_teacher %}
-					<a href="{{ url_for('admin.add_problem') }}" class="btn btn-sm btn-secondary ml-1">New Problem</a>
+					<a href="{{ url_for('problem.new') }}" class="btn btn-sm btn-secondary ml-1">New Problem</a>
 					{% endif %}
 				</div>
 				<div class="card-options">
@@ -94,7 +94,7 @@
 							<td>50%</td>
 							{% if current_user.is_teacher %}
 							<td class="text-right">
-								<a href="{{ url_for('admin.problem', pid = problem.pid) }}" class="icon">
+								<a href="{{ url_for('problem.edit', pid = problem.pid) }}" class="icon">
 									<i class="fe fe-edit"></i>
 								</a>
 								<a href="javascript:void(0)" data-toggle="modal" data-target="#modal_delete_problem"
@@ -205,7 +205,7 @@
 
 			$('#submit_delete_problem').click(function () {
 				$.post(
-					"{{ url_for('admin.delete_problem') }}",
+					"{{ url_for('problem.delete') }}",
 					{ pid: $('#id_delete_problem').val() },
 					function () {
 						window.location.reload();
