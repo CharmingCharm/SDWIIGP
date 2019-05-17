@@ -35,7 +35,7 @@
             User</button>
     </div>
     <div class="col-lg-5">
-        <form role="form" method="post" action="{{ url_for('admin.userGroupDetail') }}">
+        <form role="form" method="post" action="{{ url_for('admin.userGroupDetail', gid = user_group.gid ) }}">
             <div class="card">
                 <div class="card-header">
                     <h3 class="card-title">Information</h3>
@@ -61,7 +61,7 @@
                     </tr>
                 </table>
                 <div class="col-12" align="center" style="margin-bottom: 20px;">
-                    <button type="submit" class="btn btn-pill btn-azure btn-lg">submit</button>
+                    {{ form.changeID(class="btn btn-pill btn-azure btn-lg", value="submit") }}
                 </div>
             </div>
         </form>

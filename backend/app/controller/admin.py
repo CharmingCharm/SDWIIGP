@@ -78,9 +78,13 @@ def userGroup(page = 1):
 def userGroupDetail(gid):
 	form = FormUserGroup()
 	user_group = UserGroup.query.filter_by(gid = gid).first()
+	print(form.changeID.data)
+	if form.changeID.data:
+		user_group.group_name = form.group_name.data
+		user_group.description = form.description.data
+		flash('Success!','success')
 	form.group_name.data = user_group.group_name
 	form.description.data = user_group.description
-	form.number.data = user_group.users.count()
 	return render_template('admin/group_detail.html', user_group = user_group, form = form)
 
 @admin.route('/search_new_user', methods = ['POST'])
