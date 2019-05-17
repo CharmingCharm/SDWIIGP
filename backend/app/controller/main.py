@@ -31,10 +31,11 @@ def anno_edition():
     anno = Announcement.query.filter_by(aid = aid).first()
     if not anno:
         flash('No that announcement', 'error')
+        return 'error'
     anno.title = new_title
     anno.description = new_descr
     flash('Success!', 'success')
-    return redirect(url_for('main.home'))
+    return 'success'
 
 @main.route('/anno_deletion', methods = ['POST'])
 @login_required
@@ -43,9 +44,10 @@ def anno_deletion():
     anno = Announcement.query.filter_by(aid = aid).first()
     if not anno:
         flash('No that announcement', 'error')
+        return 'error'
     db.session.delete(anno)
     flash('Success!', 'success')
-    return redirect(url_for('main.home'))
+    return 'success'
 
 @main.route('/anno_addition', methods = ['POST'])
 @login_required
@@ -56,4 +58,4 @@ def anno_addition():
     date_time = datetime.now()
     db.session.add(Announcement( uid = uid, title = new_title, description = new_descr, date_time = date_time))
     flash('Success!', 'success')
-    return redirect(url_for('main.home'))
+    return 'success'

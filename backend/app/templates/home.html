@@ -133,7 +133,6 @@
 			});
 
 			$('#submit_edition').click(function () {
-				alert($('#edit_description').val());
 				$.post(
 					"{{ url_for('main.anno_edition') }}",
 					{

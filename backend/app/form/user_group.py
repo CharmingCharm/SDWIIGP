@@ -11,5 +11,7 @@ class FormUserGroup(FlaskForm):
     number = IntegerField('Number of members')
     description = TextAreaField('Decription', render_kw = {'rows': 6})
 
+    deleteID = SubmitField()
+
 class FormGroupList(FlaskForm):
     groups = FieldList(FormField(FormUserGroup))
