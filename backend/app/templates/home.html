@@ -5,9 +5,33 @@
 {% block page_content %}
 <div class="page-header">
 	<div class="col-12 text-center">
-		<h1 class="page-title">
-			Welcome to Python Online Judge System!
-		</h1>
+		<div class="page-header">
+			<h1 class="page-title m-auto">
+				Welcome to Python Online Judge System!
+			</h1>
+		</div>
+		<div class="row">
+			<div class="col-md-7 col-xl-5 m-auto">
+				{% for anno in annos %}
+				<div class="card">
+					<div class="card-header">
+						<h3 class="card-title">{{ anno.title }}</h3>
+						<div class="card-options">
+							<a href="#" class="card-options-collapse"><i
+									class="fe fe-edit"></i></a>
+							<a href="#" class="card-options-remove"><i
+									class="fe fe-trash"></i></a>
+						</div>
+					</div>
+					<div class="card-body" style="min-height: 200px;">
+						<span style="color: grey; font-size: 15px;">Announce by: {{ anno.user.user_name }}, at time
+							{{ anno.date_time }}</span><br>
+						<p style="margin: 20px 10px;">{{ anno.description }}</p>
+					</div>
+				</div>
+				{% endfor %}
+			</div>
+		</div>
 	</div>
 </div>
 {% endblock %}

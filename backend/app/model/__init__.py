@@ -6,6 +6,7 @@ from .task import Task
 from .tag import Tag
 from .test import Test
 from .testset import TestSet
+from .announcement import Announcement
 from app.extension import db
 from sqlalchemy import DateTime, Numeric
 
