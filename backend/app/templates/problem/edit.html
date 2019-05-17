@@ -1,5 +1,5 @@
 {% extends 'base_index.html' %}
-{% set page_title = (problem.pid|string ~ '. ' ~ problem.title) if problem else '' %}
+{% set page_title = (problem.pid|string ~ '. ' ~ problem.title) if problem else 'New Problem' %}
 {% set navbar_active = 'problemset' %}
 
 {% import 'base_macros.html' as macros %}
@@ -13,7 +13,8 @@
 				<div class="card-body">
 					{{ macros.render_field(form.title) }}
 					<div class="text-wrap" id="description">
-						<textarea style="display:none" name="description">{{ form.description.data|default('', true) }}</textarea>
+						<textarea style="display:none"
+							name="description">{{ form.description.data|default('', true) }}</textarea>
 					</div>
 				</div>
 			</div>
@@ -43,8 +44,10 @@
 							<p>Tags</p>
 							<div class="tags">
 								{% for tag in form.tags %}
-								<a href="javascript:void(0)" value="{{ tag.data }}"
-									class="tag problem_tag{% if tag.checked %} tag-azure{% endif %}">{{ tag.label.text }}</a>
+								<span class="tag{% if tag.checked %} tag-azure{% endif %}">
+									<a href="javascript:void(0)" value="{{ tag.data }}" class="problem_tag text-inherit"
+										style="text-decoration: none">{{ tag.label.text }}</a>
+								</span>
 								{% endfor %}
 							</div>
 							{{ form.tags(class = 'd-none') }}
@@ -62,14 +65,14 @@
 <script>
 	require(['jquery'], function ($) {
 		$('.problem_tag').click(function () {
-			if ($(this).hasClass('tag-azure')) {
-				$(this).removeClass('tag-azure');
+			if ($(this).parent().hasClass('tag-azure')) {
+				$(this).parent().removeClass('tag-azure');
 				$("#tags > [value='" + $(this).attr('value') + "']").each(function () {
 					$(this).remove();
 				});
 			}
 			else {
-				$(this).addClass('tag-azure');
+				$(this).parent().addClass('tag-azure');
 				$("#tags").append('<option value="' + $(this).attr('value') + '" selected></option>');
 			}
 		});
