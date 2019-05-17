@@ -12,21 +12,27 @@
 		</div>
 		<div class="row">
 			<div class="col-md-7 col-xl-5 m-auto">
+				<button class="btn btn-pill btn-success" data-toggle="modal" data-target="#modal_add_anno" style="margin: 20px 20px;"
+					type="button">Add</button>
 				{% for anno in annos %}
 				<div class="card">
 					<div class="card-header">
-						<h3 class="card-title">{{ anno.title }}</h3>
+						<h3 class="card-title" id="title-{{ anno.aid }}">{{ anno.title }}</h3>
 						<div class="card-options">
-							<a href="#" class="card-options-collapse"><i
-									class="fe fe-edit"></i></a>
-							<a href="#" class="card-options-remove"><i
-									class="fe fe-trash"></i></a>
+							<a href="javascript:void(0)" data-toggle="modal" data-target="#modal_edit_anno"
+								class="card-options edit_anno" value="{{ anno.aid }}" style="margin: 0px 2px;">
+								<i class="fe fe-edit"></i>
+							</a>
+							<a href="javascript:void(0)" data-toggle="modal" data-target="#modal_delete_anno"
+								class="card-options delete_anno" value="{{ anno.aid }}" style="margin: 0px 2px;">
+								<i class="fe fe-trash"></i>
+							</a>
 						</div>
 					</div>
 					<div class="card-body" style="min-height: 200px;">
 						<span style="color: grey; font-size: 15px;">Announce by: {{ anno.user.user_name }}, at time
 							{{ anno.date_time }}</span><br>
-						<p style="margin: 20px 10px;">{{ anno.description }}</p>
+						<p id="description-{{ anno.aid }}" style="margin: 20px 10px;">{{ anno.description }}</p>
 					</div>
 				</div>
 				{% endfor %}
@@ -34,4 +40,138 @@
 		</div>
 	</div>
 </div>
+
+<div class="modal fade" id="modal_edit_anno" role="dialog" aria-labelledby="edit_anno" aria-hidden="true">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h4 class="modal-title" id="title_edit_anno">Edit announcement</h4>
+				<a class="close" data-dismiss="modal" aria-hidden="true"></a>
+			</div>
+			<div class="modal-body">
+				<label>Title of announcement</label><br>
+				<input type="text" class="form-control" id="edit_title"><br>
+				<label>Description of announcement</label><br>
+				<textarea id="edit_description" class="form-control"></textarea>
+			</div>
+			<div class="modal-footer justify-content-between">
+				<div class="d-flex">
+					<button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+				</div>
+				<div class="d-flex justify-content-end">
+					<button type="button" class="btn btn-primary" data-dismiss="modal"
+						id="submit_edition">Submit</button>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<div class="modal fade" id="modal_delete_anno" role="dialog" aria-labelledby="delete_anno" aria-hidden="true">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h4 class="modal-title">Delete tag</h4>
+				<a class="close" data-dismiss="modal" aria-hidden="true"></a>
+			</div>
+			<div class="modal-body">
+				<h3 class="font-weight-normal text-danger">Are you sure to delete announcement:</h3>
+				<h4 id="title_delete_anno"></h4>
+				<input type="hidden" id="id_delete_tag">
+			</div>
+			<div class="modal-footer justify-content-between">
+				<div class="d-flex">
+					<button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+				</div>
+				<div class="d-flex justify-content-end">
+					<button type="button" class="btn btn-danger" data-dismiss="modal"
+						id="submit_delete_anno">Delete</button>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<div class="modal fade" id="modal_add_anno" role="dialog" aria-labelledby="add_anno" aria-hidden="true">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h4 class="modal-title" id="title_add_anno">New announcement</h4>
+				<a class="close" data-dismiss="modal" aria-hidden="true"></a>
+			</div>
+			<div class="modal-body">
+				<label>Title of announcement</label><br>
+				<input type="text" class="form-control" id="add_title" placeholder="Title of announcement"><br>
+				<label>Description of announcement</label><br>
+				<textarea id="add_description" class="form-control"
+					placeholder="Description of announcement"></textarea>
+			</div>
+			<div class="modal-footer justify-content-between">
+				<div class="d-flex">
+					<button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+				</div>
+				<div class="d-flex justify-content-end">
+					<button type="button" class="btn btn-primary" data-dismiss="modal"
+						id="submit_addition">Submit</button>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<script>
+	require(['jquery', 'bootstrap'], function ($) {
+		$(document).ready(function () {
+			$('.edit_anno').click(function () {
+				$('#edit_title').val($("#title-" + $(this).attr('value')).html());
+				$('#edit_description').val($("#description-" + $(this).attr('value')).html());
+				$('#submit_edition').val($(this).attr('value'));
+			});
+
+			$('.delete_anno').click(function () {
+				$('#title_delete_anno').html($("#title-" + $(this).attr('value')).html());
+				$('#submit_delete_anno').val($(this).attr('value'));
+			});
+
+			$('#submit_edition').click(function () {
+				alert($('#edit_description').val());
+				$.post(
+					"{{ url_for('main.anno_edition') }}",
+					{
+						new_title: $('#edit_title').val(),
+						new_descr: $('#edit_description').val(),
+						aid: $('#submit_edition').val()
+					},
+					function () {
+						window.location.reload();
+					}
+				);
+			});
+
+			$('#submit_delete_anno').click(function () {
+				$.post(
+					"{{ url_for('main.anno_deletion') }}",
+					{ aid: $('#submit_delete_anno').val() },
+					function () {
+						window.location.reload();
+					}
+				);
+			});
+
+			$('#submit_addition').click(function () {
+				$.post(
+					"{{ url_for('main.anno_addition') }}",
+					{
+						new_title: $('#add_title').val(),
+						new_descr: $('#add_description').val(),
+						uid: {{ current_user.uid }}
+					},
+			function () {
+				window.location.reload();
+			}
+		);
+	});
+		});
+	});
+</script>
 {% endblock %}
