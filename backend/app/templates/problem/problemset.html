@@ -10,52 +10,43 @@
 		<div class="card">
 			<div class="card-header">
 				<div class="card-title">
-					<div class="input-group">
-						<input type="text" class="form-control form-control-sm" placeholder="Problem ID" id="pid"
-							name="title">
-						<span class="input-group-append">
-							<button class="btn btn-sm btn-primary" type="button" id="goto_problem">
-								Go!
-							</button>
-							{% if current_user.is_teacher %}
-							<button data-toggle="dropdown" type="button"
-								class="btn btn-primary btn-sm dropdown-toggle"></button>
-							<div class="dropdown-menu dropdown-menu-right">
-								<a id='goto_edit' class="dropdown-item" href="javascript:void(0)">
-									Edit
-								</a>
-								<a id='goto_dataconfig' class="dropdown-item" href="javascript:void(0)">
-									Configure tests
-								</a>
-								<a id='goto_dataconfig' class="dropdown-item" href="javascript:void(0)">
-									Filter submission
-								</a>
-							</div>
+					<div style="display: inline-block">
+						<div class="input-group">
+							<input type="text" class="form-control form-control-sm" placeholder="Problem ID" id="pid"
+								name="title">
+							<span class="input-group-append">
+								<button class="btn btn-sm btn-primary" type="button" id="goto_problem">
+									Go!
+								</button>
+								{% if current_user.is_teacher %}
+								<button data-toggle="dropdown" type="button"
+									class="btn btn-primary btn-sm dropdown-toggle"></button>
+								<div class="dropdown-menu dropdown-menu-right">
+									<a id='goto_edit' class="dropdown-item" href="javascript:void(0)">
+										Edit
+									</a>
+									<a id='goto_dataconfig' class="dropdown-item" href="javascript:void(0)">
+										Configure tests
+									</a>
+									<a id='goto_dataconfig' class="dropdown-item" href="javascript:void(0)">
+										Filter submission
+									</a>
+								</div>
 
-							<script>
-								require(['jquery'], function ($) {
-									$(document).ready(function () {
-										$("#pid").keypress(function (e) {
-											var keyCode = e.keyCode ? e.keyCode : e.which ? e.which : e.charCode;
-											if (keyCode == 13) {
-												$("#goto_problem").trigger("click");
-												return false;
-											}
-										});
-
-										$('#goto_problem').click(function () {
-											window.location.href = '/problem/' + $('#pid').val();
-										});
-										
-										$('#goto_edit').click(function () {
-											window.location.href = '/admin/problem/' + $('#pid').val();
+								<script>
+									require(['jquery'], function ($) {
+										$().ready(function () {
+											$('#goto_edit').click(function () {
+												window.location.href = '/admin/problem/' + $('#pid').val();
+											});
 										});
 									});
-								});
-							</script>
-							{% endif %}
-						</span>
+								</script>
+								{% endif %}
+							</span>
+						</div>
 					</div>
+					<a href="{{ url_for('admin.add_problem') }}" class="btn btn-sm btn-secondary ml-1">New Problem</a>
 				</div>
 				<div class="card-options">
 					<form id="filter_form" method="post">
@@ -86,7 +77,7 @@
 							<th>Title</th>
 							<th>Level</th>
 							<th>AC Rate</th>
-							<th></th>
+							{% if current_user.is_teacher %}<th></th>{% endif %}
 						</tr>
 					</thead>
 					<tbody>
@@ -99,13 +90,13 @@
 									class="text-inherit">{{ problem.title }}</a></td>
 							<td>{{ macros.level_to_tag(problem.level) }}</td>
 							<td>50%</td>
+							{% if current_user.is_teacher %}
 							<td class="text-right">
-								{% if current_user.is_teacher %}
 								<a href="{{ url_for('admin.problem', pid = problem.pid) }}" class="icon">
 									<i class="fe fe-edit"></i>
 								</a>
-								{% endif %}
 							</td>
+							{% endif %}
 						</tr>
 						{% endfor %}
 					</tbody>
@@ -146,15 +137,29 @@
 
 <script>
 	require(['jquery'], function ($) {
-		$(document).ready(function () {
+		$().ready(function () {
+			$("#pid").keypress(function (e) {
+				var keyCode = e.keyCode ? e.keyCode : e.which ? e.which : e.charCode;
+				if (keyCode == 13) {
+					$("#goto_problem").trigger("click");
+					return false;
+				}
+			});
+
+			$('#goto_problem').click(function () {
+				window.location.href = '/problem/' + $('#pid').val();
+			});
+
 			$('#clear_filter_title').click(function () {
 				$('#title').val('');
 				$('#filter_form').submit();
 			});
+
 			$('#clear_filter_tag').click(function () {
 				$('#tag_id').val('');
 				$('#filter_form').submit();
 			});
+
 			$('.add_filter_tag').click(function () {
 				$('#tag_id').val($(this).attr('value'));
 				$('#filter_form').submit();

@@ -25,3 +25,13 @@ class FormProblem(FlaskForm):
 			self.description.data = problem.description
 			self.level.data = problem.level
 			self.tags.data = problem.tags.all()
+
+class FormNewProblem(FlaskForm):
+	def query_factory():
+		return Tag.query.all()
+
+	title = StringField('Title', validators=[DataRequired(message='Title is required')])
+	description = TextAreaField('Description', validators=[DataRequired(message='Description is required')])
+	level = SelectField('Level', coerce=int, choices=[(k, k) for k in range(1, 4)])
+	tags = QuerySelectMultipleField('Tags', query_factory=query_factory)
+	submit = SubmitField('Save')

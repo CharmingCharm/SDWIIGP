@@ -1,7 +1,7 @@
 from flask import Blueprint, current_app, redirect, url_for, flash, request, json, abort, jsonify
 from flask_paginate import Pagination, get_page_parameter
 from flask_login import current_user, login_required
-from app.form import FormProblem, FormUserGroup, FormUsers, FormUserSingle, FormGroupList
+from app.form import FormProblem, FormNewProblem, FormUserGroup, FormUsers, FormUserSingle, FormGroupList
 from app.model import serialize, Problem, Tag, UserGroup, User, UserInGroup
 from . import render_template
 from app.extension import db
@@ -67,6 +67,20 @@ def problem(pid):
 		form = form,
 		problem = serialize(problem, 'pid', 'title')
 	)
+
+@admin.route('/problem/new', methods = ['GET', 'POST'])
+@login_required
+def add_problem():
+	form = FormNewProblem()
+	if form.validate_on_submit():
+		db.session.add(Problem(
+			title = form.title.data,
+			description = form.description.data,
+			level = form.level.data,
+			tags = form.tags.data))
+		flash('Adding problem is successful!', 'success')
+		return redirect(url_for('problem.problemset'))
+	return render_template('problem/edit.html', form = form)
 
 @admin.route('/tag', methods = ['GET', 'POST'])
 @login_required

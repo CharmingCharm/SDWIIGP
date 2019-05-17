@@ -1,5 +1,5 @@
 {% extends 'base_index.html' %}
-{% set page_title = problem.pid|string ~ '. ' ~ problem.title %}
+{% set page_title = (problem.pid|string ~ '. ' ~ problem.title) if problem else '' %}
 {% set navbar_active = 'problemset' %}
 
 {% import 'base_macros.html' as macros %}
@@ -12,7 +12,9 @@
 			<div class="card">
 				<div class="card-body">
 					{{ macros.render_field(form.title) }}
-					{{ macros.render_field(form.description, rows = "15") }}
+					<div class="text-wrap" id="description">
+						<textarea style="display:none" name="description">{{ form.description.data|default('', true) }}</textarea>
+					</div>
 				</div>
 			</div>
 		</div>
@@ -21,14 +23,14 @@
 				<div class="card-header">
 					<h3 class="card-title">Information</h3>
 					<div class="card-options">
-						<a href="#" class="card-options-collapse" data-toggle="card-collapse"><i
-								class="fe fe-chevron-up"></i></a>
+						<a href="#" class="card-options-collapse" data-toggle="card-collapse">
+							<i class="fe fe-chevron-up"></i></a>
 					</div>
 				</div>
 				<table class="table card-table">
 					<tr>
 						<td>Problem ID</td>
-						<td class="text-right">{{ problem.pid }}</td>
+						<td class="text-right">{{ problem.pid if problem else '' }}</td>
 					</tr>
 					<tr>
 						<td>Level</td>
@@ -46,22 +48,6 @@
 								{% endfor %}
 							</div>
 							{{ form.tags(class = 'd-none') }}
-							<script>
-								require(['jquery'], function ($) {
-									$('.problem_tag').click(function () {
-										if ($(this).hasClass('tag-azure')) {
-											$(this).removeClass('tag-azure');
-											$("#tags > [value='" + $(this).attr('value') + "']").each(function () {
-												$(this).remove();
-											});
-										}
-										else {
-											$(this).addClass('tag-azure');
-											$("#tags").append('<option value="' + $(this).attr('value') + '" selected></option>');
-										}
-									});
-								});
-							</script>
 						</td>
 					</tr>
 				</table>
@@ -73,4 +59,40 @@
 	</div>
 </form>
 
+<script>
+	require(['jquery'], function ($) {
+		$('.problem_tag').click(function () {
+			if ($(this).hasClass('tag-azure')) {
+				$(this).removeClass('tag-azure');
+				$("#tags > [value='" + $(this).attr('value') + "']").each(function () {
+					$(this).remove();
+				});
+			}
+			else {
+				$(this).addClass('tag-azure');
+				$("#tags").append('<option value="' + $(this).attr('value') + '" selected></option>');
+			}
+		});
+	});
+
+	var description;
+
+	require(editormd_deps, function (editormd) {
+		editormd.loadCSS("{{ url_for('static', filename='plugins/editormd/lib/codemirror/addon/fold/foldgutter') }}");
+
+		description = editormd("description", {
+			width: "100%",
+			height: 480,
+			watch: false,
+			toolbar: true,
+			codeFold: true,
+			searchReplace: true,
+			placeholder: "Input problem description. Support Markdown.",
+			// value: getCodeValue(),
+			// theme: (localStorage.theme) ? localStorage.theme : "default",
+			tex: true,
+			path: "{{ url_for('static', filename='plugins/editormd/lib/') }}",
+		});
+	});
+</script>
 {% endblock %}
