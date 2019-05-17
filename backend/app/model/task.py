@@ -5,6 +5,7 @@ class Task(db.Model):
 
     task_id = db.Column(db.Integer(), primary_key = True, autoincrement = True)
     task_name = db.Column(db.String(64), nullable = False)
+    description = db.Column(db.Text, nullable = False, default = '')
     deadline = db.Column(db.DateTime(), nullable = False)
 
     problems = db.relationship(
