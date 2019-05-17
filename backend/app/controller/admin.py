@@ -29,7 +29,7 @@ def user(page = 1):
 			if userForm.changeID.data:
 				user = User.query.filter_by(uid = userForm.uid.data).first()
 				user.user_name = userForm.user_name.data
-				user.positon = userForm.position.data
+				user.position = userForm.position.data
 				flash('Success!','success')
 			elif userForm.deleteID.data:
 				User.query.filter_by(uid = userForm.uid.data).delete()
