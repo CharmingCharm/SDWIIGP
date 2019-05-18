@@ -11,11 +11,12 @@
 		</h1>
 	</div>
 	<form class="card card-profile" method="post">
-		{{ form_profile.csrf_token }}
+		{{ form.csrf_token }}
 		<div class="card-body">
 			<div class="text-center">
-				<a href="javascript:void(0)" data-toggle="modal" data-target="#modal_change_photo">
-					<img class="card-profile-img" src="{% if current_user.photo %}{{ url_for('static', filename = 'avatars/' + current_user.photo) }}{% else %}{{ url_for('static', filename = 'default.jpg') }}{% endif %}">
+				<a href="javascript:void(0)" data-toggle="modal" data-target="#modal_change_avatar">
+					<img class="card-profile-img"
+						src="{{ url_for('static', filename = 'avatars/' + current_user.avatar if current_user.avatar else 'default.jpg') }}">
 				</a>
 				<h3 class="mb-3" id="user_name">{{ current_user.user_name }}</h3>
 			</div>
@@ -43,37 +44,38 @@
 			</div>
 			<div class="row">
 				<div class="col-md-6">
-					{{ macros.render_field(form_profile.password) }}
+					{{ macros.render_field(form.password) }}
 				</div>
 				<div class="col-md-6">
-					{{ macros.render_field(form_profile.check_password) }}
+					{{ macros.render_field(form.check_password) }}
 				</div>
 			</div>
 			<div class="row">
 				<div class="col-md-12">
-					{{ macros.render_field(form_profile.old_password) }}
+					{{ macros.render_field(form.old_password) }}
 				</div>
 			</div>
 		</div>
 		<div class="card-footer text-right">
-			<button type="submit" class="btn btn-primary">{{ form_profile.submit.label.text }}</button>
+			<button type="submit" class="btn btn-primary">{{ form.submit.label.text }}</button>
 		</div>
 	</form>
 </div>
 
-<div class="modal fade" id="modal_change_photo" role="dialog" aria-labelledby="title_change_photo" aria-hidden="true">
+<div class="modal fade" id="modal_change_avatar" role="dialog" aria-labelledby="title_change_avatar" aria-hidden="true">
 	<div class="modal-dialog">
 		<div class="modal-content">
-			<form role="form" id="change_photo" method="post" action="{{ url_for('user.change_photo') }}" enctype="multipart/form-data">
-				{{ form_profile.csrf_token(id = 'icon_csrf') }}
+			<form role="form" id="form_change_avatar" method="post" action="{{ url_for('user.change_avatar') }}"
+				enctype="multipart/form-data">
+				{{ form.csrf_token(id = 'avatar_csrf') }}
 				<div class="modal-header">
-					<h4 class="modal-title" id="title_change_photo">Change Photo</h4>
+					<h4 class="modal-title" id="title_change_avatar">Change Photo</h4>
 					<a class="close" data-dismiss="modal" aria-hidden="true"></a>
 				</div>
 				<div class="modal-body">
 					<div class="custom-file">
-						<input type="file" class="custom-file-input" name="icon">
-						<label class="custom-file-label">Choose file</label>
+						<input type="file" class="custom-file-input" name="avatar" id="upload_avatar">
+						<label class="custom-file-label" id="upload_filename">Choose your avatar</label>
 					</div>
 				</div>
 				<div class="modal-footer justify-content-between">
@@ -93,21 +95,12 @@
 <script>
 	require(['jquery', 'bootstrap'], function ($) {
 		$(document).ready(function () {
-			$("#submit_change_photo").click(function () {
-				$('#change_photo').submit();
-			{#
-				var formData = new FormData(document.getElementById("change_photo"));
-				alert(formData.get('icon').name);
-				$.ajax({
-					url: "{{ url_for('user.change_photo') }}",
-					method: "post",
-					data: formData,
-					processData: false,
-					success: function (data) {
-						// window.location.reload();
-					}
-				});
-			#}
+			$('#upload_avatar').change(function () {
+				$('#upload_filename').html($(this).val());
+			});
+
+			$('#submit_change_photo').click(function () {
+				$('#form_change_avatar').submit();
 			});
 		});
 	});

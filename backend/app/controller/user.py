@@ -1,6 +1,5 @@
 from flask import Blueprint, flash, render_template, redirect, url_for, current_app, request, abort
 from flask import render_template as render_template_origin
-from flask_wtf import CSRFProtect
 from app.extension import db, photos
 from app.model import User
 from app.form import FormLogin, FormProfile, FormUsers, FormUserSingle, FormIcon
@@ -10,7 +9,6 @@ from app.helper import random_string
 import os
 
 user = Blueprint('user', __name__)
-csrf = CSRFProtect()
 
 from urllib.parse import urlparse, urljoin
 from flask import request, url_for
@@ -46,27 +44,28 @@ def logout():
 @user.route('/profile', methods = ['GET', 'POST'])
 @login_required
 def profile():
-	form_profile = FormProfile()
-	if form_profile.validate_on_submit():
-		if form_profile.password.data and current_user.verify_password(form_profile.old_password.data) and form_profile.password.data == form_profile.check_password.data:
-			current_user.password = form_profile.password.data
+	form = FormProfile()
+	if form.validate_on_submit():
+		if form.password.data and current_user.verify_password(form.old_password.data) and form.password.data == form.check_password.data:
+			current_user.password = form.password.data
 			flash('Password change is successful!', 'success')
 		else:
 			flash('Fail to change password! Please check the inputs.', 'error')
-	return render_template('profile.html', form_profile = form_profile)
+	return render_template('profile.html', form = form)
 
-@user.route('/change_photo', methods = ['POST'])
+@user.route('/change_avatar', methods = ['POST'])
 @login_required
-def change_photo():
+def change_avatar():
 	form = FormIcon()
 	if form.validate_on_submit():
-		suffix = form.icon.data.filename
+		suffix = form.avatar.data.filename
 		filename = random_string() + suffix
-		photos.save(form.icon.data, name = filename)
-		current_user.photo = filename
+		print(filename)
+		photos.save(form.avatar.data, name = filename)
+		current_user.avatar = filename
 		flash('Upload avatar successfully!', 'success')
 		return redirect(url_for('user.profile'))
-	for error in form.icon.errors:
+	for error in form.avatar.errors:
 		flash(error, 'error')
 	return redirect(url_for('user.profile'))
 

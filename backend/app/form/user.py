@@ -38,5 +38,5 @@ class FormUsers(FlaskForm):
     addID = SubmitField()
 
 class FormIcon(FlaskForm):
-    icon = FileField('Avatar', validators=[FileRequired(), FileAllowed(photos, message='You are only allowed to upload images!')])
+    avatar = FileField('Avatar', validators=[FileRequired(), FileAllowed(photos, message='You are only allowed to upload images!')])
     submit = SubmitField('submit')
