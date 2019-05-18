@@ -90,7 +90,7 @@
 						<div class="d-flex order-lg-2 ml-auto">
 							<div class="dropdown">
 								<a href="javascript:void(0)" class="nav-link pr-0 leading-none" data-toggle="dropdown">
-									<span class="avatar" {% if current_user.photo %}style="background-image: url({{ url_for('static', filename = 'avatars/' + current_user.photo) }})"{% endif %}></span>
+									<span class="avatar" style="background-image: url({{ url_for('static', filename = 'avatars/' + current_user.avatar) }})"></span>
 									<span class="ml-2 d-none d-lg-block">
 										<span class="text-default">{{ current_user.user_name }}</span>
 									</span>
