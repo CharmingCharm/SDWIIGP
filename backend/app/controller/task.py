@@ -1,6 +1,6 @@
 from flask import Blueprint, current_app, redirect, url_for, flash, request, abort, json
 from flask_login import current_user, login_required
-from app.model import serialize, Task, Problem, UserGroup
+from app.model import serialize, Task, Problem, UserGroup, User
 from app.form import FormTask
 from . import render_template, admin_required
 from app.extension import db
@@ -13,13 +13,20 @@ task = Blueprint('task', __name__)
 @task.route('/<int:page>', methods = ['GET', 'POST'])
 @login_required
 def tasklist(page = 1):
-	pagination = Task.query.paginate(page=page,per_page=5)
+	if not current_user.is_teacher:
+		tasks = Task.query.join(Task.groups, UserGroup.users).filter(User.uid == current_user.uid)
+	else:
+		tasks = Task.query
+	pagination = tasks.paginate(page = page, per_page = 5)
 	tasks = pagination.items
-	return render_template('tasklist.html',tasks = tasks,now = datetime.now(), pagination = pagination)
+	return render_template('tasklist.html', tasks = tasks, now = datetime.now(), pagination = pagination)
 
 @task.route('/show/<int:task_id>', methods = ['GET', 'POST'])
 @login_required
 def show(task_id):
+	available = current_user.groups.join(UserGroup.tasks).filter(Task.task_id == task_id).count() > 0
+	if not (available or current_user.is_teacher):
+		abort(403)
 	task = Task.query.filter_by(task_id = task_id).first()
 	return render_template('task.html', task = task)
 

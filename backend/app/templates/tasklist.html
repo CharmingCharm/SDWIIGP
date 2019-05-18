@@ -5,14 +5,14 @@
 
 {% block page_content %}
 <div class="card">
-	{% if current_user.is_teacher %}
 	<div class="card-header">
 		<h3 class="card-title">Task list</h3>
+		{% if current_user.is_teacher %}
 		<div class="card-options">
 			<a href="{{ url_for('task.new') }}" class="btn btn-sm btn-primary">New Task</a>
 		</div>
+		{% endif %}
 	</div>
-	{% endif %}
 	<div class="table-responsive">
 		<table class="table card-table table-vcenter text-nowrap">
 			<thead>
