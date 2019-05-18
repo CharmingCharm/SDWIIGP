@@ -17,6 +17,9 @@ def tag():
 @admin_required
 def add_tag():
 	tag_name = request.values.get('tag_name')
+	if not tag_name:
+		flash('Tag name cannot be blank!', 'error')
+		return 'error'
 	if Tag.query.filter(Tag.tag_name == tag_name).count() > 0:
 		flash('There is already a tag with the same name!', 'error')
 		return 'error'
@@ -44,6 +47,10 @@ def change_tag():
 	tag = Tag.query.filter(Tag.tag_id == tag_id)
 	if tag.count() == 0:
 		flash('There is no tag with the same id!', 'error')
+		return 'error'
+	tag_name = request.values.get('tag_name')
+	if not tag_name:
+		flash('Tag name cannot be blank!', 'error')
 		return 'error'
 	tag = tag.first()
 	tag.tag_name = request.values.get('tag_name')
