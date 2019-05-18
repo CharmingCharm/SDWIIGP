@@ -78,7 +78,6 @@ def userGroup(page = 1):
 def userGroupDetail(gid):
 	form = FormUserGroup()
 	user_group = UserGroup.query.filter_by(gid = gid).first()
-	print(form.changeID.data)
 	if form.changeID.data:
 		user_group.group_name = form.group_name.data
 		user_group.description = form.description.data

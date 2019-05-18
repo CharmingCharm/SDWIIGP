@@ -22,6 +22,15 @@ def status(page = 1):
     submissions = pagination.items
     return render_template('status.html', submissions = submissions, pagination = pagination)
 
+@main.route('/change_status', methods = ['POST'])
+@login_required
+def change_status():
+    sid = request.values.get('sid')
+    submission = Submission.query.filter(sid == sid).first()
+    submission.is_solution = False if submission.is_solution else True
+    flash('Success!','success')
+    return 'success'
+
 @main.route('/anno_edition', methods = ['POST'])
 @login_required
 def anno_edition():

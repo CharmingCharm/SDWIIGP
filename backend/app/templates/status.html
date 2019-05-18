@@ -17,6 +17,7 @@
                 <th>User</th>
                 <th>Result</th>
                 <th>Submission time</th>
+                <th></th>
             </tr>
         </thead>
         <tbody>
@@ -28,6 +29,19 @@
                 <td><a href="#">{{ sub.user.user_name }}</a></td>
                 <td><span class="tag tag-green">{{ sub.score }}</span> </td>
                 <td>{{ sub.date_time }}</td>
+                <td>
+                    {% if sub.is_solution %}
+                    <span class="tag tag-azure">
+                        <a href="javascript:void(0)" value="{{ sub.sid }}" class="sub_status text-inherit"
+                            style="text-decoration: none">is solution</a>
+                    </span>
+                    {% else %}
+                    <span class="tag">
+                        <a href="javascript:void(0)" value="{{ sub.sid }}" class="sub_status text-inherit"
+                            style="text-decoration: none">not solution</a>
+                    </span>
+                    {% endif %}
+                </td>
             </tr>
             {% endfor %}
 
@@ -35,4 +49,36 @@
     </table>
     {{ macros.my_paginate(pagination,'main.status') }}
 </div>
+
+<script>
+    require(['jquery'], function ($) {
+        $('.sub_status').click(function () {
+            if ($(this).parent().hasClass('tag-azure')) {
+                $(this).parent().removeClass('tag-azure');
+                $(this).html("not solution");
+                $.post(
+                    "{{ url_for('main.change_status') }}",
+                    {
+                        sid: $(this).val()
+                    },
+                    function () {
+                        window.location.reload();
+                    }
+                );
+			} else {
+                $(this).parent().addClass('tag-azure');
+                $(this).html("is solution");
+                $.post(
+                    "{{ url_for('main.change_status') }}",
+                    {
+                        sid: $(this).val()
+                    },
+                    function () {
+                        window.location.reload();
+                    }
+                );
+            }
+        });
+    });
+</script>
 {% endblock %}
