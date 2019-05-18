@@ -25,10 +25,10 @@
 									<a id='goto_edit' class="dropdown-item" href="javascript:void(0)">
 										Edit
 									</a>
-									<a id='goto_dataconfig' class="dropdown-item" href="javascript:void(0)">
-										Configure tests
+									<a id='goto_testset' class="dropdown-item" href="javascript:void(0)">
+										Testset
 									</a>
-									<a id='goto_dataconfig' class="dropdown-item" href="javascript:void(0)">
+									<a id='goto_filter_submission' class="dropdown-item" href="javascript:void(0)">
 										Filter submission
 									</a>
 								</div>
@@ -104,6 +104,9 @@
 								<a href="{{ url_for('problem.edit', pid = problem.pid) }}" class="icon ml-1">
 									<i class="fe fe-edit"></i>
 								</a>
+								<a href="{{ url_for('problem.testset', pid = problem.pid) }}" class="icon ml-1">
+									<i class="fe fe-settings"></i>
+								</a>
 								<a href="javascript:void(0)" data-toggle="modal" data-target="#modal_delete_problem"
 									class="icon delete_problem ml-1">
 									<i class="fe fe-x"></i>
@@ -165,6 +168,10 @@
 
 			$('#goto_problem').click(function () {
 				window.location.href = '/problem/' + $('#pid').val();
+			});
+
+			$('#goto_testset').click(function () {
+				window.location.href = '/problem/testset/' + $('#pid').val();
 			});
 
 			$('#clear_filter_title').click(function () {

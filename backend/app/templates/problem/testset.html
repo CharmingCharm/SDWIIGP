@@ -1,64 +1,130 @@
 {% extends 'base_index.html' %}
 {% set page_title = 'Test Set' %}
-{% set navbar_active = 'testset' %}
+{% set navbar_active = 'problemset' %}
 
 {% import 'base_macros.html' as macros %}
 
 {% block page_content %}
-<div class="row row-cards row-deck">
-	<div class="col-lg-9">
-		<div class="card">
-			<div class="card-header">
-				<h3 class="card-title">Test Set</h3>
-			</div>
-			<div class="table-responsive">
-				<table class="table card-table table-vcenter text-nowrap datatable">
-					<thead>
-						<tr>
-							<th>Status</th>
-							<th>#</th>
-							<th>Title</th>
-							<th>Level</th>
-							<th>AC Rate</th>
-							<th></th>
-						</tr>
-					</thead>
-					<tbody>
-						{% for test in tests %}
-						<tr>
-							<td><span class="tag tag-green">AC</span></td>
-							<td><a href="{{ url_for('test.show', test_id = test.test_id) }}" class="text-inherit">{{ test.test_id }}</a></td>
-							<td><a href="{{ url_for('test.show', test_id = test.test_id) }}" class="text-inherit">{{ test.score }}</a></td>
-							<td>{{ macros.level_to_tag(problem.level) }}</td>
-							<td>50%</td>
-							<td class="text-right"><a href="{{ url_for('admin.test', test_id = test.test_id) }}" class="btn btn-sm text-inherit"><i class="fe fe-edit"></i></a></td>
-						</tr>
-						{% endfor %}
-					</tbody>
-				</table>
-				<script>
-					require(['datatables', 'jquery'], function (datatable, $) {
-						$('.datatable').DataTable({
-							"lengthChange": false,
-							"searching": false,
-							"pageLength": 20,
-						});
-					});
-				</script>
-			</div>
-		</div>
-	</div>
-	<div class="col-lg-3">
-		<div class="card">
-			<div class="card-header">
-				<h3 class="card-title">Tags</h3>
-			</div>
-			<div class="card-body tags">
-				{% for tag in tags %}
-				<a href="#" class="tag tag-rounded">{{ tag.tag_name }}</a>
-				{% endfor %}
-			</div>
-		</div>
+<div class="page-header">
+	<h1 class="page-title">
+		Test Set for Problem {{ problem.pid }}
+	</h1>
+</div>
+<div class="row mb-4">
+	<div class="col-12">
+		<button id="add_test" class="btn btn-pill btn-success btn-lg">Add Test</button>
 	</div>
 </div>
+<div class="row row-cards" id="div_tests">
+	{% for test in (problem.testset.tests.all() if problem.testset else []) %}
+	<div class="col-md-6 col-xl-4">
+		<div class="card card_test">
+			<div class="card-header">
+				<h3 class="card-title">Test</h3>
+				<div class="card-options test_status">
+					<a href="javascript:void(0)" class="icon delete_test">
+						<i class="fe fe-x"></i>
+					</a>
+				</div>
+			</div>
+			<div class="card-body">
+				<div class="form-group">
+					<label class="form-label">Test ID</label>
+					<input type="text" class="form-control test_id" value="{{ test.test_id }}">
+				</div>
+				<div class="form-group">
+					<label class="form-label">Score</label>
+					<input type="text" class="form-control test_score" value="{{ test.score }}">
+				</div>
+				<div class="form-group">
+					<label class="form-label">Test code</label>
+					<textarea class="form-control test_code" rows="6">{{ test.code }}</textarea>
+				</div>
+			</div>
+		</div>
+	</div>
+	{% endfor %}
+</div>
+<div class="row">
+	<div class="col-12" align="center">
+		<button id="save" class="btn btn-pill btn-azure btn-lg">Save</button>
+	</div>
+</div>
+
+<script>
+	require(['jquery'], function ($) {
+		$().ready(function () {
+			$('.delete_test').click(function () {
+				$(this).parent().parent().parent().parent().remove();
+			});
+
+			$('.test_id,.test_score,.test_code').change(function () {
+				if ($(this).parent().parent().parent().find('.test_changed').length == 0){
+					var test_status = $(this).parent().parent().parent().find('.test_status');
+					test_status.html('<span class="tag tag-warning mr-2 test_changed">Changed</span>' + test_status.html())
+				}
+			});
+
+			$('#add_test').click(function () {
+				var html = ' \
+				<div class="col-md-6 col-xl-4"> \
+					<div class="card card_test"> \
+						<div class="card-header"> \
+							<h3 class="card-title">Test</h3> \
+							<div class="card-options test_status"> \
+								<a href="javascript:void(0)" class="icon delete_test"> \
+									<i class="fe fe-x"></i> \
+								</a> \
+							</div> \
+						</div> \
+						<div class="card-body"> \
+							<div class="form-group"> \
+								<label class="form-label">Test ID</label> \
+								<input type="text" class="form-control test_id" value="0"> \
+							</div> \
+							<div class="form-group"> \
+								<label class="form-label">Score</label> \
+								<input type="text" class="form-control test_score" value="0.00"> \
+							</div> \
+							<div class="form-group"> \
+								<label class="form-label">Test code</label> \
+								<textarea class="form-control test_code" rows="6"></textarea> \
+							</div> \
+						</div> \
+					</div> \
+				</div>';
+				$('.delete_test').off('click');
+				$('.test_id,.test_score,.test_code').off('change');
+				$('#div_tests').append(html);
+				$('.delete_test').click(function () {
+					$(this).parent().parent().parent().parent().remove();
+				});
+				$('.test_id,.test_score,.test_code').change(function () {
+					if ($(this).parent().parent().parent().find('.test_changed').length == 0){
+						var test_status = $(this).parent().parent().parent().find('.test_status');
+						test_status.html('<span class="tag tag-warning mr-2 test_changed">Changed</span>' + test_status.html())
+					}
+				});
+			});
+
+			$('#save').click(function () {
+				var tests = new Array();
+				$('.card_test').each(function () {
+					tests.push({
+						test_id: $(this).find('.test_id').val(),
+						score: $(this).find('.test_score').val(),
+						code: $(this).find('.test_code').val(),
+					});
+				});
+				$.post(
+					"{{ url_for('problem.testset', pid = problem.pid) }}",
+					{ tests: JSON.stringify(tests) },
+					function () {
+						window.location.reload();
+					}
+				);
+			});
+		});
+	});
+</script>
 {% endblock %}

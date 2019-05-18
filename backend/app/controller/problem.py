@@ -1,9 +1,11 @@
-from flask import Blueprint, current_app, redirect, url_for, flash, request, abort
+from flask import Blueprint, current_app, redirect, url_for, flash, request, abort, json
 from flask_login import current_user, login_required
-from app.model import serialize, Problem, Tag
+from app.model import serialize, Problem, Tag, Test, TestSet
 from app.form import FormProblem, FormNewProblem
 from . import render_template, admin_required
 from app.extension import db
+from decimal import Decimal
+import re
 
 problem = Blueprint('problem', __name__)
 
@@ -98,3 +100,35 @@ def change_visible():
 	problem.visible = not problem.visible
 	flash('Setting visible is successful!', 'success')
 	return 'success'
+
+@problem.route('/testset/<int:pid>', methods = ['GET', 'POST'])
+@admin_required
+def testset(pid):
+	problem = Problem.query.filter_by(pid = pid).first()
+	if request.method == 'POST':
+		tests = json.loads(request.values.get('tests'))
+		old_tests = problem.testset.tests.all() if problem.testset else []
+		add_tests = []
+		new_tests = []
+		for test_upload in tests:
+			if not re.match(re.compile(r"^(-?\d+)(\.\d*)?$"), test_upload['score']):
+				flash('Score "' + test_upload['score'] + '" are not decimals!', 'error')
+				return 'score error'
+			test_upload['score'] = Decimal(test_upload['score']).quantize(Decimal('0.00'))
+			test = Test.query.filter(Test.test_id == test_upload['test_id']).first()
+			if (not test) or test.score != test_upload['score'] or test.code != test_upload['code']:
+				add_tests.append(Test(score = test_upload['score'], code = test_upload['code']))
+			else:
+				old_tests.remove(test)
+				new_tests.append(test)
+		if old_tests or add_tests:
+			new_tests.extend(add_tests)
+			testset = problem.testset
+			new_testset = TestSet(tests = new_tests)
+			db.session.add(new_testset)
+			problem.testset = new_testset
+			if testset and (not testset.submissions.count()):
+				db.session.delete(testset)
+		flash('Setting testset is successful!', 'success')
+		return 'success'
+	return render_template('problem/testset.html', problem = problem)

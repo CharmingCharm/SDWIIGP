@@ -7,6 +7,7 @@ class Submission(db.Model):
     sid = db.Column(db.Integer(), primary_key = True, autoincrement = True)
     pid = db.Column(db.Integer(), db.ForeignKey('problem.pid'))
     uid = db.Column(db.Integer(), db.ForeignKey('user.uid'))
+    testset_id = db.Column(db.Integer, db.ForeignKey('testset.testset_id'))
     score = db.Column(db.Text, nullable = True)
     code = db.Column(db.Text, nullable = False)
     is_solution = db.Column(db.Boolean(), default = False, nullable = False)
