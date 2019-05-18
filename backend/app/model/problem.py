@@ -8,5 +8,6 @@ class Problem(db.Model):
     level = db.Column(db.Integer, nullable = False)
     title = db.Column(db.String(64), nullable = False)
     description = db.Column(db.Text(), nullable = False)
+    visible = db.Column(db.Boolean, nullable = False, server_default = "1")
 
     testset = db.relationship('TestSet', backref = 'problem')

@@ -1,4 +1,4 @@
-from flask import Blueprint, current_app, redirect, url_for, flash, request, render_template_string
+from flask import Blueprint, current_app, redirect, url_for, flash, request, abort
 from flask_login import current_user, login_required
 from app.model import serialize, Problem, Tag
 from app.form import FormProblem, FormNewProblem
@@ -17,6 +17,8 @@ def problemset():
 		problems = problems.join(Problem.tags).filter(Tag.tag_id == filter_tag_id)
 	if filter_title:
 		problems = problems.filter(Problem.title.ilike("%{0}%".format(filter_title)))
+	if not current_user.is_teacher:
+		problems = problems.filter_by(visible = True)
 	return render_template(
 		'problem/problemset.html',
 		problems = [serialize(prob) for prob in problems.all()],
@@ -29,6 +31,8 @@ def problemset():
 @login_required
 def show(pid):
 	problem = Problem.query.filter_by(pid = pid).first()
+	if not (current_user.is_teacher or problem.visible):
+		abort(404)
 	problem_dict = serialize(problem)
 	problem_dict['tags'] = [serialize(s) for s in problem.tags.all()]
 	return render_template('problem/problem.html', problem = problem_dict)
@@ -78,4 +82,19 @@ def delete():
 		return 'error'
 	db.session.delete(problem.first())
 	flash('Deleting problem is successful!', 'success')
+	return 'success'
+
+@problem.route('/change_visible', methods = ['GET', 'POST'])
+@admin_required
+def change_visible():
+	pid = request.values.get('pid')
+	if not pid:
+		abort(404)
+	problem = Problem.query.filter_by(pid = pid)
+	if problem.count() == 0:
+		flash('There is no problem with the same pid!', 'error')
+		return 'error'
+	problem = problem.first()
+	problem.visible = not problem.visible
+	flash('Setting visible is successful!', 'success')
 	return 'success'

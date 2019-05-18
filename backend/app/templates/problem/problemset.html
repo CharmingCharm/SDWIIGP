@@ -94,7 +94,14 @@
 							<td>50%</td>
 							{% if current_user.is_teacher %}
 							<td class="text-right">
-								<a href="{{ url_for('problem.edit', pid = problem.pid) }}" class="icon">
+								<a href="javascript:void(0)" class="icon change_visible">
+									{% if problem.visible %}
+									<i class="fe fe-eye"></i>
+									{% else %}
+									<i class="fe fe-eye-off"></i>
+									{% endif %}
+								</a>
+								<a href="{{ url_for('problem.edit', pid = problem.pid) }}" class="icon ml-1">
 									<i class="fe fe-edit"></i>
 								</a>
 								<a href="javascript:void(0)" data-toggle="modal" data-target="#modal_delete_problem"
@@ -176,6 +183,16 @@
 			});
 
 			{% if current_user.is_teacher %}
+			$('.change_visible').click(function () {
+				$.post(
+					"{{ url_for('problem.change_visible') }}",
+					{ pid: $(this).parent().parent().find('.problem_pid').html() },
+					function () {
+						window.location.reload();
+					}
+				)
+			});
+
 			$('.delete_problem').click(function () {
 				var problem = $(this).parent().parent();
 				$('#name_delete_problem').html(problem.find('.problem_title').html());
