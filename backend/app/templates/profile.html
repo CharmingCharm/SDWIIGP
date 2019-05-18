@@ -16,7 +16,7 @@
 			<div class="text-center">
 				<a href="javascript:void(0)" data-toggle="modal" data-target="#modal_change_avatar">
 					<img class="card-profile-img"
-						src="{{ url_for('static', filename = 'avatars/' + current_user.avatar if current_user.avatar else 'default.jpg') }}">
+						src="{{ url_for('static', filename = 'avatars/' + (current_user.avatar if current_user.avatar else 'default.jpg')) }}">
 				</a>
 				<h3 class="mb-3" id="user_name">{{ current_user.user_name }}</h3>
 			</div>
@@ -69,7 +69,7 @@
 				enctype="multipart/form-data">
 				{{ form.csrf_token(id = 'avatar_csrf') }}
 				<div class="modal-header">
-					<h4 class="modal-title" id="title_change_avatar">Change Photo</h4>
+					<h4 class="modal-title" id="title_change_avatar">Change Avatar</h4>
 					<a class="close" data-dismiss="modal" aria-hidden="true"></a>
 				</div>
 				<div class="modal-body">
@@ -84,7 +84,7 @@
 					</div>
 					<div class="d-flex justify-content-end">
 						<button type="submit" class="btn btn-primary" data-dismiss="modal"
-							id="submit_change_photo">Save</button>
+							id="submit_change_avatar">Save</button>
 					</div>
 				</div>
 			</form>
@@ -99,7 +99,7 @@
 				$('#upload_filename').html($(this).val());
 			});
 
-			$('#submit_change_photo').click(function () {
+			$('#submit_change_avatar').click(function () {
 				$('#form_change_avatar').submit();
 			});
 		});
