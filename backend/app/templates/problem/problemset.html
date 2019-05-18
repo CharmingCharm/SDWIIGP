@@ -5,7 +5,7 @@
 {% import 'base_macros.html' as macros %}
 
 {% block page_content %}
-<div class="row row-cards row-deck">
+<div class="row row-cards">
 	<div class="col-lg-9">
 		<div class="card">
 			<div class="card-header">
@@ -87,9 +87,9 @@
 						<tr>
 							<td><span class="tag tag-green">AC</span></td>
 							<td><a href="{{ url_for('problem.show', pid = problem.pid) }}"
-									class="text-inherit problem_pid">{{ problem.pid }}</a></td>
+									class="problem_pid">{{ problem.pid }}</a></td>
 							<td><a href="{{ url_for('problem.show', pid = problem.pid) }}"
-									class="text-inherit problem_title">{{ problem.title }}</a></td>
+									class="problem_title">{{ problem.title }}</a></td>
 							<td>{{ macros.level_to_tag(problem.level) }}</td>
 							<td>50%</td>
 							{% if current_user.is_teacher %}
