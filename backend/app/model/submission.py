@@ -8,6 +8,7 @@ class Submission(db.Model):
     pid = db.Column(db.Integer(), db.ForeignKey('problem.pid'))
     uid = db.Column(db.Integer(), db.ForeignKey('user.uid'))
     testset_id = db.Column(db.Integer, db.ForeignKey('testset.testset_id'))
+    task_id = db.Column(db.Integer, db.ForeignKey('task.task_id'))
     score = db.Column(db.Text, nullable = True)
     code = db.Column(db.Text, nullable = False)
     is_solution = db.Column(db.Boolean(), default = False, nullable = False)
@@ -15,3 +16,4 @@ class Submission(db.Model):
 
     problem = db.relationship('Problem', backref = db.backref('submissions', lazy = 'dynamic'))
     user = db.relationship('User', backref = db.backref('submissions', lazy = 'dynamic'))
+    task = db.relationship('Task', backref = db.backref('submissions', lazy = 'dynamic'))
