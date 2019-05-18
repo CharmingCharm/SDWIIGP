@@ -18,7 +18,7 @@ def problemset():
 	if filter_title:
 		problems = problems.filter(Problem.title.ilike("%{0}%".format(filter_title)))
 	if not current_user.is_teacher:
-		problems = problems.filter_by(visible = True)
+		problems = problems.filter(Problem.visible == True)
 	return render_template(
 		'problem/problemset.html',
 		problems = [serialize(prob) for prob in problems.all()],
