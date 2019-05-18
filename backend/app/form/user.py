@@ -1,7 +1,10 @@
 from flask_login import current_user
+from flask_uploads import UploadSet, IMAGES
 from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, SubmitField, BooleanField, IntegerField, SelectField, FormField, FieldList, SubmitField
 from wtforms.validators import DataRequired, EqualTo, ValidationError
+from flask_wtf.file import FileField, FileAllowed, FileRequired
+from app.extension import photos
 
 from app.model import User
 
@@ -33,3 +36,7 @@ class FormUsers(FlaskForm):
     new_user_name = StringField('Username', render_kw = {'value':'new user'})
     new_position = SelectField('User\'s position', choices = [("Teacher", "Teacher"), ("Student", "Student")], render_kw = {'value':'Teacher'})
     addID = SubmitField()
+
+class FormIcon(FlaskForm):
+    icon = FileField('Avatar', validators=[FileRequired(), FileAllowed(photos, message='You are only allowed to upload images!')])
+    submit = SubmitField('submit')

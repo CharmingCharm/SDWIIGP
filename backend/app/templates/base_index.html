@@ -90,10 +90,9 @@
 						<div class="d-flex order-lg-2 ml-auto">
 							<div class="dropdown">
 								<a href="javascript:void(0)" class="nav-link pr-0 leading-none" data-toggle="dropdown">
-									<span class="avatar" id="base_username_short">UN</span>
+									<span class="avatar" {% if current_user.photo %}style="background-image: url({{ url_for('static', filename = 'avatars/' + current_user.photo) }})"{% endif %}></span>
 									<span class="ml-2 d-none d-lg-block">
-										<span class="text-default"
-											id="base_username">{{ current_user.user_name }}</span>
+										<span class="text-default">{{ current_user.user_name }}</span>
 									</span>
 								</a>
 								<div class="dropdown-menu dropdown-menu-right dropdown-menu-arrow">
@@ -105,13 +104,6 @@
 										<i class="dropdown-icon fe fe-log-out"></i> Sign out
 									</a>
 								</div>
-								<script>
-									/*
-									require(['jquery'], function ($) {
-										$('#base_username').html(currentUser.user_name);
-									});
-									*/
-								</script>
 							</div>
 						</div>
 						<a href="#" class="header-toggler d-lg-none ml-3 ml-lg-0" data-toggle="collapse"
@@ -136,7 +128,7 @@
 										<a href="{{ url_for('admin.tag') }}" class="dropdown-item ">Tags</a>
 										<a href="{{ url_for('admin.userGroup') }}" class="dropdown-item ">
 											User Groups</a>
-										<a href="#" class="dropdown-item ">Tests</a>
+										<a href="#" class="dropdown-item">Tests</a>
 									</div>
 								</li>
 							</ul>
