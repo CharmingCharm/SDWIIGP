@@ -12,12 +12,15 @@
 		</div>
 		<div class="row">
 			<div class="col-md-7 col-xl-5 m-auto">
+				{% if current_user.is_teacher %}
 				<button class="btn btn-pill btn-success" data-toggle="modal" data-target="#modal_add_anno" style="margin: 20px 20px;"
 					type="button">Add</button>
+				{% endif %}
 				{% for anno in annos %}
 				<div class="card">
 					<div class="card-header">
 						<h3 class="card-title" id="title-{{ anno.aid }}">{{ anno.title }}</h3>
+						{% if current_user.is_teacher %}
 						<div class="card-options">
 							<a href="javascript:void(0)" data-toggle="modal" data-target="#modal_edit_anno"
 								class="card-options edit_anno" value="{{ anno.aid }}" style="margin: 0px 2px;">
@@ -28,6 +31,7 @@
 								<i class="fe fe-trash"></i>
 							</a>
 						</div>
+						{% endif %}
 					</div>
 					<div class="card-body" style="min-height: 200px;">
 						<span style="color: grey; font-size: 15px;">Announce by: {{ anno.user.user_name }}, at time
