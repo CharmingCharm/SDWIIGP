@@ -14,14 +14,6 @@ def home():
     announcements = Announcement.query.join(Announcement.user).filter(Announcement.uid == User.uid).order_by(Announcement.date_time.desc()).limit(3).all()
     return render_template('home.html', annos = announcements)
 
-@main.route('/status', methods = ['GET', 'POST'])
-@main.route('/status/<int:page>', methods = ['GET', 'POST'])
-@login_required
-def status(page = 1):
-    pagination = Submission.query.paginate(page=page,per_page=5)
-    submissions = pagination.items
-    return render_template('status.html', submissions = submissions, pagination = pagination)
-
 @main.route('/change_status', methods = ['POST'])
 @login_required
 def change_status():

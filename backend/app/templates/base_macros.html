@@ -8,6 +8,22 @@
 	{% endif %}
 {%- endmacro %}
 
+{% macro status_tag(status) -%}
+	{% if status == 'hidden' %}
+	<span class="tag tag-gray">Hidden</span>
+	{% elif status == 'pending' %}
+	<span class="tag tag-azure">Pending</span>
+	{% elif status == 'running' %}
+	<span class="tag tag-azure">Running</span>
+	{% elif status == 'ac' %}
+	<span class="tag tag-success">AC</span>
+	{% elif status == 'wa' %}
+	<span class="tag tag-danger">WA</span>
+	{% else %}
+	<span class="tag">Unknown</span>
+	{% endif %}
+{%- endmacro %}
+
 {% macro render_field(field, div_class = '') -%}
 <div class="form-group {{ div_class }}">
 	{% if field.type == 'BooleanField' %}

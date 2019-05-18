@@ -5,61 +5,64 @@
 {% import 'base_macros.html' as macros %}
 
 {% block page_content %}
-<form method="post" action="{{ url_for('problem.show', pid = problem.pid) }}">
-	<div class="row">
-		<div class="col-md-9">
-			<div class="card">
-				<div class="card-header">
-					<h3 class="card-title"><strong>{{ problem.title }}</strong></h3>
+<div class="row row-cards">
+	<div class="col-md-9">
+		<div class="card">
+			<div class="card-header">
+				<h3 class="card-title"><strong>{{ problem.title }}</strong></h3>
+			</div>
+			<div class="card-body">
+				<div class="text-wrap" id="problem_description">
+					<textarea style="display:none">{{ problem.description }}</textarea>
 				</div>
-				<div class="card-body">
-					<div class="text-wrap" id="problem_description">
-						<textarea style="display:none">{{ problem.description }}</textarea>
-					</div>
-					<div class="col-12" align="center">
-						<div class="card">
-							<div id="submission_code" style="margin: 0"></div>
+			</div>
+		</div>
+	</div>
+	<div class="col-md-3">
+		<div class="card">
+			<div class="card-header">
+				<h3 class="card-title">Information</h3>
+			</div>
+			<table class="table card-table">
+				<tr>
+					<td>Problem ID</td>
+					<td class="text-right">{{ problem.pid }}</td>
+				</tr>
+				<tr>
+					<td>Level</td>
+					<td class="text-right">{{ macros.level_to_tag(problem.level) }}</td>
+				</tr>
+				<tr>
+					<td colspan="2">
+						<p>Tags</p>
+						<div class="tags">
+							{% for tag in problem.tags %}
+							<span class="tag tag-rounded tag-azure">{{ tag.tag_name }}</span>
+							{% endfor %}
 						</div>
-					</div>
+					</td>
+				</tr>
+			</table>
+		</div>
+	</div>
+	<div class="col-12">
+		<div class="card">
+			<div class="card-header">
+				<h3 class="card-title">Submit your code</h3>
+				<div class="card-options">
+					<a href="javascript:void(0)" class="card-options-collapse" data-toggle="card-collapse"><i
+							class="fe fe-chevron-up"></i></a>
+				</div>
+			</div>
+			<div class="card-body">
+				<div id="submission_code"></div>
+				<div class="col-12" align="center">
+					<button class="btn btn-pill btn-azure btn-lg" id="submit_code">Submit</button>
 				</div>
 			</div>
 		</div>
-		<div class="col-md-3">
-			<div class="card">
-				<div class="card-header">
-					<h3 class="card-title">Information</h3>
-					<div class="card-options">
-						<a href="#" class="card-options-collapse" data-toggle="card-collapse"><i
-								class="fe fe-chevron-up"></i></a>
-					</div>
-				</div>
-				<table class="table card-table">
-					<tr>
-						<td>Problem ID</td>
-						<td class="text-right">{{ problem.pid }}</td>
-					</tr>
-					<tr>
-						<td>Level</td>
-						<td class="text-right">{{ macros.level_to_tag(problem.level) }}</td>
-					</tr>
-					<tr>
-						<td colspan="2">
-							<p>Tags</p>
-							<div class="tags">
-								{% for tag in problem.tags %}
-								<span class="tag tag-rounded tag-azure">{{ tag.tag_name }}</span>
-								{% endfor %}
-							</div>
-						</td>
-					</tr>
-				</table>
-			</div>
-		</div>
 	</div>
-	<div class="col-12" align="center">
-		<a href="#" class="btn btn-pill btn-azure btn-lg">Submit</a>
-	</div>
-</form>
+</div>
 
 <script>
 	var submission_code, problem_description;
@@ -82,6 +85,19 @@
 
 		problem_description = editormd.markdownToHTML("problem_description", {
 			tex: true
+		});
+
+		$('#submit_code').click(function () {
+			$.post(
+				"{{ url_for('submission.new', pid = problem.pid) }}",
+				{ code: submission_code.getMarkdown() },
+				function (data) {
+					if (data == 'success')
+						window.location.href = "{{ url_for('submission.status') }}";
+					else
+						window.location.reload();
+				}
+			);
 		});
 	});
 </script>

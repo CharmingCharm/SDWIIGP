@@ -2,84 +2,69 @@
 {% set page_title = 'Status' %}
 {% set navbar_active = 'status' %}
 {% import 'base_macros.html' as macros %}
+
 {% block page_content %}
 <div class="page-header">
-    <h1 class="page-title">
-        Status
-    </h1>
+	<h1 class="page-title">
+		Status
+	</h1>
 </div>
 <div class="card">
-    <table class="table card-table table-striped">
-        <thead>
-            <tr>
-                <th>Submission ID</th>
-                <th>Problem ID</th>
-                <th>User</th>
-                <th>Result</th>
-                <th>Submission time</th>
-                <th></th>
-            </tr>
-        </thead>
-        <tbody>
+	<table class="table card-table table-striped">
+		<thead>
+			<tr>
+				<th>Status</th>
+				<th>#</th>
+				<th>Problem ID</th>
+				<th>User</th>
+				<th>Result</th>
+				<th>Submission Time</th>
+				<th>Solution</th>
+			</tr>
+		</thead>
+		<tbody>
 
-            {% for sub in submissions %}
-            <tr>
-                <td>{{ sub.sid }}</td>
-                <td>{{ sub.pid }}</td>
-                <td><a href="#">{{ sub.user.user_name }}</a></td>
-                <td><span class="tag tag-green">{{ sub.score }}</span> </td>
-                <td>{{ sub.date_time }}</td>
-                <td>
-                    {% if sub.is_solution %}
-                    <span class="tag tag-azure">
-                        <a href="javascript:void(0)" value="{{ sub.sid }}" class="sub_status text-inherit"
-                            style="text-decoration: none">is solution</a>
-                    </span>
-                    {% else %}
-                    <span class="tag">
-                        <a href="javascript:void(0)" value="{{ sub.sid }}" class="sub_status text-inherit"
-                            style="text-decoration: none">not solution</a>
-                    </span>
-                    {% endif %}
-                </td>
-            </tr>
-            {% endfor %}
+			{% for sub in submissions %}
+			<tr>
+				<td>{{ macros.status_tag(sub.status) }}</td>
+				<td>{{ sub.sid }}</td>
+				<td>
+					<a href="{{ url_for('problem.show', pid = sub.pid) }}">{{ sub.pid }}</a>
+				</td>
+				<td><a href="#">{{ sub.user.user_name }}</a></td>
+				<td>
+					{% if sub.status == 'hidden' or (not sub.score) %}-{% else %}
+					<span class="tag tag-green">{{ sub.score }}</span>
+					{% endif %}
+				</td>
+				<td>{{ sub.date_time }}</td>
+				<td>
+					{% if sub.is_solution %}
+					<a href="javascript:void(0)" value="{{ sub.sid }}" class="tag tag-azure sub_status">Yes</a>
+					{% elif current_user.is_teacher %}
+					<a href="javascript:void(0)" value="{{ sub.sid }}" class="tag sub_status">No</a>
+					{% endif %}
+				</td>
+			</tr>
+			{% endfor %}
 
-        </tbody>
-    </table>
-    {{ macros.my_paginate(pagination,'main.status') }}
+		</tbody>
+	</table>
+	{{ macros.my_paginate(pagination,'submission.status') }}
 </div>
 {% if current_user.is_teacher %}
 <script>
-    require(['jquery'], function ($) {
-        $('.sub_status').click(function () {
-            if ($(this).parent().hasClass('tag-azure')) {
-                $(this).parent().removeClass('tag-azure');
-                $(this).html("not solution");
-                $.post(
-                    "{{ url_for('main.change_status') }}",
-                    {
-                        sid: $(this).val()
-                    },
-                    function () {
-                        window.location.reload();
-                    }
-                );
-			} else {
-                $(this).parent().addClass('tag-azure');
-                $(this).html("is solution");
-                $.post(
-                    "{{ url_for('main.change_status') }}",
-                    {
-                        sid: $(this).val()
-                    },
-                    function () {
-                        window.location.reload();
-                    }
-                );
-            }
-        });
-    });
+	require(['jquery'], function ($) {
+		$('.sub_status').click(function () {
+			$.post(
+				"{{ url_for('main.change_status') }}",
+				{ sid: $(this).val() },
+				function () {
+					window.location.reload();
+				}
+			);
+		});
+	});
 </script>
 {% endif %}
 {% endblock %}
