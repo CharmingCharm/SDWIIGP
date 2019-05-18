@@ -1,4 +1,10 @@
 require.config({
+baseUrl: '/static',
+map: {
+'*': {
+'css': 'plugins/require-css/css'
+}
+},
 shim: {
 'bootstrap': ['jquery'],
 'sparkline': ['jquery'],
@@ -7,6 +13,11 @@ shim: {
 'vector-map-de': ['vector-map', 'jquery'],
 'vector-map-world': ['vector-map', 'jquery'],
 'core': ['bootstrap', 'jquery'],
+'datetimepicker': {
+	deps: ['bootstrap', 'jquery', 'moment', 'css!/static/css/bootstrap-datetimepicker.min'],
+	exports: "datetimepicker",
+},
+'moment': {exports: "moment"},
 },
 paths: {
 'core': 'js/core',
@@ -19,6 +30,7 @@ paths: {
 'vector-map-de': 'js/vendors/jquery-jvectormap-de-merc',
 'vector-map-world': 'js/vendors/jquery-jvectormap-world-mill',
 'circle-progress': 'js/vendors/circle-progress.min',
+
 'marked': "plugins/editormd/lib/marked.min",
 'prettify': "plugins/editormd/lib/prettify.min",
 'raphael': "plugins/editormd/lib/raphael.min",
@@ -29,12 +41,10 @@ paths: {
 'katex': "plugins/katex/katex.min",
 'codemirror': "plugins/editormd/lib/codemirror",
 'editormd': "plugins/editormd/editormd.amd.min", // Using Editor.md amd version for Require.js
+
+'moment': 'js/vendors/moment.min',
+'datetimepicker': 'js/vendors/bootstrap-datetimepicker.min',
 },
-map: {
-'*': {
-'css': 'plugins/require-css/css'
-}
-}
 });
 window.tabler = {
 colors: {

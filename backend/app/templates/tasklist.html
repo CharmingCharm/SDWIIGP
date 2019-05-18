@@ -7,7 +7,10 @@
 <div class="card">
 	{% if current_user.is_teacher %}
 	<div class="card-header">
-		<a href="{{ url_for('task.new') }}" class="btn btn-sm btn-primary">New Task</a>
+		<h3 class="card-title">Task list</h3>
+		<div class="card-options">
+			<a href="{{ url_for('task.new') }}" class="btn btn-sm btn-primary">New Task</a>
+		</div>
 	</div>
 	{% endif %}
 	<div class="table-responsive">
@@ -61,7 +64,7 @@
 	require(['jquery'], function ($) {
 		$().ready(function () {
 			$('.delete_task').click(function () {
-				var task = $(this).parent().siblings();
+				var task = $(this).parent().parent();
 				$('#name_delete_task').html(task.find('.task_name').html());
 				$('#id_delete_task').val(task.find('.task_id').html());
 			});
@@ -69,7 +72,7 @@
 			$('#submit_delete_task').click(function () {
 				$.post(
 					"{{ url_for('task.delete') }}",
-					{ pid: $('#id_delete_task').val() },
+					{ task_id: $('#id_delete_task').val() },
 					function () {
 						window.location.reload();
 					}

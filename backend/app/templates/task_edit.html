@@ -1,0 +1,292 @@
+{% extends 'base_index.html' %}
+{% set page_title = (task.task_id|string ~ '. ' ~ task.task_name) if task else 'New Task' %}
+{% set navbar_active = 'admin' %}
+{% import 'base_macros.html' as macros %}
+
+{% block page_content %}
+<form role="form" method="post">
+	{{ form.csrf_token }}
+	<div class="row">
+		<div class="col-lg-7">
+			<div class="card">
+				<div class="card-header">
+					<h3 class="card-title">Problem set</h3>
+					<div class="card-options">
+						<button type="button" class="btn btn-sm btn-success" data-toggle="modal"
+							data-target="#modal_add_problem">Add Problem</button>
+					</div>
+				</div>
+				<div class="table-responsive">
+					<table class="table card-table table-vcenter text-nowrap">
+						<thead>
+							<tr>
+								<th>#</th>
+								<th>Title</th>
+								<th></th>
+							</tr>
+						</thead>
+						<tbody id="problems_table">
+							{% for problem in (task.problems if task else []) %}
+							<tr pid="{{ problem.pid }}">
+								<td class="problem_pid">{{ problem.pid }}</td>
+								<td class="problem_title">{{ problem.title }}</td>
+								<td class="text-right">
+									<a href="javascript:void(0)" data-toggle="modal" class="icon delete_problem">
+										<i class="fe fe-x"></i>
+									</a>
+								</td>
+							</tr>
+							{% endfor %}
+						</tbody>
+					</table>
+				</div>
+				<select class="d-none" id="problems" multiple name="problems">
+					{% for problem in (task.problems if task else []) %}
+					<option selected value="{{ problem.pid }}"></option>
+					{% endfor %}
+				</select>
+			</div>
+
+			<div class="card">
+				<div class="card-header">
+					<h3 class="card-title">Related groups</h3>
+					<div class="card-options">
+						<button type="button" class="btn btn-sm btn-success" data-toggle="modal"
+							data-target="#modal_add_group">Add Group</button>
+					</div>
+				</div>
+				<div class="table-responsive">
+					<table class="table card-table table-vcenter text-nowrap">
+						<thead>
+							<tr>
+								<th>Group ID</th>
+								<th>Group Name</th>
+								<th></th>
+							</tr>
+						</thead>
+						<tbody id="groups_table">
+							{% for group in (task.groups if task else []) %}
+							<tr gid="{{ group.gid }}">
+								<td class="group_gid">{{ group.gid }}</td>
+								<td class="group_name">{{ group.group_name }}</td>
+								<td class="text-right">
+									<a href="javascript:void(0)" class="icon delete_group">
+										<i class="fe fe-x"></i>
+									</a>
+								</td>
+							</tr>
+							{% endfor %}
+						</tbody>
+					</table>
+				</div>
+				<select class="d-none" id="groups" multiple name="groups">
+					{% for group in (task.groups if task else []) %}
+					<option selected value="{{ group.gid }}"></option>
+					{% endfor %}
+				</select>
+			</div>
+		</div>
+
+		<div class="col-lg-5">
+			<div class="card">
+				<div class="card-header">
+					<h3 class="card-title">Information</h3>
+				</div>
+				<div class="card-body">
+					<div class="form-group">
+						<label class="form-label">Task ID</label>
+						<div class="form-control-plaintext">{{ task.task_id if task else '' }}</div>
+					</div>
+					{{ macros.render_field(form.task_name) }}
+					{{ macros.render_field(form.description, rows = 5) }}
+					{{ macros.render_field(form.deadline) }}
+				</div>
+			</div>
+		</div>
+		<div class="col-12" align="center">
+			<button type="submit" class="btn btn-pill btn-azure btn-lg">{{ form.submit.label.text }}</button>
+		</div>
+	</div>
+</form>
+
+<div class="modal fade" id="modal_add_problem" tabindex="-1" role="dialog" aria-labelledby="title_add_problem"
+	aria-hidden="true">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h4 class="modal-title" id="title_add_problem">Add problem into task</h4>
+				<a class="close" data-dismiss="modal" aria-hidden="true"></a>
+			</div>
+			<div class="modal-body">
+				<label class="form-label">Problem ID or title</label>
+				<div class="row gutters-xs">
+					<div class="col">
+						<input type='text' class='form-control' id='search_problem_text'>
+					</div>
+					<span class="col-auto">
+						<a href="javascript:void(0)" class="btn btn-secondary" role="button" id="search_problem">
+							<i class="fe fe-search"></i>
+						</a>
+					</span>
+				</div>
+				<div class="row gutters-xs">
+					<table class="table card-table">
+						<thead>
+							<tr>
+								<th>Group ID</th>
+								<th>Group Name</th>
+								<th></th>
+							</tr>
+						</thead>
+						<tbody id="search_problem_table">
+						</tbody>
+					</table>
+				</div>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+			</div>
+		</div>
+	</div>
+</div>
+
+<div class="modal fade" id="modal_add_group" tabindex="-1" role="dialog" aria-labelledby="title_add_group"
+	aria-hidden="true">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h4 class="modal-title" id="title_add_group">Assign task to group</h4>
+				<a class="close" data-dismiss="modal" aria-hidden="true"></a>
+			</div>
+			<div class="modal-body">
+				<label class="form-label">User group ID or name</label>
+				<div class="row gutters-xs">
+					<div class="col">
+						<input type='text' class='form-control' id='search_group_text'>
+					</div>
+					<span class="col-auto">
+						<a href="javascript:void(0)" class="btn btn-secondary" role="button" id="search_group">
+							<i class="fe fe-search"></i>
+						</a>
+					</span>
+				</div>
+				<div class="row gutters-xs">
+					<table class="table card-table">
+						<thead>
+							<tr>
+								<th>#</th>
+								<th>Title</th>
+								<th></th>
+							</tr>
+						</thead>
+						<tbody id="search_group_table">
+						</tbody>
+					</table>
+				</div>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+			</div>
+		</div>
+	</div>
+</div>
+
+<script>
+	require(['jquery', 'bootstrap', 'moment', 'datetimepicker'],
+		function ($, bootstrap, moment, datetimepicker) {
+			$().ready(function () {
+				$('#deadline').datetimepicker();
+
+				$('.delete_problem').one("click", function () {
+					$("#problems > [value='" + $(this).parent().parent().find('.problem_pid').html() + "']").remove();
+					$(this).parent().parent().remove();
+				});
+
+				$('#search_problem').click(function () {
+					$.post(
+						"{{ url_for('task.search_problem') }}",
+						{
+							search: $('#search_problem_text').val(),
+							page: 1
+						},
+						function (problems) {
+							var text = "";
+							problems = problems.problems;
+							for (var row = 0; row < problems.length; row++) {
+								text += "<tr>"
+								text += "<td class='search_problem_pid'>" + problems[row]['pid'] + "</td>";
+								text += "<td class='search_problem_title'>" + problems[row]['title'] + "</td>";
+								text += "<td><button type='button' data-dismiss='modal' class='btn btn-sm btn-azure add_problem'>Add</button></td>";
+								text += "</tr>"
+							}
+							$('.add_problem').off("click");
+							$("#search_problem_table").html(text);
+							$('.add_problem').click(function () {
+								var problem = $(this).parent().parent();
+								var pid = problem.find('.search_problem_pid').html();
+								var title = problem.find('.search_problem_title').html();
+								var text = "<tr pid='" + pid + "'>";
+								text += "<td class='problem_pid'>" + pid + "</td>";
+								text += "<td class='problem_title'>" + title + "</td>";
+								text += "<td class='text-right'>";
+								text += "<a href='javascript:void(0)' class='icon delete_problem'><i class='fe fe-x'></i></a>";
+								text += "</td>";
+								$('#problems_table').append(text);
+								$('#problems').append('<option value="' + pid + '" selected></option>');
+								$('[pid=' + pid + ']').find('.delete_problem').one("click", function () {
+									$("#problems > [value='" + $(this).parent().parent().find('.problem_pid').html() + "']").remove();
+									$(this).parent().parent().remove();
+								});
+							});
+						}
+					);
+				});
+
+				$('.delete_group').one("click", function () {
+					$("#groups > [value='" + $(this).parent().parent().find('.group_gid').html() + "']").remove();
+					$(this).parent().parent().remove();
+				});
+
+				$('#search_group').click(function () {
+					$.post(
+						"{{ url_for('task.search_group') }}",
+						{
+							search: $('#search_group_text').val(),
+							page: 1
+						},
+						function (groups) {
+							var text = "";
+							groups = groups.groups;
+							for (var row = 0; row < groups.length; row++) {
+								text += "<tr>"
+								text += "<td class='search_group_gid'>" + groups[row]['gid'] + "</td>";
+								text += "<td class='search_group_name'>" + groups[row]['group_name'] + "</td>";
+								text += "<td><button type='button' data-dismiss='modal' class='btn btn-sm btn-azure add_group'>Add</button></td>";
+								text += "</tr>"
+							}
+							$('.add_group').off("click");
+							$("#search_group_table").html(text);
+							$('.add_group').click(function () {
+								var group = $(this).parent().parent();
+								var gid = group.find('.search_group_gid').html();
+								var name = group.find('.search_group_name').html();
+								var text = "<tr gid='" + gid + "'>";
+								text += "<td class='group_gid'>" + gid + "</td>";
+								text += "<td class='group_name'>" + name + "</td>";
+								text += "<td class='text-right'>";
+								text += "<a href='javascript:void(0)' class='icon delete_group'><i class='fe fe-x'></i></a>";
+								text += "</td>";
+								$('#groups_table').append(text);
+								$('#groups').append('<option value="' + gid + '" selected></option>');
+								$('[gid=' + gid + ']').find('.delete_group').one("click", function () {
+									$("#groups > [value='" + $(this).parent().parent().find('.group_gid').html() + "']").remove();
+									$(this).parent().parent().remove();
+								});
+							});
+						}
+					);
+				});
+			});
+		});
+</script>
+{% endblock %}

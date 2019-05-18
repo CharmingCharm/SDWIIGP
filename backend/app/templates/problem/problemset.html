@@ -177,7 +177,7 @@
 
 			{% if current_user.is_teacher %}
 			$('.delete_problem').click(function () {
-				var problem = $(this).parent().siblings();
+				var problem = $(this).parent().parent();
 				$('#name_delete_problem').html(problem.find('.problem_title').html());
 				$('#id_delete_problem').val(problem.find('.problem_pid').html());
 			});
