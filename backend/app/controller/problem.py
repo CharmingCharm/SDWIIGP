@@ -1,7 +1,7 @@
 from flask import Blueprint, current_app, redirect, url_for, flash, request, abort, json
 from flask_login import current_user, login_required
 from app.model import serialize, Problem, Tag, Test, TestSet, Submission
-from app.form import FormProblem, FormNewProblem
+from app.form import FormProblem
 from . import render_template, admin_required
 from app.extension import db
 from decimal import Decimal
@@ -46,7 +46,7 @@ def show(pid):
 @admin_required
 def edit(pid):
 	problem = Problem.query.filter_by(pid = pid).first()
-	form = FormProblem(problem)
+	form = FormProblem(pid)
 	if form.validate_on_submit():
 		problem.title = form.title.data
 		problem.description = form.description.data
@@ -64,7 +64,7 @@ def edit(pid):
 @problem.route('/new', methods = ['GET', 'POST'])
 @admin_required
 def new():
-	form = FormNewProblem()
+	form = FormProblem(0)
 	if form.validate_on_submit():
 		db.session.add(Problem(
 			title = form.title.data,

@@ -20,18 +20,9 @@ class FormProblem(FlaskForm):
 
 	def __init__(self, problem, *args, **kwargs):
 		super().__init__(*args, **kwargs)
-		if request.method == 'GET':
+		if request.method == 'GET' and problem:
+			problem = Problem.query.filter_by(pid = pid).first()
 			self.title.data = problem.title
 			self.description.data = problem.description
 			self.level.data = problem.level
 			self.tags.data = problem.tags.all()
-
-class FormNewProblem(FlaskForm):
-	def query_factory():
-		return Tag.query.all()
-
-	title = StringField('Title', validators=[DataRequired(message='Title is required')])
-	description = TextAreaField('Description', validators=[DataRequired(message='Description is required')])
-	level = SelectField('Level', coerce=int, choices=[(k, k) for k in range(1, 4)])
-	tags = QuerySelectMultipleField('Tags', query_factory=query_factory)
-	submit = SubmitField('Save')

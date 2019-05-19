@@ -1,7 +1,7 @@
 from flask import Blueprint, current_app, redirect, url_for, flash, request, json, abort, jsonify
 from flask_paginate import Pagination, get_page_parameter
 from flask_login import current_user, login_required
-from app.form import FormProblem, FormNewProblem, FormUserGroup, FormUsers, FormUserSingle, FormGroupList
+from app.form import FormUserGroup, FormUsers, FormUserSingle, FormGroupList
 from app.model import serialize, Problem, Tag, UserGroup, User, UserInGroup
 from . import render_template, admin_required
 from app.extension import db
