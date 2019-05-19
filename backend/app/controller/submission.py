@@ -16,6 +16,26 @@ def status(page = 1):
 	submissions = pagination.items
 	return render_template('status.html', submissions = submissions, pagination = pagination)
 
+@submission.route('/show/<int:sid>', methods = ["GET"])
+@login_required
+def show(sid):
+	sub = Submission.query.filter_by(sid = sid)
+	if sub.count() == 0:
+		abort(404)
+	sub = sub.first()
+	if (not current_user.is_teacher) and (not sub.is_solution) and (sub.uid != current_user.uid or sub.status == 'hidden'):
+		abort(403)
+	if sub.status == 'pending' or sub.status == 'running':
+		result_tests = "[]"
+	else:
+		result_tests = json.loads(sub.result)
+		show_first_wrong = True
+		for test in result_tests:
+			test['full_score'] = float(str(Test.query.filter_by(test_id = test['test_id']).first().score))
+			test['is_show'] = current_user.is_teacher or (show_first_wrong and test['score'] == 0.0)
+			show_first_wrong = show_first_wrong and (not test['is_show'])
+	return render_template('submission.html', submission = sub, result_tests = result_tests)
+
 @submission.route('/new/<int:pid>', methods = ['POST'])
 @login_required
 def new(pid):

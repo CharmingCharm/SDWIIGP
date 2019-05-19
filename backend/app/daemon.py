@@ -26,7 +26,8 @@ def judge(sid):
 		test_score = 0 if returncode or output else 1
 		result.append({
 			'test_id': test.test_id,
-			'score': float(str(test.score)) * test_score
+			'score': float(str(test.score)) * test_score,
+			'output': output.decode(encoding = "utf-8", errors = "ignore"),
 		})
 		os.remove(test_file)
 	sub.result = json.dumps(result)

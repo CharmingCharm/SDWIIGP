@@ -17,7 +17,7 @@
 				<th>#</th>
 				<th>Problem ID</th>
 				<th>User</th>
-				<th>Result</th>
+				<th>Score</th>
 				<th>Submission Time</th>
 				<th>Solution</th>
 			</tr>
@@ -26,15 +26,17 @@
 
 			{% for sub in submissions %}
 			<tr>
-				<td>{{ macros.status_tag(sub.status) }}</td>
-				<td>{{ sub.sid }}</td>
+				<td>
+					{{ macros.status_tag(sub.status, url_for('submission.show', sid = sub.sid)) }}
+				</td>
+				<td><a href="{{ url_for('submission.show', sid = sub.sid) }}">{{ sub.sid }}</a></td>
 				<td>
 					<a href="{{ url_for('problem.show', pid = sub.pid) }}">{{ sub.pid }}</a>
 				</td>
 				<td><a href="#">{{ sub.user.user_name }}</a></td>
 				<td>
-					{% if sub.status == 'hidden' or sub.score == None %}-{% else %}
-					{{ sub.score }}
+					{% if sub.status == 'hidden' or sub.status == 'pending' or sub.status == 'running' %}-{% else %}
+					<a href="{{ url_for('submission.show', sid = sub.sid) }}">{{ sub.score }}</a>
 					{% endif %}
 				</td>
 				<td>{{ sub.date_time }}</td>

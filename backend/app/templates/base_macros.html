@@ -8,19 +8,18 @@
 	{% endif %}
 {%- endmacro %}
 
-{% macro status_tag(status) -%}
-	{% if status == 'hidden' %}
-	<span class="tag tag-gray">Hidden</span>
-	{% elif status == 'pending' %}
-	<span class="tag tag-azure">Pending</span>
-	{% elif status == 'running' %}
-	<span class="tag tag-azure">Running</span>
-	{% elif status == 'accepted' %}
-	<span class="tag tag-success">Accepted</span>
-	{% elif status == 'wrong_answer' %}
-	<span class="tag tag-danger">Wrong Answer</span>
+{% macro status_tag(status, href = '') -%}
+	{% set color = {
+		'hidden': ['gray', 'Hidden'],
+		'pending': ['azure', 'Pending'],
+		'running': ['azure', 'Running'],
+		'accepted': ['success', 'Accepted'],
+		'wrong_answer': ['danger', 'Wrong Answer'],
+	} %}
+	{% if status in color %}
+	<a href="{{ href if href else 'javascript:void(0)' }}" class="tag tag-{{ color[status][0] }}">{{ color[status][1] }}</a>
 	{% else %}
-	<span class="tag">Unknown</span>
+	<a href="{{ href if href else 'javascript:void(0)' }}" class="tag">Unknown</a>
 	{% endif %}
 {%- endmacro %}
 

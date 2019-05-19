@@ -1,0 +1,80 @@
+{% extends 'base_index.html' %}
+{% set page_title = 'Status' %}
+{% set navbar_active = 'status' %}
+{% import 'base_macros.html' as macros %}
+
+{% block page_content %}
+<div class="page-header">
+	<h1 class="page-title">
+		Status for #{{ submission.sid }}
+	</h1>
+</div>
+<div class="row row-cards">
+	<div class="col-12">
+		<div class="card">
+			<div class="card-header">
+				<h3 class="card-title">Python code</h3>
+			</div>
+			<div class="card-body">
+				<div id="submission_code">
+					<textarea style="display:none">{{ submission.code }}</textarea>
+				</div>
+			</div>
+		</div>
+	</div>
+	{% for test in result_tests %}
+	<div class="col-12">
+		<div class="card">
+			<div class="card-header">
+					<h3 class="card-title">Test #{{ loop.index }}</h3>
+					<span class="tag tag-azure ml-2">{{ test['full_score'] }}</span>
+					{% if test['score'] == 0.0 %}
+					<span class="tag tag-danger ml-2">Wrong Answer</span>
+					{% else %}
+					<span class="tag tag-success ml-2">Accepted</span>
+					{% endif %}
+				{% if test['is_show'] %}
+				<div class="card-options">
+					<a href="#" class="card-options-collapse" data-toggle="card-collapse">
+						<i class="fe fe-chevron-up"></i></a>
+				</div>
+				{% endif %}
+			</div>
+			{% if test['is_show'] %}
+			<div class="card-body">
+				<div class="test_output" id="test_output_{{ loop.index }}">
+					<textarea style="display:none">{{ test['output'] }}</textarea>
+				</div>
+			</div>
+			{% endif %}
+		</div>
+	</div>
+	{% endfor %}
+</div>
+
+<script>
+	var submission_code;
+	var test_outputs = new Array();
+
+	require(editormd_deps, function (editormd) {
+		submission_code = editormd("submission_code", {
+			watch: false,
+			toolbar: false,
+			readOnly: true,
+			mode: "python",
+			path: "{{ url_for('static', filename='plugins/editormd/lib/') }}",
+		});
+
+		$('.test_output').each(function () {
+			var test_output = editormd($(this).attr('id'), {
+				watch: false,
+				toolbar: false,
+				readOnly: true,
+				mode: "python",
+				path: "{{ url_for('static', filename='plugins/editormd/lib/') }}",
+			});
+			test_outputs.push(test_output);
+		});
+	});
+</script>
+{% endblock %}
