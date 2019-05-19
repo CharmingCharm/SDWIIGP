@@ -44,7 +44,7 @@ def judge(sid):
 		output = p.communicate()[1].decode(encoding = "utf-8", errors = "ignore")
 		returncode = p.returncode
 		test_score = float(str(test.score)) * (0 if returncode or output else 1)
-		print('{ test_id: ', test.test_id, ', returncode: ', returncode, ', score:', test_score, ' }', sep='')
+		print('{ test_id: ', test.test_id, ', returncode: ', returncode, ', score: ', test_score, ' }', sep='')
 
 		score = score + test_score
 		result.append({
