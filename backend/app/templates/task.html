@@ -32,7 +32,11 @@
 					<tbody>
 						{% for problem in task.problems %}
 						<tr>
-							<td><span class="tag tag-green">AC</span></td>
+							<td>
+								{% if problem.sub %}
+								{{ macros.status_tag(problem.sub.status, url_for('submission.show', sid = problem.sub.sid)) }}
+								{% endif %}
+							</td>
 							<td><a href="{{ url_for('problem.show', pid = problem.pid) }}">{{ problem.pid }}</a></td>
 							<td><a href="{{ url_for('problem.show', pid = problem.pid) }}">{{ problem.title }}</a></td>
 							<td>{{ macros.level_to_tag(problem.level) }}</td>

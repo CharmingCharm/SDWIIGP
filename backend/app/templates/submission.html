@@ -24,14 +24,14 @@
 	</div>
 	{% for test in result_tests %}
 	<div class="col-12">
-		<div class="card">
+		<div class="card{% if test['score'] == test['full_score'] %} card-collapsed{% endif %}">
 			<div class="card-header">
 					<h3 class="card-title">Test #{{ loop.index }}</h3>
 					<span class="tag tag-azure ml-2">{{ test['full_score'] }}</span>
-					{% if test['score'] == 0.0 %}
-					<span class="tag tag-danger ml-2">Wrong Answer</span>
-					{% else %}
+					{% if test['score'] == test['full_score'] %}
 					<span class="tag tag-success ml-2">Accepted</span>
+					{% else %}
+					<span class="tag tag-danger ml-2">Wrong Answer</span>
 					{% endif %}
 				{% if test['is_show'] %}
 				<div class="card-options">
@@ -70,6 +70,7 @@
 				watch: false,
 				toolbar: false,
 				readOnly: true,
+				placeholder: "Congratulations! You passed this test.",
 				mode: "python",
 				path: "{{ url_for('static', filename='plugins/editormd/lib/') }}",
 			});
