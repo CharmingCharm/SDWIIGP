@@ -17,8 +17,8 @@ def home():
 @main.route('/change_status', methods = ['POST'])
 @login_required
 def change_status():
-    sid = request.values.get('sid')
-    submission = Submission.query.filter(sid == sid).first()
+    sid = int(request.values.get('sid'))
+    submission = Submission.query.filter_by(sid = sid).first()
     submission.is_solution = False if submission.is_solution else True
     flash('Success!','success')
     return 'success'
