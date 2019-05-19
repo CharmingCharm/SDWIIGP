@@ -20,7 +20,7 @@
 	<div class="col-md-6 col-xl-4">
 		<div class="card card_test">
 			<div class="card-header">
-				<h3 class="card-title">Test</h3>
+				<h3 class="card-title">Test #{{ test.test_id }}</h3>
 				<div class="card-options test_status">
 					<a href="javascript:void(0)" class="icon delete_test">
 						<i class="fe fe-x"></i>
@@ -70,7 +70,7 @@
 				<div class="col-md-6 col-xl-4"> \
 					<div class="card card_test"> \
 						<div class="card-header"> \
-							<h3 class="card-title">Test</h3> \
+							<h3 class="card-title">New Test</h3> \
 							<div class="card-options test_status"> \
 								<a href="javascript:void(0)" class="icon delete_test"> \
 									<i class="fe fe-x"></i> \
@@ -119,8 +119,11 @@
 				$.post(
 					"{{ url_for('problem.testset', pid = problem.pid) }}",
 					{ tests: JSON.stringify(tests) },
-					function () {
-						window.location.reload();
+					function (data) {
+						if (data == 'success')
+							window.location.href = "{{ url_for('problem.problemset') }}";
+						else
+							window.location.reload();
 					}
 				);
 			});

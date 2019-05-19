@@ -109,7 +109,7 @@
 									<i class="fe fe-edit"></i>
 								</a>
 								<a href="{{ url_for('problem.testset', pid = problem.pid) }}" class="icon ml-1">
-									<i class="fe fe-settings"></i>
+									<i class="fe fe-settings{% if not problem.testset %} text-danger{% endif %}"></i>
 								</a>
 								<a href="javascript:void(0)" data-toggle="modal" data-target="#modal_delete_problem"
 									class="icon delete_problem ml-1">
