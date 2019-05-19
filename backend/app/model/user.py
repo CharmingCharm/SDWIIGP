@@ -10,6 +10,7 @@ class User(UserMixin, db.Model):
     password_hash = db.Column(db.String(256), nullable = False)
     is_teacher = db.Column(db.Boolean(), nullable = False, default = False)
     avatar = db.Column(db.String(256), nullable = False, server_default = 'default.jpg')
+    item_per_page = db.Column(db.Integer, nullable = False, server_default = '20')
 	
     def __repr__(self):
         return self.name
