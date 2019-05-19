@@ -15,7 +15,10 @@
 					<div class="text-wrap" id="description">
 						<textarea style="display:none"
 							name="description">{{ form.description.data|default('', true) }}</textarea>
-					</div>
+					</div>	
+					{% for error in form.description.errors %}
+					<div class="alert alert-danger" role="alert">{{ error }}</div>
+					{% endfor %}
 				</div>
 			</div>
 		</div>
@@ -91,8 +94,6 @@
 			codeFold: true,
 			searchReplace: true,
 			placeholder: "Input problem description. Support Markdown.",
-			// value: getCodeValue(),
-			// theme: (localStorage.theme) ? localStorage.theme : "default",
 			tex: true,
 			path: "{{ url_for('static', filename='plugins/editormd/lib/') }}",
 		});

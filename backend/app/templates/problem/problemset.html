@@ -109,7 +109,7 @@
 									<i class="fe fe-edit"></i>
 								</a>
 								<a href="{{ url_for('problem.testset', pid = problem.pid) }}" class="icon ml-1">
-									<i class="fe fe-settings{% if not problem.testset %} text-danger{% endif %}"></i>
+									<i class="fe fe-settings{% if not problem.testset %} text-danger testset_required{% endif %}"></i>
 								</a>
 								<a href="javascript:void(0)" data-toggle="modal" data-target="#modal_delete_problem"
 									class="icon delete_problem ml-1">
@@ -151,7 +151,7 @@
 {% endif %}
 
 <script>
-	require(['jquery'], function ($) {
+	require(['jquery', 'bootstrap'], function ($) {
 		$().ready(function () {
 			$("#pid").keypress(function (e) {
 				var keyCode = e.keyCode ? e.keyCode : e.which ? e.which : e.charCode;
@@ -193,6 +193,12 @@
 						window.location.reload();
 					}
 				)
+			});
+
+			$('.testset_required').tooltip({
+				trigger: 'hover',
+				title: 'Testset is required',
+				delay: { show: 500, hide: 100 },
 			});
 
 			$('.delete_problem').click(function () {
