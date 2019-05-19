@@ -60,6 +60,10 @@ def new(pid):
 	
 	db.session.add(sub)
 	db.session.commit()
-	judge.queue(sub.sid)
+	try:
+		judge.queue(sub.sid)
+		print('[Info ] Submitted #%d to judger' % sub.sid)
+	except:
+		print('[Error] Failed to submit #%d to judger!' % sub.sid)
 	flash('Success!', 'success')
 	return 'success'

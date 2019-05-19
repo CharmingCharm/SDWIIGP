@@ -1,6 +1,6 @@
 from flask import Blueprint, current_app, redirect, url_for, flash, request, abort, json
 from flask_login import current_user, login_required
-from app.model import serialize, Problem, Tag, Test, TestSet
+from app.model import serialize, Problem, Tag, Test, TestSet, Submission
 from app.form import FormProblem, FormNewProblem
 from . import render_template, admin_required
 from app.extension import db
@@ -21,9 +21,12 @@ def problemset():
 		problems = problems.filter(Problem.title.ilike("%{0}%".format(filter_title)))
 	if not current_user.is_teacher:
 		problems = problems.filter(Problem.visible == True)
+	problems = problems.all()
+	for problem in problems:
+		problem.sub = problem.get_user_sub()
 	return render_template(
 		'problem/problemset.html',
-		problems = [serialize(prob) for prob in problems.all()],
+		problems = problems,
 		tags = [serialize(tag) for tag in Tag.query.all()],
 		filter_tag_id = filter_tag_id if filter_tag_id else '',
 		filter_title = filter_title if filter_title else '',
@@ -33,11 +36,11 @@ def problemset():
 @login_required
 def show(pid):
 	problem = Problem.query.filter_by(pid = pid).first()
-	if not (current_user.is_teacher or problem.visible):
+	if (not problem) or (not (current_user.is_teacher or problem.visible)):
 		abort(404)
-	problem_dict = serialize(problem)
-	problem_dict['tags'] = [serialize(s) for s in problem.tags.all()]
-	return render_template('problem/problem.html', problem = problem_dict)
+	problem.sub = problem.get_user_sub()
+	problem.last_sub = current_user.submissions.filter_by(pid = pid).order_by(Submission.sid.desc()).first()
+	return render_template('problem/problem.html', problem = problem)
 
 @problem.route('/edit/<int:pid>', methods = ['GET', 'POST'])
 @admin_required

@@ -71,7 +71,7 @@
 				</div>
 			</div>
 			<div class="table-responsive">
-				<table class="table card-table table-vcenter text-nowrap datatable">
+				<table class="table card-table table-vcenter text-nowrap">
 					<thead>
 						<tr>
 							<th>Status</th>
@@ -85,13 +85,17 @@
 					<tbody>
 						{% for problem in problems %}
 						<tr>
-							<td><span class="tag tag-green">AC</span></td>
+							<td>
+								{% if problem.sub %}
+								{{ macros.status_tag(problem.sub.status, url_for('submission.show', sid = problem.sub.sid)) }}
+								{% endif %}
+							</td>
 							<td><a href="{{ url_for('problem.show', pid = problem.pid) }}"
 									class="problem_pid">{{ problem.pid }}</a></td>
 							<td><a href="{{ url_for('problem.show', pid = problem.pid) }}"
 									class="problem_title">{{ problem.title }}</a></td>
 							<td>{{ macros.level_to_tag(problem.level) }}</td>
-							<td>50%</td>
+							<td>{{ problem.ac_rate }}</td>
 							{% if current_user.is_teacher %}
 							<td class="text-right">
 								<a href="javascript:void(0)" class="icon change_visible">
@@ -117,15 +121,6 @@
 						{% endfor %}
 					</tbody>
 				</table>
-				<script>
-					require(['datatables', 'jquery'], function (datatable, $) {
-						$('.datatable').DataTable({
-							"lengthChange": false,
-							"searching": false,
-							"pageLength": 20,
-						});
-					});
-				</script>
 			</div>
 		</div>
 	</div>

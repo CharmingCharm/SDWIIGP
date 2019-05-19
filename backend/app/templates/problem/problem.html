@@ -33,10 +33,22 @@
 					<td class="text-right">{{ macros.level_to_tag(problem.level) }}</td>
 				</tr>
 				<tr>
+					<td>Status</td>
+					<td class="text-right">
+						{% if problem.sub %}
+						{{ macros.status_tag(problem.sub.status, url_for('submission.show', sid = problem.sub.sid)) }}
+						{% endif %}
+					</td>
+				</tr>
+				<tr>
+					<td>AC Rate</td>
+					<td class="text-right">{{ problem.ac_rate }}</td>
+				</tr>
+				<tr>
 					<td colspan="2">
 						<p>Tags</p>
 						<div class="tags">
-							{% for tag in problem.tags %}
+							{% for tag in problem.tags.all() %}
 							<span class="tag tag-rounded tag-azure">{{ tag.tag_name }}</span>
 							{% endfor %}
 						</div>
@@ -50,14 +62,16 @@
 			<div class="card-header">
 				<h3 class="card-title">Submit your code</h3>
 				<div class="card-options">
+					<button class="btn btn-sm btn-azure" id="restore_last_sub">Restore last submission</button>
 					<a href="javascript:void(0)" class="card-options-collapse" data-toggle="card-collapse"><i
 							class="fe fe-chevron-up"></i></a>
 				</div>
 			</div>
 			<div class="card-body">
 				<div id="submission_code"></div>
+				<textarea class="d-none" id="last_sub_code">{{ problem.last_sub.code if problem.last_sub else '' }}</textarea>
 				<div class="col-12" align="center">
-					<button class="btn btn-pill btn-azure btn-lg" id="submit_code">Submit</button>
+					<button class="btn btn-pill btn-success btn-lg" id="submit_code">Submit</button>
 				</div>
 			</div>
 		</div>
@@ -85,6 +99,10 @@
 
 		problem_description = editormd.markdownToHTML("problem_description", {
 			tex: true
+		});
+
+		$('#restore_last_sub').click(function () {
+			submission_code.setValue($('#last_sub_code').val());
 		});
 
 		$('#submit_code').click(function () {
