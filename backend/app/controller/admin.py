@@ -70,7 +70,7 @@ def userGroup(page = 1):
 				UserGroup.query.filter_by(gid = groupForm.gid.data).delete()
 				flash('Delete successfully!','success')
 
-	pagination = UserGroup.query.paginate(page=page,per_page=5)
+	pagination = UserGroup.query.paginate(page=page,per_page=current_user.item_per_page)
 	user_groups = pagination.items
 	for group in user_groups:
 		groupForm = FormUserGroup()

@@ -17,7 +17,7 @@ def tasklist(page = 1):
 		tasks = Task.query.join(Task.groups, UserGroup.users).filter(User.uid == current_user.uid)
 	else:
 		tasks = Task.query
-	pagination = tasks.paginate(page = page, per_page = 5)
+	pagination = tasks.paginate(page = page, per_page = current_user.item_per_page)
 	tasks = pagination.items
 	return render_template('tasklist.html', tasks = tasks, now = datetime.now(), pagination = pagination)
 

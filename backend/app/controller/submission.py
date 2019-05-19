@@ -12,7 +12,7 @@ submission = Blueprint('submission', __name__)
 @submission.route('/<int:page>', methods = ['GET', 'POST'])
 @login_required
 def status(page = 1):
-	pagination = Submission.query.paginate(page=page,per_page=5)
+	pagination = Submission.query.paginate(page=page,per_page=current_user.item_per_page)
 	submissions = pagination.items
 	return render_template('status.html', submissions = submissions, pagination = pagination)
 

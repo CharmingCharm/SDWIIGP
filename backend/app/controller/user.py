@@ -45,6 +45,11 @@ def logout():
 @login_required
 def profile():
 	form = FormProfile()
+	if form.item_per_page.data:
+		current_user.item_per_page = form.item_per_page.data
+	else:
+		form.item_per_page.data = current_user.item_per_page		
+
 	if form.validate_on_submit():
 		if form.password.data and current_user.verify_password(form.old_password.data) and form.password.data == form.check_password.data:
 			current_user.password = form.password.data
@@ -96,7 +101,7 @@ def admin(page = 1):
 				User.query.filter_by(uid = userForm.uid.data).delete()
 				flash('Delete successfully!','success')
 
-	pagination = User.query.paginate(page=page,per_page=5)
+	pagination = User.query.paginate(page=page,per_page=current_user.item_per_page)
 	users = pagination.items
 	for user in users:
 		userForm = FormUserSingle()
