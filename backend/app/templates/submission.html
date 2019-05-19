@@ -54,13 +54,13 @@
 	<div class="col-12">
 		<div class="card{% if test['score'] == test['full_score'] %} card-collapsed{% endif %}">
 			<div class="card-header">
-					<h3 class="card-title">Test #{{ loop.index }}</h3>
-					<span class="tag tag-azure ml-2">{{ test['full_score'] }}</span>
-					{% if test['score'] == test['full_score'] %}
-					<span class="tag tag-success ml-2">Accepted</span>
-					{% else %}
-					<span class="tag tag-danger ml-2">Wrong Answer</span>
-					{% endif %}
+				<h3 class="card-title">Test #{{ loop.index }}</h3>
+				<span class="tag tag-azure ml-2">{{ test['full_score'] }}</span>
+				{% if test['score'] == test['full_score'] %}
+				<span class="tag tag-success ml-2">Accepted</span>
+				{% else %}
+				<span class="tag tag-danger ml-2">Wrong Answer</span>
+				{% endif %}
 				{% if test['is_show'] %}
 				<div class="card-options">
 					<a href="#" class="card-options-collapse" data-toggle="card-collapse">
@@ -69,10 +69,8 @@
 				{% endif %}
 			</div>
 			{% if test['is_show'] %}
-			<div class="card-body">
-				<div class="test_output" id="test_output_{{ loop.index }}">
-					<textarea style="display:none">{{ test['output'] }}</textarea>
-				</div>
+			<div class="test_output" id="test_output_{{ loop.index }}">
+				<textarea style="display:none">{{ '```python\n' + test['output'] + '\n```' }}</textarea>
 			</div>
 			{% endif %}
 		</div>
@@ -85,15 +83,19 @@
 	var test_outputs = new Array();
 
 	require(editormd_deps, function (editormd) {
+		editormd.loadCSS("{{ url_for('static', filename='plugins/editormd/lib/codemirror/addon/fold/foldgutter') }}");
+
 		submission_code = editormd("submission_code", {
 			watch: false,
 			toolbar: false,
+			codeFold: true,
 			readOnly: true,
 			mode: "python",
 			path: "{{ url_for('static', filename='plugins/editormd/lib/') }}",
 		});
 
 		$('.test_output').each(function () {
+			/*
 			var test_output = editormd($(this).attr('id'), {
 				watch: false,
 				toolbar: false,
@@ -102,6 +104,8 @@
 				mode: "python",
 				path: "{{ url_for('static', filename='plugins/editormd/lib/') }}",
 			});
+			*/
+			var test_output = editormd.markdownToHTML($(this).attr('id'));
 			test_outputs.push(test_output);
 		});
 	});
