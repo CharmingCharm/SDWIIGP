@@ -13,7 +13,6 @@ class Submission(db.Model):
 	task_id = db.Column(db.Integer, db.ForeignKey('task.task_id'))
 	result = db.Column(db.Text, nullable = True)
 	score = db.Column(db.DECIMAL(6,2), nullable = True)
-	full_score = db.Column(db.DECIMAL(6,2), nullable = True)
 	code = db.Column(db.Text, nullable = False)
 	is_solution = db.Column(db.Boolean(), default = False, nullable = False)
 	date_time = db.Column(db.DateTime(), nullable = False, default = datetime.now)
@@ -23,13 +22,19 @@ class Submission(db.Model):
 	task = db.relationship('Task', backref = db.backref('submissions', lazy = 'dynamic'))
 
 	@property
+	def full_score(self):
+		return self.testset.full_score if self.testset else None
+
+	@property
 	def status(self):
 		if (not current_user.is_teacher) and self.task and self.task.deadline > datetime.now():
 			return 'hidden'
-		if self.score is None:
+		if self.result is None:
 			return 'pending'
-		if self.score == 'running':
+		if self.result == 'running':
 			return 'running'
+		if self.result == 'system_error':
+			return 'system_error'
 		if self.full_score == self.score:
 			return 'accepted'
 		if self.full_score > self.score:

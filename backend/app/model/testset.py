@@ -4,6 +4,7 @@ class TestSet(db.Model):
     __tablename__ = 'testset'
 
     testset_id = db.Column(db.Integer, primary_key = True, autoincrement = True)
+    full_score = db.Column(db.DECIMAL(6, 2), nullable = False, server_default = '0')
 
     tests = db.relationship(
         'Test',
