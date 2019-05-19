@@ -6,15 +6,28 @@
 
 2. Install requirements
 	```shell
-	# In the directory of /backend
 	pip install -r requirements.txt
 	```
 
-3. Start up this Flask backend
+3. Create your own environment file private.env
+	Sample file: `app/private.env.example`
+
+4. Start up Flask backend
 	```shell
+
 	# To run server on http://localhost:5000 :
 	python manage.py runserver
 	
 	# To manage database:
 	python manage.py db
+
+	# To add your first user (as a teacher):
+	python manage.py adduser root password true
+	```
+
+5. Setup up redis (>=3.0.0)
+
+6. Start up judgers (Linux environment only)
+	```shell
+	python manage.py judger
 	```
