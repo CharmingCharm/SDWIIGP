@@ -1,6 +1,6 @@
 from flask import Blueprint, current_app, redirect, url_for, flash, request, abort, json
 from flask_login import current_user, login_required
-from app.model import serialize, Task, Problem, UserGroup, User
+from app.model import serialize, Task, Problem, UserGroup, User, Submission
 from app.form import FormTask
 from . import render_template, admin_required
 from app.extension import db
@@ -30,7 +30,7 @@ def show(task_id):
 	task = Task.query.filter_by(task_id = task_id).first()
 	problems = task.problems.all()
 	for problem in problems:
-		problem.sub = problem.get_user_sub()
+		problem.sub = problem.submissions.filter(Submission.uid == current_user.uid, Submission.task_id == task_id).order_by(Submission.score.desc()).first()
 	return render_template('task.html', task = task, problems = problems)
 
 @task.route('/edit/<int:task_id>', methods = ['GET', 'POST'])
