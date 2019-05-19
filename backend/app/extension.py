@@ -9,9 +9,7 @@ from flask_rq2 import RQ
 
 db = SQLAlchemy()
 migrate = Migrate(db = db)
-# moment = Moment()
 login_manager = LoginManager()
-# 上传
 photos = UploadSet('photos',IMAGES)
 rq = RQ()
 
@@ -22,15 +20,13 @@ def config_extension(app):
     migrate.init_app(app)
     rq.init_app(app)
 
-    # 一些图片上传的配置
     configure_uploads(app, photos)
-    # 设置上传文件大小
     patch_request_class(app)
 
-    # 指定登录的端点
     login_manager.login_view = 'user.login'
 
-    # 需要登录时的提示信息
+    login_manager.session_protection = 'strong'
     login_manager.login_message = 'Please login first'
     login_manager.login_message_category = 'info'
-    login_manager.session_protection = 'strong'
+    login_manager.needs_refresh_message = 'Session expired. Please re-login'
+    login_manager.needs_refresh_message_category = 'info'
