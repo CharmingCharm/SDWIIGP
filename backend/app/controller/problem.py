@@ -113,11 +113,13 @@ def testset(pid):
 		old_tests = problem.testset.tests.all() if problem.testset else []
 		add_tests = []
 		new_tests = []
+		full_score = 0.0
 		for test_upload in tests:
 			if not re.match(re.compile(r"^(-?\d+)(\.\d*)?$"), test_upload['score']):
 				flash('Score "' + test_upload['score'] + '" are not decimals!', 'error')
 				return 'score error'
 			test_upload['score'] = Decimal(test_upload['score']).quantize(Decimal('0.00'))
+			full_score = full_score + float(test_upload['score'])
 			test = Test.query.filter(Test.test_id == test_upload['test_id']).first()
 			if (not test) or test.score != test_upload['score'] or test.code != test_upload['code']:
 				add_tests.append(Test(score = test_upload['score'], code = test_upload['code']))
@@ -127,7 +129,7 @@ def testset(pid):
 		if old_tests or add_tests:
 			new_tests.extend(add_tests)
 			testset = problem.testset
-			new_testset = TestSet(tests = new_tests)
+			new_testset = TestSet(tests = new_tests, full_score = full_score)
 			db.session.add(new_testset)
 			problem.testset = new_testset
 			if testset and (not testset.submissions.count()):

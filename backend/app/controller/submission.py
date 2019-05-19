@@ -12,7 +12,7 @@ submission = Blueprint('submission', __name__)
 @submission.route('/<int:page>', methods = ['GET', 'POST'])
 @login_required
 def status(page = 1):
-	pagination = Submission.query.paginate(page=page,per_page=current_user.item_per_page)
+	pagination = Submission.query.order_by(Submission.sid.desc()).paginate(page=page,per_page=current_user.item_per_page)
 	submissions = pagination.items
 	return render_template('status.html', submissions = submissions, pagination = pagination)
 
@@ -25,8 +25,8 @@ def show(sid):
 	sub = sub.first()
 	if (not current_user.is_teacher) and (not sub.is_solution) and (sub.uid != current_user.uid or sub.status == 'hidden'):
 		abort(403)
-	if sub.status == 'pending' or sub.status == 'running':
-		result_tests = "[]"
+	if sub.status == 'pending' or sub.status == 'running' or sub.status == 'system_error':
+		result_tests = []
 	else:
 		result_tests = json.loads(sub.result)
 		show_first_wrong = True

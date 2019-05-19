@@ -35,7 +35,7 @@
 				</td>
 				<td><a href="#">{{ sub.user.user_name }}</a></td>
 				<td>
-					{% if sub.status == 'hidden' or sub.status == 'pending' or sub.status == 'running' %}-{% else %}
+					{% if sub.status == 'hidden' or sub.score == None %}-{% else %}
 					<a href="{{ url_for('submission.show', sid = sub.sid) }}">{{ sub.score }}</a>
 					{% endif %}
 				</td>

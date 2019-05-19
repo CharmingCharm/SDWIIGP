@@ -8,16 +8,17 @@
 	{% endif %}
 {%- endmacro %}
 
-{% macro status_tag(status, href = '') -%}
+{% macro status_tag(status, href = '', long = 0) -%}
 	{% set color = {
-		'hidden': ['gray', 'Hidden'],
-		'pending': ['azure', 'Pending'],
-		'running': ['azure', 'Running'],
-		'accepted': ['success', 'Accepted'],
-		'wrong_answer': ['danger', 'Wrong Answer'],
+		'hidden': ['gray', 'Hide', 'Hidden'],
+		'pending': ['azure', 'Pend', 'Pending'],
+		'running': ['azure', 'Run', 'Running'],
+		'accepted': ['success', 'AC', 'Accepted'],
+		'wrong_answer': ['danger', 'WA', 'Wrong Answer'],
+		'system_error': ['dark', 'SE', 'System Error'],
 	} %}
 	{% if status in color %}
-	<a href="{{ href if href else 'javascript:void(0)' }}" class="tag tag-{{ color[status][0] }}">{{ color[status][1] }}</a>
+	<a href="{{ href if href else 'javascript:void(0)' }}" class="tag tag-{{ color[status][0] }}">{{ color[status][1 + long] }}</a>
 	{% else %}
 	<a href="{{ href if href else 'javascript:void(0)' }}" class="tag">Unknown</a>
 	{% endif %}

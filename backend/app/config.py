@@ -1,4 +1,5 @@
 import os
+from datetime import timedelta
 from dotenv import load_dotenv
 BASE_DIR = os.path.abspath(os.path.dirname(__file__))
 load_dotenv(os.path.join(BASE_DIR, 'private.env'))
@@ -29,6 +30,8 @@ class Config:
 
     RQ_REDIS_URL = 'redis://localhost:6379/0'
     JUDGER_DIR = os.path.join(BASE_DIR, 'judger_dir')
+    SHOW_FIRST_WRONG = os.environ.get('SHOW_FIRST_WRONG') or True
+    PERMANENT_SESSION_LIFETIME = timedelta(hours = 2)
 
     # 额外的初始化操作
     @staticmethod
