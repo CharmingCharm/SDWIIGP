@@ -44,7 +44,7 @@ CREATE TABLE `announcement` (
   PRIMARY KEY (`aid`),
   KEY `uid` (`uid`),
   CONSTRAINT `announcement_ibfk_1` FOREIGN KEY (`uid`) REFERENCES `user` (`uid`)
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -60,10 +60,11 @@ CREATE TABLE `problem` (
   `title` varchar(64) NOT NULL,
   `description` text NOT NULL,
   `testset_id` int(11) DEFAULT NULL,
+  `visible` tinyint(1) NOT NULL DEFAULT '1',
   PRIMARY KEY (`pid`),
   KEY `testset_id` (`testset_id`),
   CONSTRAINT `problem_ibfk_1` FOREIGN KEY (`testset_id`) REFERENCES `testset` (`testset_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -94,16 +95,24 @@ CREATE TABLE `submission` (
   `sid` int(11) NOT NULL AUTO_INCREMENT,
   `pid` int(11) DEFAULT NULL,
   `uid` int(11) DEFAULT NULL,
-  `score` text,
   `code` text NOT NULL,
   `is_solution` tinyint(1) NOT NULL,
   `date_time` datetime NOT NULL,
+  `testset_id` int(11) DEFAULT NULL,
+  `task_id` int(11) DEFAULT NULL,
+  `result` text,
+  `full_score` decimal(6,2) DEFAULT NULL,
+  `score` decimal(6,2) DEFAULT NULL,
   PRIMARY KEY (`sid`),
   KEY `pid` (`pid`),
   KEY `uid` (`uid`),
+  KEY `testset_id` (`testset_id`),
+  KEY `task_id` (`task_id`),
   CONSTRAINT `submission_ibfk_1` FOREIGN KEY (`pid`) REFERENCES `problem` (`pid`),
-  CONSTRAINT `submission_ibfk_2` FOREIGN KEY (`uid`) REFERENCES `user` (`uid`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4;
+  CONSTRAINT `submission_ibfk_2` FOREIGN KEY (`uid`) REFERENCES `user` (`uid`),
+  CONSTRAINT `submission_ibfk_3` FOREIGN KEY (`testset_id`) REFERENCES `testset` (`testset_id`),
+  CONSTRAINT `submission_ibfk_4` FOREIGN KEY (`task_id`) REFERENCES `task` (`task_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -118,7 +127,7 @@ CREATE TABLE `tag` (
   `tag_name` varchar(64) NOT NULL,
   PRIMARY KEY (`tag_id`),
   UNIQUE KEY `tag_name` (`tag_name`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -183,7 +192,7 @@ CREATE TABLE `test` (
   `score` decimal(6,2) NOT NULL,
   `code` text NOT NULL,
   PRIMARY KEY (`test_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -213,7 +222,7 @@ DROP TABLE IF EXISTS `testset`;
 CREATE TABLE `testset` (
   `testset_id` int(11) NOT NULL AUTO_INCREMENT,
   PRIMARY KEY (`testset_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -228,10 +237,11 @@ CREATE TABLE `user` (
   `user_name` varchar(64) NOT NULL,
   `password_hash` varchar(256) NOT NULL,
   `is_teacher` tinyint(1) NOT NULL,
-  `photo` varchar(64) DEFAULT NULL,
+  `avatar` varchar(256) NOT NULL DEFAULT 'default.jpg',
+  `item_per_page` int(11) NOT NULL DEFAULT '20',
   PRIMARY KEY (`uid`),
   UNIQUE KEY `user_name` (`user_name`)
-) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -275,4 +285,4 @@ CREATE TABLE `user_in_group` (
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2019-05-18 17:44:29
+-- Dump completed on 2019-05-19 21:05:33
