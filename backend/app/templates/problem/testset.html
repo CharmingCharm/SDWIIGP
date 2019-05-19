@@ -54,7 +54,7 @@
 <script>
 	require(['jquery'], function ($) {
 		$().ready(function () {
-			$('.delete_test').click(function () {
+			$('.delete_test').one('click', function () {
 				$(this).parent().parent().parent().parent().remove();
 			});
 
@@ -94,16 +94,9 @@
 					</div> \
 				</div>';
 				$('.delete_test').off('click');
-				$('.test_id,.test_score,.test_code').off('change');
 				$('#div_tests').append(html);
-				$('.delete_test').click(function () {
+				$('.delete_test').one("click", function () {
 					$(this).parent().parent().parent().parent().remove();
-				});
-				$('.test_id,.test_score,.test_code').change(function () {
-					if ($(this).parent().parent().parent().find('.test_changed').length == 0){
-						var test_status = $(this).parent().parent().parent().find('.test_status');
-						test_status.html('<span class="tag tag-warning mr-2 test_changed">Changed</span>' + test_status.html())
-					}
 				});
 			});
 
