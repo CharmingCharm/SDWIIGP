@@ -60,7 +60,7 @@
 		$('.sub_status').click(function () {
 			$.post(
 				"{{ url_for('main.change_status') }}",
-				{ sid: $(this).val() },
+				{ sid: $(this).attr('value') },
 				function () {
 					window.location.reload();
 				}
