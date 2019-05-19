@@ -18,9 +18,9 @@ class FormProblem(FlaskForm):
 	# tags = SelectMultipleField('Tags', coerce=int, choices=[(k, k) for k in range(1, 4)])
 	submit = SubmitField('Save')
 
-	def __init__(self, problem, *args, **kwargs):
+	def __init__(self, pid, *args, **kwargs):
 		super().__init__(*args, **kwargs)
-		if request.method == 'GET' and problem:
+		if request.method == 'GET' and pid:
 			problem = Problem.query.filter_by(pid = pid).first()
 			self.title.data = problem.title
 			self.description.data = problem.description
