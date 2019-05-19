@@ -11,4 +11,4 @@ class TestSet(db.Model):
         backref = db.backref('testsets', lazy = 'dynamic'),
         lazy = 'dynamic'
     )
-    submissions = db.relationship('Submission', lazy = 'dynamic')
+    submissions = db.relationship('Submission', backref = 'testset', lazy = 'dynamic')

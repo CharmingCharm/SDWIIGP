@@ -10,3 +10,6 @@ WTForms==2.2.1
 Flask_WTF==0.14.2
 pymysql==0.9.3
 python-dotenv==0.10.1
+flask_uploads==0.2.1
+flask_rq2==18.3
+flask_paginate==0.5.2

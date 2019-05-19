@@ -27,6 +27,9 @@ class Config:
     MAX_CONTENT_LENGTH = 8 * 1024 * 1024
     UPLOADED_PHOTOS_DEST = os.path.join(BASE_DIR, 'static/avatars')
 
+    RQ_REDIS_URL = 'redis://localhost:6379/0'
+    JUDGER_DIR = os.path.join(BASE_DIR, 'judger_dir')
+
     # 额外的初始化操作
     @staticmethod
     def init_app(app):

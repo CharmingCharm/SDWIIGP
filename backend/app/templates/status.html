@@ -33,8 +33,8 @@
 				</td>
 				<td><a href="#">{{ sub.user.user_name }}</a></td>
 				<td>
-					{% if sub.status == 'hidden' or (not sub.score) %}-{% else %}
-					<span class="tag tag-green">{{ sub.score }}</span>
+					{% if sub.status == 'hidden' or sub.score == None %}-{% else %}
+					{{ sub.score }}
 					{% endif %}
 				</td>
 				<td>{{ sub.date_time }}</td>

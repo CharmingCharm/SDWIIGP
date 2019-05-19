@@ -15,10 +15,10 @@
 	<span class="tag tag-azure">Pending</span>
 	{% elif status == 'running' %}
 	<span class="tag tag-azure">Running</span>
-	{% elif status == 'ac' %}
-	<span class="tag tag-success">AC</span>
-	{% elif status == 'wa' %}
-	<span class="tag tag-danger">WA</span>
+	{% elif status == 'accepted' %}
+	<span class="tag tag-success">Accepted</span>
+	{% elif status == 'wrong_answer' %}
+	<span class="tag tag-danger">Wrong Answer</span>
 	{% else %}
 	<span class="tag">Unknown</span>
 	{% endif %}

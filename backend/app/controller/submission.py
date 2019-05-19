@@ -3,6 +3,7 @@ from flask_login import current_user, login_required
 from app.model import serialize, Problem, Tag, Test, TestSet, Submission, Task, UserGroup
 from . import render_template, admin_required, str_time
 from app.extension import db
+from app.daemon import judge
 from datetime import datetime
 
 submission = Blueprint('submission', __name__)
@@ -13,14 +14,6 @@ submission = Blueprint('submission', __name__)
 def status(page = 1):
 	pagination = Submission.query.paginate(page=page,per_page=5)
 	submissions = pagination.items
-	for i, sub in enumerate(submissions):
-		if (not current_user.is_teacher) and sub.task and sub.task.deadline > datetime.now:
-			print(sub)
-			submissions[i].status = 'hidden'
-		elif sub.score is None:
-			submissions[i].status = 'pending'
-		else:
-			submissions[i].status = 'other'
 	return render_template('status.html', submissions = submissions, pagination = pagination)
 
 @submission.route('/new/<int:pid>', methods = ['POST'])
@@ -46,5 +39,7 @@ def new(pid):
 		sub.task = related_task
 	
 	db.session.add(sub)
+	db.session.commit()
+	judge.queue(sub.sid)
 	flash('Success!', 'success')
 	return 'success'
