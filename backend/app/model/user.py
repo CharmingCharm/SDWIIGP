@@ -15,14 +15,13 @@ class User(UserMixin, db.Model):
     def __repr__(self):
         return self.name
 	
-    # Flask-Login需要
     @property
     def id(self):
         return self.uid
     
     @property
     def password(self):
-        raise AttributeError('密码不可读')
+        raise AttributeError('Password is unreadble')
     
     @password.setter
     def password(self, password):
