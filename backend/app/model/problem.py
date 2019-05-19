@@ -19,6 +19,9 @@ class Problem(db.Model):
 
 	@property
 	def ac_rate(self):
-		total = self.submissions.count()
-		ac = self.submissions.filter(Submission.score == Submission.full_score).count()
+		subs_count = self.submissions.filter(Submission.result != None)
+		total = subs_count.count()
+		ac = 0
+		for sub in subs_count.all():
+			ac = ac + (1 if sub.score != None and sub.score == sub.full_score else 0)
 		return ('%.2f%%' % (ac / total)) if total else '0.00%'
