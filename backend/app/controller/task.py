@@ -28,9 +28,10 @@ def show(task_id):
 	if not (available or current_user.is_teacher):
 		abort(403)
 	task = Task.query.filter_by(task_id = task_id).first()
-	for problem in task.problems:
+	problems = task.problems.all()
+	for problem in problems:
 		problem.sub = problem.get_user_sub()
-	return render_template('task.html', task = task)
+	return render_template('task.html', task = task, problems = problems)
 
 @task.route('/edit/<int:task_id>', methods = ['GET', 'POST'])
 @admin_required
