@@ -9,11 +9,11 @@ def config_api(app):
     @app.errorhandler(404)
     def page_not_found(e):
         return render_template('error/404.html', e = e)
-    '''
     @app.before_request
     def before_request():
         session.permanent = True
         app.permanent_session_lifetime = timedelta(hours = 2)
+    '''
 
 def create_app(config_name):
     app = Flask(__name__)
