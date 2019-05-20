@@ -6,6 +6,7 @@ from app.form import FormLogin, FormProfile, FormUsers, FormUserSingle, FormIcon
 from flask_login import login_user, logout_user, current_user, login_required
 from . import render_template, admin_required
 from app.helper import random_string
+from PIL import Image
 import os
 
 user = Blueprint('user', __name__)
@@ -14,9 +15,9 @@ from urllib.parse import urlparse, urljoin
 from flask import request, url_for
 
 def is_safe_url(target):
-    ref_url = urlparse(request.host_url)
-    test_url = urlparse(urljoin(request.host_url, target))
-    return test_url.scheme in ('http', 'https') and ref_url.netloc == test_url.netloc
+	ref_url = urlparse(request.host_url)
+	test_url = urlparse(urljoin(request.host_url, target))
+	return test_url.scheme in ('http', 'https') and ref_url.netloc == test_url.netloc
 
 @user.route('/login', methods = ['GET', 'POST'])
 def login():
@@ -65,8 +66,21 @@ def change_avatar():
 	if form.validate_on_submit():
 		suffix = form.avatar.data.filename
 		filename = random_string() + suffix
-		print(filename)
 		photos.save(form.avatar.data, name = filename)
+
+		fullpath = os.path.join(current_app.config['UPLOADED_PHOTOS_DEST'], filename)
+		img = Image.open(fullpath)
+		width, height = img.size
+		print(width, height)
+		if width > height:
+			diff = (width - height) / 2.0
+			print((diff, 0, width - diff, height))
+			img = img.crop((diff, 0, width - diff, height))
+		else:
+			diff = (height - width) / 2.0
+			img = img.crop((0, diff, width, height - diff))
+		img.save(fullpath)
+		
 		current_user.avatar = filename
 		flash('Upload avatar successfully!', 'success')
 		return redirect(url_for('user.profile'))
