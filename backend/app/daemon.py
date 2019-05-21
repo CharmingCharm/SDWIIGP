@@ -31,6 +31,7 @@ def judge(sid):
 		return 3
 	sub.result = 'running'
 	sub.testset = sub.problem.testset
+	db.session.commit()
 	result = []
 	score = 0.0
 	for test in sub.testset.tests.all():
