@@ -13,7 +13,6 @@ services:
     restart: always
     depends_on:
       - oj-redis
-    build: .
     environment:
       - RQ_REDIS_URL=redis://oj-redis:6379/0
     volumes:
