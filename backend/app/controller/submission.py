@@ -4,6 +4,7 @@ from app.model import serialize, Problem, Tag, Test, TestSet, Submission, Task, 
 from . import render_template, admin_required, str_time
 from app.extension import db
 from app.daemon import judge
+from app.form import FormRejudge
 from datetime import datetime
 
 submission = Blueprint('submission', __name__)
@@ -62,8 +63,39 @@ def new(pid):
 	db.session.commit()
 	try:
 		judge.queue(sub.sid)
-		print('[Info ] Submitted #%d to judger' % sub.sid)
+		print('[Info] Submitted #%d to judger' % sub.sid)
 	except:
 		print('[Error] Failed to submit #%d to judger!' % sub.sid)
-	flash('Success!', 'success')
+	flash('Your code is submitted!', 'success')
 	return 'success'
+
+@submission.route('/rejudge', methods = ['GET', 'POST'])
+@admin_required
+def rejudge():
+	form = FormRejudge()
+	rejudge_list = []
+	if request.method == 'POST':
+		if form.rejudge_type.data == 'sid':
+			rejudge_list = Submission.query.filter(Submission.sid == form.sid.data).all()
+		elif form.rejudge_type.data == 'pid':
+			rejudge_list = Submission.query.filter(Submission.pid == form.pid.data).all()
+		elif form.rejudge_type.data == 'task_id':
+			rejudge_list = Submission.query.filter(Submission.task_id == form.task_id.data).all()
+		elif form.rejudge_type.data == 'pending':
+			rejudge_list = Submission.query.filter(Submission.result == None).all()
+		
+		if not form.rejudge_confirm.data:
+			return str(len(rejudge_list))
+		else:
+			for sub in rejudge_list:
+				try:
+					sub.score = None
+					sub.result = None
+					db.session.commit()
+					judge.queue(sub.sid)
+					print('[Info] Submitted #%d to judger' % sub.sid)
+				except:
+					print('[Error] Failed to submit #%d to judger!' % sub.sid)
+			flash('Submitting rejudge successfully!', 'success')
+			return redirect(url_for('submission.status'))
+	return render_template('rejudge.html', form = form)

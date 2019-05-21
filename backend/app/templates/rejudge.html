@@ -1,0 +1,121 @@
+{% extends 'base_index.html' %}
+{% set page_title = 'Rejudge' %}
+{% set navbar_active = 'admin' %}
+{% import 'base_macros.html' as macros %}
+
+{% block page_content %}
+<div class="page-header">
+	<h1 class="page-title">
+		Rejudge submissions
+	</h1>
+</div>
+<form id="form" method="post" role="form">
+	<div class="row row-cards">
+		<div class="col-12">
+			<div class="card">
+				<div class="card-header">
+					<h3 class="card-title">Global rejudge</h3>
+				</div>
+				<div class="card-body">
+					<button type="button" class="btn btn-azure rejudge" value="pending" data-toggle="modal"
+						data-target="#modal_rejudge_confirm">Rejudge Pending submissions</button>
+				</div>
+			</div>
+		</div>
+		<div class="col-lg-4 col-md-6">
+			<div class="card">
+				<div class="card-header">
+					<h3 class="card-title">Rejudge submission</h3>
+				</div>
+				<div class="card-body">
+					{{ macros.render_field(form.sid) }}
+				</div>
+				<div class="card-footer">
+					<button type="button" class="btn btn-primary rejudge" value="sid">Rejudge</button>
+				</div>
+			</div>
+		</div>
+		<div class="col-lg-4 col-md-6">
+			<div class="card">
+				<div class="card-header">
+					<h3 class="card-title">Rejudge problem</h3>
+				</div>
+				<div class="card-body">
+					{{ macros.render_field(form.pid) }}
+				</div>
+				<div class="card-footer">
+					<button type="button" class="btn btn-primary rejudge" value="pid" data-toggle="modal"
+						data-target="#modal_rejudge_confirm">Rejudge</button>
+				</div>
+			</div>
+		</div>
+		<div class="col-lg-4 col-md-6">
+			<div class="card">
+				<div class="card-header">
+					<h3 class="card-title">Rejudge task</h3>
+				</div>
+				<div class="card-body">
+					{{ macros.render_field(form.task_id) }}
+				</div>
+				<div class="card-footer">
+					<button type="button" class="btn btn-primary rejudge" value="task_id" data-toggle="modal"
+						data-target="#modal_rejudge_confirm">Rejudge</button>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div class="modal fade" id="modal_rejudge_confirm" role="dialog" aria-labelledby="title_rejudge_confirm"
+		aria-hidden="true">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h4 class="modal-title" id="title_rejudge_confirm">Change tag name</h4>
+					<a class="close" data-dismiss="modal" aria-hidden="true"></a>
+				</div>
+				<div class="modal-body">
+					<h4>
+						Are you sure to rejudge <span id="span_rejudge_confirm"></span> submissions?
+					</h4>
+					<input type="hidden" id="rejudge_type" name="rejudge_type">
+					<input type="hidden" id="rejudge_confirm" name="rejudge_confirm">
+				</div>
+				<div class="modal-footer justify-content-between">
+					<div class="d-flex">
+						<button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+					</div>
+					<div class="d-flex justify-content-end">
+						<button type="submit" id="submit_rejudge_confirm" class="btn btn-primary ml-auto"
+							data-dismiss="modal">Confirm</button>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</form>
+
+<script>
+	require(['jquery', 'bootstrap', 'jquery.form'], function ($) {
+		$().ready(function () {
+			$('.rejudge').click(function () {
+				var type = $(this).attr('value');
+				$('#rejudge_type').val(type);
+				$('#rejudge_confirm').val('');
+				if (type == 'sid') {
+					$('#rejudge_confirm').val('true');
+					$('#form').submit();
+				}
+				else
+					$('#form').ajaxSubmit(function (data) {
+						$('#span_rejudge_confirm').html(data);
+						$('#rejudge_confirm').val('true');
+					});
+			});
+
+			$('#submit_rejudge_confirm').click(function () {
+				$('#form').submit();
+			});
+		});
+	});
+</script>
+{% endblock %}

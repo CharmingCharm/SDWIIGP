@@ -44,6 +44,7 @@ paths: {
 
 'moment': 'js/vendors/moment.min',
 'datetimepicker': 'js/vendors/bootstrap-datetimepicker.min',
+'jquery.form': 'js/vendors/jquery.form',
 },
 });
 window.tabler = {
