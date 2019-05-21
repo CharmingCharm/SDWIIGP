@@ -67,14 +67,12 @@ def change_avatar():
 		suffix = form.avatar.data.filename
 		filename = random_string() + suffix
 		photos.save(form.avatar.data, name = filename)
-
+		
 		fullpath = os.path.join(current_app.config['UPLOADED_PHOTOS_DEST'], filename)
 		img = Image.open(fullpath)
 		width, height = img.size
-		print(width, height)
 		if width > height:
 			diff = (width - height) / 2.0
-			print((diff, 0, width - diff, height))
 			img = img.crop((diff, 0, width - diff, height))
 		else:
 			diff = (height - width) / 2.0
