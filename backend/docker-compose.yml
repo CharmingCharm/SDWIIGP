@@ -1,0 +1,20 @@
+version: '3'
+services:
+  oj-redis:
+    image: redis
+    container_name: oj-redis
+    restart: always
+    ports:
+      - "6379:6379"
+
+  oj-judger:
+    image: registry.cn-shenzhen.aliyuncs.com/python-oj/oj-judger:latest
+    container_name: oj-judger
+    restart: always
+    depends_on:
+      - oj-redis
+    build: .
+    environment:
+      - RQ_REDIS_URL=redis://oj-redis:6379/0
+    volumes:
+      - .:/oj
