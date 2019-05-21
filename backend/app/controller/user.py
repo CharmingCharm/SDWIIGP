@@ -46,17 +46,17 @@ def logout():
 @login_required
 def profile():
 	form = FormProfile()
-	if form.item_per_page.data:
-		current_user.item_per_page = form.item_per_page.data
-	else:
-		form.item_per_page.data = current_user.item_per_page		
-
 	if form.validate_on_submit():
-		if form.password.data and current_user.verify_password(form.old_password.data) and form.password.data == form.check_password.data:
-			current_user.password = form.password.data
-			flash('Password change is successful!', 'success')
-		else:
-			flash('Fail to change password! Please check the inputs.', 'error')
+		if form.item_per_page.data:
+			current_user.item_per_page = form.item_per_page.data
+			flash('Change the number of item per page successfully', 'success')
+		if form.password.data:
+			if current_user.verify_password(form.old_password.data) and form.password.data == form.check_password.data:
+				current_user.password = form.password.data
+				flash('Password change is successful!', 'success')
+			else:
+				flash('Fail to change password! Please check the inputs.', 'error')
+	form.item_per_page.data = current_user.item_per_page
 	return render_template('profile.html', form = form)
 
 @user.route('/change_avatar', methods = ['POST'])
