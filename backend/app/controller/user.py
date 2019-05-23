@@ -33,7 +33,7 @@ def login():
 			login_user(user, remember = form.remember.data)
 			next = request.values.get('next')
 			if not is_safe_url(next):
-				return abort(400)
+				abort(400)
 			return redirect(next or url_for('main.home'))
 	return render_template_origin('login.html', form = form)
 

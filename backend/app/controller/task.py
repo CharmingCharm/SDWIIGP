@@ -27,7 +27,9 @@ def show(task_id):
 	available = current_user.groups.join(UserGroup.tasks).filter(Task.task_id == task_id).count() > 0
 	if not (available or current_user.is_teacher):
 		abort(403)
-	task = Task.query.filter_by(task_id = task_id).first()
+	task = Task.query.filter(Task.task_id == task_id).first()
+	if not task:
+		abort(404)
 	problems = task.problems.all()
 	for problem in problems:
 		problem.sub = task.submissions.filter(Submission.uid == current_user.uid, Submission.pid == problem.pid).order_by(Submission.score.desc()).first()
@@ -72,9 +74,7 @@ def new():
 @admin_required
 def delete():
 	task_id = request.values.get('task_id')
-	if not task_id:
-		abort(404)
-	task = Task.query.filter_by(task_id = task_id)
+	task = Task.query.filter(Task.task_id == task_id)
 	if task.count() == 0:
 		flash('There is no task with the same id!', 'error')
 		return 'error'

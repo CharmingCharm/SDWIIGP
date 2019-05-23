@@ -79,9 +79,7 @@ def new():
 @admin_required
 def delete():
 	pid = request.values.get('pid')
-	if not pid:
-		abort(404)
-	problem = Problem.query.filter_by(pid = pid)
+	problem = Problem.query.filter(Problem.pid == pid)
 	if problem.count() == 0:
 		flash('There is no problem with the same pid!', 'error')
 		return 'error'
@@ -93,9 +91,7 @@ def delete():
 @admin_required
 def change_visible():
 	pid = request.values.get('pid')
-	if not pid:
-		abort(404)
-	problem = Problem.query.filter_by(pid = pid)
+	problem = Problem.query.filter(Problem.pid == pid)
 	if problem.count() == 0:
 		flash('There is no problem with the same pid!', 'error')
 		return 'error'
