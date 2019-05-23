@@ -11,7 +11,7 @@ main = Blueprint('main', __name__)
 @main.route('/home', methods = ['GET', 'POST'])
 @login_required
 def home():
-    announcements = Announcement.query.join(Announcement.user).filter(Announcement.uid == User.uid).order_by(Announcement.date_time.desc()).limit(2).all()
+    announcements = Announcement.query.order_by(Announcement.publish_time.desc()).limit(2).all()
     return render_template('home.html', annos = announcements)
 
 @main.route('/change_status', methods = ['POST'])
@@ -56,7 +56,6 @@ def anno_addition():
     new_title = request.values.get('new_title')
     new_descr = request.values.get('new_descr')
     uid = request.values.get('uid')
-    date_time = datetime.now()
-    db.session.add(Announcement( uid = uid, title = new_title, description = new_descr, date_time = date_time))
+    db.session.add(Announcement( uid = uid, title = new_title, description = new_descr))
     flash('Success!', 'success')
     return 'success'

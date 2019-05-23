@@ -31,7 +31,7 @@
 					<td><a href="{{ url_for('task.show', task_id = task.task_id) }}" class="task_name">{{ task.task_name }}</a></td>
 					<td>{{ task.deadline }}</td>
 
-					{% if task.deadline > now %}
+					{% if task.available %}
 					<td><span class="tag tag-green">Available</span></td>
 					{% else %}
 					<td><span class="tag tag-red">End</span></td>

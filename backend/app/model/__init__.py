@@ -35,8 +35,14 @@ ProblemInTask = db.Table(
 )
 
 TaskForUserGroup = db.Table(
-	'task_for_user_group',
+	'task_for_usergroup',
 	db.Column('gid', db.Integer, db.ForeignKey('user_group.gid'), primary_key = True),
+	db.Column('task_id', db.Integer, db.ForeignKey('task.task_id'), primary_key = True)
+)
+
+SubmissionInTask = db.Table(
+	'submission_in_task',
+	db.Column('sid', db.Integer, db.ForeignKey('submission.sid'), primary_key = True),
 	db.Column('task_id', db.Integer, db.ForeignKey('task.task_id'), primary_key = True)
 )
 

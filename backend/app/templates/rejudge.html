@@ -101,10 +101,8 @@
 				var type = $(this).attr('value');
 				$('#rejudge_type').val(type);
 				$('#rejudge_confirm').val('');
-				if (type == 'sid') {
-					$('#rejudge_confirm').val('true');
+				if (type == 'sid')
 					$('#form').submit();
-				}
 				else
 					$('#form').ajaxSubmit(function (data) {
 						$('#span_rejudge_confirm').html(data);

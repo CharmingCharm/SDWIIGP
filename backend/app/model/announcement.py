@@ -8,6 +8,6 @@ class Announcement(db.Model):
     uid = db.Column(db.Integer, db.ForeignKey('user.uid'))
     title = db.Column(db.String(64), nullable = False)
     description = db.Column(db.Text(), nullable = False)
-    date_time = db.Column(db.DateTime(), nullable = False, default = datetime.now)
+    publish_time = db.Column(db.DateTime(), nullable = False, default = datetime.now)
 
     user = db.relationship('User', backref = 'announcements')

@@ -49,15 +49,10 @@ def new(pid):
 		code = request.values.get('code'),
 	)
 
-	related_task = Task.query.filter(Task.deadline > str_time(datetime.now())) \
+	related_tasks = Task.query.filter(Task.deadline > str_time(datetime.now())) \
 		.join(Task.problems).filter(Problem.pid == pid) \
 		.join(Task.groups).filter(UserGroup.gid.in_(current_user.groups.with_entities(UserGroup.gid)))
-	if related_task.count() > 1:
-		flash('This problem is in multiple active tasks. Please contact teachers.', 'warning')
-		return 'problem in multiple tasks'
-	related_task = related_task.first()
-	if related_task:
-		sub.task = related_task
+	sub.tasks = related_tasks
 	
 	db.session.add(sub)
 	db.session.commit()
@@ -80,11 +75,13 @@ def rejudge():
 		elif form.rejudge_type.data == 'pid':
 			rejudge_list = Submission.query.filter(Submission.pid == form.pid.data).all()
 		elif form.rejudge_type.data == 'task_id':
-			rejudge_list = Submission.query.filter(Submission.task_id == form.task_id.data).all()
+			task = Task.query.filter(Task.task_id == form.task_id.data).first()
+			if task:
+				rejudge_list = task.submissions.all()
 		elif form.rejudge_type.data == 'pending':
 			rejudge_list = Submission.query.filter(Submission.result == None).all()
 		
-		if not form.rejudge_confirm.data:
+		if (not form.rejudge_confirm.data) and form.rejudge_type.data != 'sid':
 			return str(len(rejudge_list))
 		else:
 			for sub in rejudge_list:

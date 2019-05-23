@@ -19,7 +19,7 @@ def tasklist(page = 1):
 		tasks = Task.query
 	pagination = tasks.paginate(page = page, per_page = current_user.item_per_page)
 	tasks = pagination.items
-	return render_template('tasklist.html', tasks = tasks, now = datetime.now(), pagination = pagination)
+	return render_template('tasklist.html', tasks = tasks, pagination = pagination)
 
 @task.route('/show/<int:task_id>', methods = ['GET', 'POST'])
 @login_required
@@ -30,7 +30,7 @@ def show(task_id):
 	task = Task.query.filter_by(task_id = task_id).first()
 	problems = task.problems.all()
 	for problem in problems:
-		problem.sub = problem.submissions.filter(Submission.uid == current_user.uid, Submission.task_id == task_id).order_by(Submission.score.desc()).first()
+		problem.sub = task.submissions.filter(Submission.uid == current_user.uid, Submission.pid == problem.pid).order_by(Submission.score.desc()).first()
 	return render_template('task.html', task = task, problems = problems)
 
 @task.route('/edit/<int:task_id>', methods = ['GET', 'POST'])

@@ -39,7 +39,7 @@
 					<a href="{{ url_for('submission.show', sid = sub.sid) }}">{{ sub.score }}</a>
 					{% endif %}
 				</td>
-				<td>{{ sub.date_time }}</td>
+				<td>{{ sub.submit_time }}</td>
 				<td>
 					{% if sub.is_solution %}
 					<a href="javascript:void(0)" value="{{ sub.sid }}" class="tag tag-azure sub_status">Yes</a>
