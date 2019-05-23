@@ -10,6 +10,7 @@
 	```
 
 3. Create your own environment file private.env
+
 	Sample file: `app/private.env.example`
 
 4. Start up Flask backend
