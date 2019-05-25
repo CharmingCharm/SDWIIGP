@@ -37,7 +37,9 @@
 					<input type="text" class="form-control test_score" value="{{ test.score }}">
 				</div>
 				<div class="form-group">
-					<label class="form-label">Test code</label>
+					<label class="form-label">
+						Test code <i class="fe fe-info test_hint"></i>
+					</label>
 					<textarea class="form-control test_code" rows="6">{{ test.code }}</textarea>
 				</div>
 			</div>
@@ -52,11 +54,23 @@
 </div>
 
 <script>
-	require(['jquery'], function ($) {
+	
+	require(['jquery', 'bootstrap'], function ($) {
+		var test_hint_popover = {
+			trigger: 'hover',
+			html: true,
+			title: 'Sample test code',
+			content: "# Use assert to check functions<br>assert add(1, 2) == 3"
+		};
+		
+		var delete_test_func = function () {
+			$(this).parent().parent().parent().parent().remove();
+		};
+
 		$().ready(function () {
-			$('.delete_test').one('click', function () {
-				$(this).parent().parent().parent().parent().remove();
-			});
+			$('.delete_test').one('click', delete_test_func);
+
+			$('.test_hint').popover(test_hint_popover);
 
 			$('.test_id,.test_score,.test_code').change(function () {
 				if ($(this).parent().parent().parent().find('.test_changed').length == 0){
@@ -87,7 +101,9 @@
 								<input type="text" class="form-control test_score" value="0.00"> \
 							</div> \
 							<div class="form-group"> \
-								<label class="form-label">Test code</label> \
+								<label class="form-label"> \
+									Test code <i class="fe fe-info test_hint"></i> \
+								</label> \
 								<textarea class="form-control test_code" rows="6"></textarea> \
 							</div> \
 						</div> \
@@ -95,9 +111,8 @@
 				</div>';
 				$('.delete_test').off('click');
 				$('#div_tests').append(html);
-				$('.delete_test').one("click", function () {
-					$(this).parent().parent().parent().parent().remove();
-				});
+				$('.delete_test').one("click", delete_test_func);
+				$('.test_hint').popover(test_hint_popover);
 			});
 
 			$('#save').click(function () {
