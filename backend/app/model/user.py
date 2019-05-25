@@ -1,6 +1,8 @@
 from werkzeug.security import generate_password_hash, check_password_hash
 from app.extension import db, login_manager
 from flask_login import UserMixin
+from flask import current_app
+import os
 
 class User(UserMixin, db.Model):
     __tablename__ = 'user'
@@ -37,6 +39,10 @@ class User(UserMixin, db.Model):
             self.is_teacher = pos
         else:
             self.is_teacher = pos == 'Teacher'
+
+    @property
+    def avatar_path(self):
+        return self.avatar if os.path.exists(os.path.join(current_app.config['UPLOADED_PHOTOS_DEST'], self.avatar)) else 'default.jpg'
     
     def verify_password(self, password):
         return check_password_hash(self.password_hash, password)

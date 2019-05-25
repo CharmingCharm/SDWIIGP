@@ -15,7 +15,7 @@
 			<div class="text-center">
 				<a href="javascript:void(0)" data-toggle="modal" data-target="#modal_change_avatar">
 					<img class="card-profile-img"
-						src="{{ url_for('static', filename = 'avatars/' + (user.avatar if user.avatar else 'default.jpg')) }}">
+						src="{{ url_for('static', filename = 'avatars/' + user.avatar_path) }}">
 				</a>
 				<h3 class="mb-3" id="user_name">{{ user.user_name }}</h3>
 			</div>
