@@ -33,7 +33,7 @@
 				<td>
 					<a href="{{ url_for('problem.show', pid = sub.pid) }}">{{ sub.pid }}</a>
 				</td>
-				<td><a href="#">{{ sub.user.user_name }}</a></td>
+				<td><a href="{{ url_for('user.profilelala', uid = sub.user.uid) }}">{{ sub.user.user_name }}</a></td>
 				<td>
 					{% if sub.status == 'hidden' or sub.score == None %}-{% else %}
 					<a href="{{ url_for('submission.show', sid = sub.sid) }}">{{ sub.score }}</a>

@@ -59,6 +59,14 @@ def profile():
 	form.item_per_page.data = current_user.item_per_page
 	return render_template('profile.html', form = form)
 
+@user.route('/profilelala/<int:uid>', methods = ['GET'])
+@login_required
+def profilelala(uid):
+	if uid == current_user.uid:
+		return redirect(url_for('user.profile'))
+	user = User.query.filter(User.uid == uid).first()
+	return render_template('profilelala.html', user = user)
+
 @user.route('/change_avatar', methods = ['POST'])
 @login_required
 def change_avatar():

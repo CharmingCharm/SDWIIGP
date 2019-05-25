@@ -1,0 +1,43 @@
+{% extends 'base_index.html' %}
+{% set page_title = 'My Profile' %}
+
+{% import 'base_macros.html' as macros %}
+
+{% block page_content %}
+<div class="row" style="padding: 0px 200px;">
+	<div class="page-header">
+		<h1 class="page-title">
+			Edit Profile
+		</h1>
+	</div>
+	<div class="card card-profile">
+		<div class="card-body">
+			<div class="text-center">
+				<a href="javascript:void(0)" data-toggle="modal" data-target="#modal_change_avatar">
+					<img class="card-profile-img"
+						src="{{ url_for('static', filename = 'avatars/' + (user.avatar if user.avatar else 'default.jpg')) }}">
+				</a>
+				<h3 class="mb-3" id="user_name">{{ user.user_name }}</h3>
+			</div>
+			<hr>
+			<div class="row">
+				<div class="col-sm-6">
+					<div class="form-group" align="center">
+						<label class="form-label">User ID</label>
+						<div class="form-control-plaintext">{{ user.uid }}</div>
+					</div>
+				</div>
+				<div class="col-sm-6">
+					<div class="form-group" align="center">
+						<label class="form-label">Position</label>
+						<div class="form-control-plaintext">{% if user.is_teacher %}Teacher{% else %}Student{% endif %}</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div>
+		<a href="javascript:history.back()" role="button" class="btn btn-azure btn-pill">&lt&lt Back</a>
+	</div>
+</div>
+{% endblock %}
