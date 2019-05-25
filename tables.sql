@@ -40,7 +40,7 @@ CREATE TABLE `announcement` (
   `uid` int(11) DEFAULT NULL,
   `title` varchar(64) NOT NULL,
   `description` text NOT NULL,
-  `date_time` datetime NOT NULL,
+  `publish_time` datetime NOT NULL,
   PRIMARY KEY (`aid`),
   KEY `uid` (`uid`),
   CONSTRAINT `announcement_ibfk_1` FOREIGN KEY (`uid`) REFERENCES `user` (`uid`)
@@ -97,22 +97,35 @@ CREATE TABLE `submission` (
   `uid` int(11) DEFAULT NULL,
   `code` text NOT NULL,
   `is_solution` tinyint(1) NOT NULL,
-  `date_time` datetime NOT NULL,
+  `submit_time` datetime NOT NULL,
   `testset_id` int(11) DEFAULT NULL,
-  `task_id` int(11) DEFAULT NULL,
   `result` text,
-  `full_score` decimal(6,2) DEFAULT NULL,
   `score` decimal(6,2) DEFAULT NULL,
   PRIMARY KEY (`sid`),
   KEY `pid` (`pid`),
   KEY `uid` (`uid`),
   KEY `testset_id` (`testset_id`),
-  KEY `task_id` (`task_id`),
   CONSTRAINT `submission_ibfk_1` FOREIGN KEY (`pid`) REFERENCES `problem` (`pid`),
   CONSTRAINT `submission_ibfk_2` FOREIGN KEY (`uid`) REFERENCES `user` (`uid`),
-  CONSTRAINT `submission_ibfk_3` FOREIGN KEY (`testset_id`) REFERENCES `testset` (`testset_id`),
-  CONSTRAINT `submission_ibfk_4` FOREIGN KEY (`task_id`) REFERENCES `task` (`task_id`)
+  CONSTRAINT `submission_ibfk_3` FOREIGN KEY (`testset_id`) REFERENCES `testset` (`testset_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `submission_in_task`
+--
+
+DROP TABLE IF EXISTS `submission_in_task`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `submission_in_task` (
+  `sid` int(11) NOT NULL,
+  `task_id` int(11) NOT NULL,
+  PRIMARY KEY (`sid`,`task_id`),
+  KEY `task_id` (`task_id`),
+  CONSTRAINT `submission_in_task_ibfk_1` FOREIGN KEY (`sid`) REFERENCES `submission` (`sid`),
+  CONSTRAINT `submission_in_task_ibfk_2` FOREIGN KEY (`task_id`) REFERENCES `task` (`task_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -164,19 +177,19 @@ CREATE TABLE `task` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Table structure for table `task_for_user_group`
+-- Table structure for table `task_for_usergroup`
 --
 
-DROP TABLE IF EXISTS `task_for_user_group`;
+DROP TABLE IF EXISTS `task_for_usergroup`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `task_for_user_group` (
+CREATE TABLE `task_for_usergroup` (
   `gid` int(11) NOT NULL,
   `task_id` int(11) NOT NULL,
   PRIMARY KEY (`gid`,`task_id`),
   KEY `task_id` (`task_id`),
-  CONSTRAINT `task_for_user_group_ibfk_1` FOREIGN KEY (`gid`) REFERENCES `user_group` (`gid`),
-  CONSTRAINT `task_for_user_group_ibfk_2` FOREIGN KEY (`task_id`) REFERENCES `task` (`task_id`)
+  CONSTRAINT `task_for_usergroup_ibfk_1` FOREIGN KEY (`gid`) REFERENCES `user_group` (`gid`),
+  CONSTRAINT `task_for_usergroup_ibfk_2` FOREIGN KEY (`task_id`) REFERENCES `task` (`task_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -221,6 +234,7 @@ DROP TABLE IF EXISTS `testset`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `testset` (
   `testset_id` int(11) NOT NULL AUTO_INCREMENT,
+  `full_score` decimal(6,2) NOT NULL DEFAULT '0.00',
   PRIMARY KEY (`testset_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -285,4 +299,4 @@ CREATE TABLE `user_in_group` (
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2019-05-19 21:05:33
+-- Dump completed on 2019-05-25 22:28:09
