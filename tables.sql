@@ -96,7 +96,7 @@ CREATE TABLE `submission` (
   `pid` int(11) DEFAULT NULL,
   `uid` int(11) DEFAULT NULL,
   `code` text NOT NULL,
-  `is_solution` tinyint(1) NOT NULL,
+  `is_solution` tinyint(1) NOT NULL DEFAULT '0',
   `submit_time` datetime NOT NULL,
   `testset_id` int(11) DEFAULT NULL,
   `result` text,
@@ -173,7 +173,7 @@ CREATE TABLE `task` (
   `deadline` datetime NOT NULL,
   `description` text NOT NULL,
   PRIMARY KEY (`task_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -250,7 +250,7 @@ CREATE TABLE `user` (
   `uid` int(11) NOT NULL AUTO_INCREMENT,
   `user_name` varchar(64) NOT NULL,
   `password_hash` varchar(256) NOT NULL,
-  `is_teacher` tinyint(1) NOT NULL,
+  `is_teacher` tinyint(1) NOT NULL DEFAULT '0',
   `avatar` varchar(256) NOT NULL DEFAULT 'default.jpg',
   `item_per_page` int(11) NOT NULL DEFAULT '20',
   PRIMARY KEY (`uid`),
@@ -270,7 +270,7 @@ CREATE TABLE `user_group` (
   `group_name` varchar(64) NOT NULL,
   `description` text NOT NULL,
   PRIMARY KEY (`gid`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -299,4 +299,4 @@ CREATE TABLE `user_in_group` (
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2019-05-25 22:28:09
+-- Dump completed on 2019-05-26 22:31:07
