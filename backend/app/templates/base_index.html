@@ -39,22 +39,6 @@
 	<script src="{{ url_for('static', filename='plugins/datatables/plugin.js') }}"></script>
 
 	<script>
-		// Get currentUser
-		/*
-		var currentUser;
-		require(['jquery'], function ($) {
-			$.ajax({
-				type: "GET",
-				async: false,
-				url: "{{ url_for('api.get_user') }}",
-				dataType: "json",
-				success: function (data) {
-					currentUser = data;
-				},
-			});
-		});
-		*/
-
 		// Set global dependence variable for Editor.md
 		var editormd_deps = [
 			"editormd",
@@ -169,34 +153,6 @@
 				<div class="container">
 					{% block page_content %}{% endblock %}
 				</div>
-
-				<script>
-					require(['jquery'], function () {
-						$(document).ready(function () {
-
-							function setCookie(name, value, days) {
-								var expires = "";
-								if (days) {
-									var date = new Date();
-									date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
-									expires = "; expires=" + date.toUTCString();
-								}
-								document.cookie = name + "=" + (value || "") + expires + "; path=/";
-							}
-
-							function getCookie(name) {
-								var nameEQ = name + "=";
-								var ca = document.cookie.split(';');
-								for (var i = 0; i < ca.length; i++) {
-									var c = ca[i];
-									while (c.charAt(0) == ' ') c = c.substring(1, c.length);
-									if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length, c.length);
-								}
-								return null;
-							}
-						});
-					});
-				</script>
 			</div>
 		</div>
 		<footer class="footer">
