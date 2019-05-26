@@ -46,13 +46,17 @@
 							class="icon delete_task ml-1">
 							<i class="fe fe-x"></i>
 						</a>
-					</Td>
+					</td>
 					{% endif %}
 				</tr>
 				{% endfor %}
 			</tbody>
 		</table>
-		{{ macros.my_paginate(pagination,'task.tasklist') }}
+	</div>
+	<div class="card-footer p-0">
+		<div class="d-flex flex-column align-items-end">
+			{{ macros.my_paginate(pagination) }}
+		</div>
 	</div>
 </div>
 
@@ -63,6 +67,11 @@
 <script>
 	require(['jquery'], function ($) {
 		$().ready(function () {
+			$('.submit_next_page').click(function () {
+				window.location.search = "page="+ $(this).attr('next-page');
+			});
+
+			{% if current_user.is_teacher %}
 			$('.delete_task').click(function () {
 				var task = $(this).parent().parent();
 				$('#name_delete_task').html(task.find('.task_name').html());
@@ -78,6 +87,7 @@
 					}
 				);
 			});
+			{% endif %}
 		});
 	});
 </script>

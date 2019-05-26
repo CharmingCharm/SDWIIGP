@@ -10,18 +10,18 @@ from datetime import datetime
 task = Blueprint('task', __name__)
 
 @task.route('/', methods = ['GET', 'POST'])
-@task.route('/<int:page>', methods = ['GET', 'POST'])
 @login_required
-def tasklist(page = 1):
+def tasklist():
+	page = request.values.get('page') or 1
 	if not current_user.is_teacher:
 		tasks = Task.query.join(Task.groups, UserGroup.users).filter(User.uid == current_user.uid)
 	else:
 		tasks = Task.query
-	pagination = tasks.paginate(page = page, per_page = current_user.item_per_page)
+	pagination = tasks.paginate(page = int(page), per_page = current_user.item_per_page)
 	tasks = pagination.items
 	return render_template('tasklist.html', tasks = tasks, pagination = pagination)
 
-@task.route('/show/<int:task_id>', methods = ['GET', 'POST'])
+@task.route('/<int:task_id>', methods = ['GET', 'POST'])
 @login_required
 def show(task_id):
 	available = current_user.groups.join(UserGroup.tasks).filter(Task.task_id == task_id).count() > 0

@@ -1,10 +1,12 @@
-from flask import Blueprint, current_app, redirect, url_for, flash, request, json, abort, jsonify
-from flask_paginate import Pagination, get_page_parameter
+from flask import (Blueprint, abort, current_app, flash, json, jsonify,
+					redirect, request, url_for)
 from flask_login import current_user, login_required
-from app.form import FormUserGroup, FormUsers, FormUserSingle, FormGroupList
-from app.model import serialize, Problem, Tag, UserGroup, User, UserInGroup
-from . import render_template, admin_required
+
 from app.extension import db
+from app.form import FormGroupList, FormUserGroup, FormUsers, FormUserSingle
+from app.model import Problem, Tag, User, UserGroup, UserInGroup, serialize
+
+from . import admin_required, render_template
 
 admin = Blueprint('admin', __name__)
 
@@ -58,9 +60,8 @@ def change_tag():
 	return 'success'
 
 @admin.route('/userGroup', methods = ['GET', 'POST'])
-@admin.route('/userGroup/<int:page>', methods = ['GET', 'POST'])
 @admin_required
-def userGroup(page = 1):
+def userGroup():
 	form = FormGroupList()
 	if form.groups.__len__():
 		print(form.groups.__getitem__(0).group_name)
@@ -70,7 +71,8 @@ def userGroup(page = 1):
 				UserGroup.query.filter_by(gid = groupForm.gid.data).delete()
 				flash('Delete successfully!','success')
 
-	pagination = UserGroup.query.paginate(page=page,per_page=current_user.item_per_page)
+	page = request.values.get('page') or 1
+	pagination = UserGroup.query.paginate(page = int(page), per_page = current_user.item_per_page)
 	user_groups = pagination.items
 	for group in user_groups:
 		groupForm = FormUserGroup()

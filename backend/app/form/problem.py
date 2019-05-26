@@ -26,3 +26,20 @@ class FormProblem(FlaskForm):
 			self.description.data = problem.description
 			self.level.data = problem.level
 			self.tags.data = problem.tags.all()
+
+class FormProblemFilter(FlaskForm):
+	level = SelectField('Level', choices = [('0', 'All levels'), ('1', '1'), ('2', '2'), ('3', '3')])
+	title = StringField('Problem Title')
+	tag_id = StringField('tag_id')
+	page = StringField('page')
+
+	def __init__(self, *args, **kwargs):
+		super().__init__(*args, **kwargs)
+		self.level.data = request.values.get('level') or 0
+		self.title.data = request.values.get('title')
+		self.tag_id.data = request.values.get('tag_id')
+		self.page.data = request.values.get('page') or 1
+
+	@property
+	def collapsed(self):
+		return int(self.level.data) == 0 and (not self.title.data)

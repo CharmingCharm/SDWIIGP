@@ -7,20 +7,65 @@
 {% block page_content %}
 <div class="row row-cards">
 	<div class="col-lg-9">
+		<div class="card {% if form.collapsed %}card-collapsed{% endif %}">
+			<div class="card-header">
+				<h3 class="card-title">Problem Filter</h3>
+				<div class="card-options">
+					<a href="javascript:void(0)" class="card-options-collapse" data-toggle="card-collapse"><i class="fe fe-chevron-up"></i></a>
+				</div>
+			</div>
+			<div class="card-body">
+				<form id="filter_form" method="get" role="form">
+					{{ form.tag_id(class = 'd-none') }}
+					{{ form.page(class = 'd-none') }}
+					<div class="row">
+						<div class="col-md-3">
+							<div class="form-group">
+								<div class="input-group">
+									{{ form.level(class = "form-control") }}
+									<span class="input-group-append">
+										<button class="btn btn-primary submit_refresh_page" type="button">
+											<span class="fe fe-search"></span>
+										</button>
+									</span>
+								</div>
+							</div>
+						</div>
+						<div class="col-md-6">
+							<div class="form-group">
+								<div class="input-group">
+									{{ form.title(class = "form-control", placeholder = "Search title") }}
+									<span class="input-group-append">
+										<button class="btn btn-default" id="clear_filter_title" type="button">
+											<span class="fe fe-delete"></span>
+										</button>
+										<button class="btn btn-primary submit_refresh_page" type="button">
+											<span class="fe fe-search"></span>
+										</button>
+									</span>
+								</div>
+							</div>
+						</div>
+					</div>
+				</form>
+			</div>
+		</div>
 		<div class="card">
 			<div class="card-header">
-				<div class="card-title">
-					<div style="display: inline-block">
+				<h3 class="card-title">Problem Set</h3>
+				<div class="d-flex ml-auto" style="margin-right: -.5rem">
+					{% if current_user.is_teacher %}
+					<a href="{{ url_for('problem.new') }}" class="btn btn-sm btn-secondary mr-2">New Problem</a>
+					{% endif %}
+					<div class="d-inline-block">
 						<div class="input-group">
-							<input type="text" class="form-control form-control-sm" placeholder="Problem ID" id="pid"
-								name="title">
-							<span class="input-group-append">
+							<input type="text" class="form-control form-control-sm" id="pid" placeholder="Problem ID" style="width: 100px">
+							<div class="input-group-append">
 								<button class="btn btn-sm btn-primary" type="button" id="goto_problem">
 									Go!
 								</button>
 								{% if current_user.is_teacher %}
-								<button data-toggle="dropdown" type="button"
-									class="btn btn-primary btn-sm dropdown-toggle"></button>
+								<button data-toggle="dropdown" type="button" class="dropdown-toggle btn btn-sm btn-primary"></button>
 								<div class="dropdown-menu dropdown-menu-right">
 									<a id='goto_edit' class="dropdown-item" href="javascript:void(0)">
 										Edit
@@ -37,37 +82,19 @@
 									require(['jquery'], function ($) {
 										$().ready(function () {
 											$('#goto_edit').click(function () {
-												window.location.href = '/admin/problem/' + $('#pid').val();
+												window.location.href = '/problem/edit/' + $('#pid').val();
+											});
+											
+											$('#goto_testset').click(function () {
+												window.location.href = '/problem/testset/' + $('#pid').val();
 											});
 										});
 									});
 								</script>
 								{% endif %}
-							</span>
+							</div>
 						</div>
 					</div>
-					{% if current_user.is_teacher %}
-					<a href="{{ url_for('problem.new') }}" class="btn btn-sm btn-secondary ml-1">New Problem</a>
-					{% endif %}
-				</div>
-				<div class="card-options">
-					<form id="filter_form" method="post">
-						<div class="input-group">
-							<input type="text" class="form-control form-control-sm" placeholder="Search title"
-								id="title" name="title" value="{{ filter_title }}">
-							<span class="input-group-append">
-								<button class="btn btn-sm btn-default" type="submit">
-									<span class="fe fe-search"></span>
-								</button>
-								{% if filter_title %}
-								<button class="btn btn-sm btn-default" type="button" id="clear_filter_title">
-									<span class="fe fe-x"></span>
-								</button>
-								{% endif %}
-							</span>
-						</div>
-						<input type="hidden" id="tag_id" name="tag_id" value="{{ filter_tag_id }}">
-					</form>
 				</div>
 			</div>
 			<div class="table-responsive">
@@ -122,24 +149,27 @@
 					</tbody>
 				</table>
 			</div>
+			<div class="card-footer p-0">
+				<div class="d-flex flex-column align-items-end">
+				{{ macros.my_paginate(pagination) }}
+				</div>
+			</div>
 		</div>
 	</div>
 	<div class="col-lg-3">
 		<div class="card">
 			<div class="card-header">
 				<h3 class="card-title">Tags</h3>
-				{% if filter_tag_id %}
+				{% if form.tag_id.data %}
 				<div class="card-options">
-					<button id="clear_filter_tag" class="btn btn-secondary btn-sm">
-						<span class="fe fe-x"></span>
-					</button>
+					<button id="clear_filter_tag" class="btn btn-secondary btn-sm">Clear</button>
 				</div>
 				{% endif %}
 			</div>
 			<div class="card-body tags">
 				{% for tag in tags %}
 				<a href="javascript:void(0)" value="{{ tag.tag_id }}"
-					class="add_filter_tag tag tag-rounded{% if tag.tag_id|string == filter_tag_id %} tag-azure{% endif %}">{{ tag.tag_name }}</a>
+					class="add_filter_tag tag tag-rounded{% if tag.tag_id|string == form.tag_id.data %} tag-azure{% endif %}">{{ tag.tag_name }}</a>
 				{% endfor %}
 			</div>
 		</div>
@@ -153,6 +183,10 @@
 <script>
 	require(['jquery', 'bootstrap'], function ($) {
 		$().ready(function () {
+			$('#goto_problem').click(function () {
+				window.location.href = '/problem/' + $('#pid').val();
+			});
+
 			$("#pid").keypress(function (e) {
 				var keyCode = e.keyCode ? e.keyCode : e.which ? e.which : e.charCode;
 				if (keyCode == 13) {
@@ -161,26 +195,38 @@
 				}
 			});
 
-			$('#goto_problem').click(function () {
-				window.location.href = '/problem/' + $('#pid').val();
+			$("#title").keypress(function (e) {
+				var keyCode = e.keyCode ? e.keyCode : e.which ? e.which : e.charCode;
+				if (keyCode == 13) {
+					$('#page').val('');
+					$('#filter_form').submit();
+					return false;
+				}
 			});
 
-			$('#goto_testset').click(function () {
-				window.location.href = '/problem/testset/' + $('#pid').val();
+			$('.submit_refresh_page').click(function () {
+				$('#page').val('');
+				$('#filter_form').submit();
+			});
+
+			$('.submit_next_page').click(function () {
+				$('#page').val($(this).attr('next-page'));
+				$('#filter_form').submit();
 			});
 
 			$('#clear_filter_title').click(function () {
 				$('#title').val('');
-				$('#filter_form').submit();
 			});
 
 			$('#clear_filter_tag').click(function () {
 				$('#tag_id').val('');
+				$('#page').val('');
 				$('#filter_form').submit();
 			});
 
 			$('.add_filter_tag').click(function () {
 				$('#tag_id').val($(this).attr('value'));
+				$('#page').val('');
 				$('#filter_form').submit();
 			});
 

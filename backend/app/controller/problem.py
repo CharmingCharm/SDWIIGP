@@ -1,7 +1,7 @@
 from flask import Blueprint, current_app, redirect, url_for, flash, request, abort, json
 from flask_login import current_user, login_required
 from app.model import serialize, Problem, Tag, Test, TestSet, Submission
-from app.form import FormProblem
+from app.form import FormProblem, FormProblemFilter
 from . import render_template, admin_required
 from app.extension import db
 from decimal import Decimal
@@ -13,23 +13,25 @@ problem = Blueprint('problem', __name__)
 @login_required
 def problemset():
 	problems = Problem.query
-	filter_tag_id = request.values.get('tag_id')
-	filter_title = request.values.get('title')
-	if filter_tag_id:
-		problems = problems.join(Problem.tags).filter(Tag.tag_id == filter_tag_id)
-	if filter_title:
-		problems = problems.filter(Problem.title.ilike("%{0}%".format(filter_title)))
+	form = FormProblemFilter()
+	if form.title.data:
+		problems = problems.filter(Problem.title.ilike("%{0}%".format(form.title.data)))
+	if form.level.data and (form.level.data != "0"):
+		problems = problems.filter(Problem.level == form.level.data)
+	if form.tag_id.data:
+		problems = problems.join(Problem.tags).filter(Tag.tag_id == form.tag_id.data)
 	if not current_user.is_teacher:
 		problems = problems.filter(Problem.visible == True)
-	problems = problems.all()
+	pagination = problems.paginate(page = int(form.page.data), per_page = current_user.item_per_page)
+	problems = pagination.items
 	for problem in problems:
 		problem.sub = problem.get_user_sub()
 	return render_template(
 		'problem/problemset.html',
 		problems = problems,
-		tags = [serialize(tag) for tag in Tag.query.all()],
-		filter_tag_id = filter_tag_id if filter_tag_id else '',
-		filter_title = filter_title if filter_title else '',
+		tags = Tag.query.all(),
+		form = form,
+		pagination = pagination,
 	)
 
 @problem.route('/<int:pid>', methods = ['GET', 'POST'])

@@ -9,64 +9,133 @@
 		Status
 	</h1>
 </div>
-<div class="card">
-	<table class="table card-table table-striped">
-		<thead>
-			<tr>
-				<th>Status</th>
-				<th>#</th>
-				<th>Problem ID</th>
-				<th>User</th>
-				<th>Score</th>
-				<th>Submission Time</th>
-				<th>Solution</th>
-			</tr>
-		</thead>
-		<tbody>
+<div class="row row-cards">
+	<div class="col-12">
+		<div class="card {% if form.collapsed %}card-collapsed{% endif %}">
+			<div class="card-header">
+				<h3 class="card-title">Submission Filter</h3>
+				<div class="card-options">
+					<a href="javascript:void(0)" class="card-options-collapse" data-toggle="card-collapse"><i class="fe fe-chevron-up"></i></a>
+				</div>
+			</div>
+			<div class="card-body">
+				<form id="filter_form" method="get" role="form">
+					{{ form.page(class = 'd-none') }}
+					<div class="row">
+						<div class="col-md-3">
+							<div class="form-group">
+								<div class="input-group">
+									{{ form.pid(class = "form-control", placeholder = "Problem ID") }}
+									<span class="input-group-append">
+										<button class="btn btn-primary submit_refresh_page" type="button">
+											<span class="fe fe-search"></span>
+										</button>
+									</span>
+								</div>
+							</div>
+						</div>
+						<div class="col-md-3">
+							<div class="form-group">
+								<div class="input-group">
+									{{ form.uid(class = "form-control", placeholder = "User ID") }}
+									<span class="input-group-append">
+										<button class="btn btn-primary submit_refresh_page" type="button">
+											<span class="fe fe-search"></span>
+										</button>
+									</span>
+								</div>
+							</div>
+						</div>
+					</div>
+				</form>
+			</div>
+		</div>
+		<div class="card">
+			<table class="table card-table table-striped">
+				<thead>
+					<tr>
+						<th>Status</th>
+						<th>#</th>
+						<th>Problem ID</th>
+						<th>User</th>
+						<th>Score</th>
+						<th>Submission Time</th>
+						<th>Solution</th>
+					</tr>
+				</thead>
+				<tbody>
 
-			{% for sub in submissions %}
-			<tr>
-				<td>
-					{{ macros.status_tag(sub.status, url_for('submission.show', sid = sub.sid)) }}
-				</td>
-				<td><a href="{{ url_for('submission.show', sid = sub.sid) }}">{{ sub.sid }}</a></td>
-				<td>
-					<a href="{{ url_for('problem.show', pid = sub.pid) }}">{{ sub.pid }}</a>
-				</td>
-				<td><a href="{{ url_for('user.profilelala', uid = sub.user.uid) }}">{{ sub.user.user_name }}</a></td>
-				<td>
-					{% if sub.status == 'hidden' or sub.score == None %}-{% else %}
-					<a href="{{ url_for('submission.show', sid = sub.sid) }}">{{ sub.score }}</a>
-					{% endif %}
-				</td>
-				<td>{{ sub.submit_time }}</td>
-				<td>
-					{% if sub.is_solution %}
-					<a href="javascript:void(0)" value="{{ sub.sid }}" class="tag tag-azure sub_status">Yes</a>
-					{% elif current_user.is_teacher %}
-					<a href="javascript:void(0)" value="{{ sub.sid }}" class="tag sub_status">No</a>
-					{% endif %}
-				</td>
-			</tr>
-			{% endfor %}
+					{% for sub in submissions %}
+					<tr>
+						<td>
+							{{ macros.status_tag(sub.status, url_for('submission.show', sid = sub.sid)) }}
+						</td>
+						<td><a href="{{ url_for('submission.show', sid = sub.sid) }}">{{ sub.sid }}</a></td>
+						<td>
+							<a href="{{ url_for('problem.show', pid = sub.pid) }}">{{ sub.pid }}</a>
+						</td>
+						<td><a href="{{ url_for('user.profilelala', uid = sub.user.uid) }}">{{ sub.user.user_name }}</a>
+						</td>
+						<td>
+							{% if sub.status == 'hidden' or sub.score == None %}-{% else %}
+							<a href="{{ url_for('submission.show', sid = sub.sid) }}">{{ sub.score }}</a>
+							{% endif %}
+						</td>
+						<td>{{ sub.submit_time }}</td>
+						<td>
+							{% if sub.is_solution %}
+							<a href="javascript:void(0)" value="{{ sub.sid }}" class="tag tag-azure sub_status">Yes</a>
+							{% elif current_user.is_teacher %}
+							<a href="javascript:void(0)" value="{{ sub.sid }}" class="tag sub_status">No</a>
+							{% endif %}
+						</td>
+					</tr>
+					{% endfor %}
 
-		</tbody>
-	</table>
-	{{ macros.my_paginate(pagination,'submission.status') }}
+				</tbody>
+			</table>
+			<div class="card-footer p-0">
+				<div class="d-flex flex-column align-items-end">
+					{{ macros.my_paginate(pagination) }}
+				</div>
+			</div>
+		</div>
+	</div>
 </div>
-{% if current_user.is_teacher %}
 <script>
 	require(['jquery'], function ($) {
-		$('.sub_status').click(function () {
-			$.post(
-				"{{ url_for('main.change_status') }}",
-				{ sid: $(this).attr('value') },
-				function () {
-					window.location.reload();
+		$().ready(function () {
+			$('.submit_next_page').click(function () {
+				$('#page').val($(this).attr('next-page'));
+				$('#filter_form').submit();
+			});
+
+			$('.submit_refresh_page').click(function () {
+				$('#page').val('');
+				$('#filter_form').submit();
+			});	
+			
+			$("#pid, #uid").keypress(function (e) {
+				var keyCode = e.keyCode ? e.keyCode : e.which ? e.which : e.charCode;
+				if (keyCode == 13) {
+					$('#page').val('');
+					$('#filter_form').submit();
+					return false;
 				}
-			);
+			});
+			
+			{% if current_user.is_teacher %}
+			$('.sub_status').click(function () {
+				$.post(
+					"{{ url_for('main.change_status') }}",
+					{ sid: $(this).attr('value') },
+					function () {
+						window.location.reload();
+					}
+				);
+			});
+			{% endif %}
 		});
 	});
 </script>
-{% endif %}
 {% endblock %}

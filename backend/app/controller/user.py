@@ -95,13 +95,12 @@ def change_avatar():
 	return redirect(url_for('user.profile'))
 
 @user.route('/admin', methods = ['GET', 'POST'])
-@user.route('/admin/<int:page>', methods = ['GET', 'POST'])
 @admin_required
-def admin(page = 1):
+def admin():
 	form = FormUsers()
 	if form.addID.data and form.new_user_name.data and form.new_position.data:
 		if User.query.filter_by(user_name = form.new_user_name.data).first():
-			flash(form.new_user_name.data + ' is exist, change your name!','error')
+			flash(form.new_user_name.data + ' exists, please change the name!','error')
 		else:
 			db.session.add(User(user_name=form.new_user_name.data,
 								password=form.new_user_name.data,
@@ -121,7 +120,8 @@ def admin(page = 1):
 				User.query.filter_by(uid = userForm.uid.data).delete()
 				flash('Delete successfully!','success')
 
-	pagination = User.query.paginate(page=page,per_page=current_user.item_per_page)
+	page = request.values.get('page') or 1
+	pagination = User.query.paginate(page = int(page), per_page = current_user.item_per_page)
 	users = pagination.items
 	for user in users:
 		userForm = FormUserSingle()

@@ -9,7 +9,7 @@
         User group admin
     </h1>
 </div>
-<form role="form" method="post" name="form" action="{{ url_for('admin.userGroup') }}">
+<form role="form" method="post" name="form">
     {{ form.hidden_tag() }}
     {{ form.csrf_token }}
     <div class="card">
@@ -38,7 +38,21 @@
                 {% endfor %}
             </tbody>
         </table>
-        {{ macros.my_paginate(pagination,'admin.userGroup') }}
+		<div class="card-footer p-0">
+			<div class="d-flex flex-column align-items-end">
+				{{ macros.my_paginate(pagination) }}
+			</div>
+		</div>
     </div>
 </form>
+
+<script>
+    require(['jquery'], function ($) {
+        $().ready(function () {
+            $('.submit_next_page').click(function () {
+                window.location.search = "page="+ $(this).attr('next-page');
+            });
+        });
+    });
+</script>
 {% endblock %}

@@ -4,20 +4,26 @@ from app.model import serialize, Problem, Tag, Test, TestSet, Submission, Task, 
 from . import render_template, admin_required, str_time
 from app.extension import db
 from app.daemon import judge
-from app.form import FormRejudge
+from app.form import FormRejudge, FormSubmissionFilter
 from datetime import datetime
 
 submission = Blueprint('submission', __name__)
 
 @submission.route('/', methods = ['GET', 'POST'])
-@submission.route('/<int:page>', methods = ['GET', 'POST'])
 @login_required
-def status(page = 1):
-	pagination = Submission.query.order_by(Submission.sid.desc()).paginate(page=page,per_page=current_user.item_per_page)
+def status():
+	form = FormSubmissionFilter()
+	submissions = Submission.query.order_by(Submission.sid.desc())
+	if form.pid.data:
+		submissions = submissions.filter(Submission.pid == form.pid.data)
+	if form.uid.data:
+		submissions = submissions.filter(Submission.uid == form.uid.data)
+	
+	pagination = submissions.paginate(page = int(form.page.data), per_page = current_user.item_per_page)
 	submissions = pagination.items
-	return render_template('status.html', submissions = submissions, pagination = pagination)
+	return render_template('status.html', submissions = submissions, form = form, pagination = pagination)
 
-@submission.route('/show/<int:sid>', methods = ["GET"])
+@submission.route('/<int:sid>', methods = ["GET"])
 @login_required
 def show(sid):
 	sub = Submission.query.filter_by(sid = sid)
