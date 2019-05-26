@@ -9,7 +9,7 @@ class FormUserGroup(FlaskForm):
     gid = IntegerField('Username', render_kw = {'readonly':'expression(this.readOnly=false)'})
     group_name = StringField('Group name')
     number = IntegerField('Number of members')
-    description = TextAreaField('Decription', render_kw = {'rows': 6})
+    description = TextAreaField('Description', render_kw = {'rows': 6})
 
     deleteID = SubmitField()
     changeID = SubmitField()
