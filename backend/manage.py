@@ -25,5 +25,13 @@ def adduser(name, pwd, teacher):
     db.session.add(User(user_name = name, password = pwd, is_teacher = is_teacher))
     db.session.commit()
 
+@manager.command
+def generate_user():
+    for i in range(50000):
+        name = "m7300%05d" % (i + 1)
+        db.session.add(User(user_name = name, password = name, is_teacher = False))
+        db.session.commit()
+        print(i)
+
 if __name__ == '__main__':
     manager.run()
