@@ -11,7 +11,7 @@ main = Blueprint('main', __name__)
 @main.route('/home', methods = ['GET', 'POST'])
 @login_required
 def home():
-    announcements = Announcement.query.order_by(Announcement.publish_time.desc()).limit(2).all()
+    announcements = Announcement.query.order_by(Announcement.aid.desc()).limit(2).all()
     return render_template('home.html', annos = announcements)
 
 @main.route('/change_status', methods = ['POST'])
