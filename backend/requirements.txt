@@ -8,5 +8,4 @@ Flask_Login
 Flask_WTF
 flask_uploads
 flask_rq2
-flask_paginate
 pillow
