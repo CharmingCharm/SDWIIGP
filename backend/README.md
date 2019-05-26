@@ -26,9 +26,7 @@
 	python manage.py adduser root password true
 	```
 
-5. Setup up redis (>=3.0.0)
-
-6. Start up judgers (Linux environment only)
+5. Setup Judger (Docker required)
 	```shell
-	python manage.py judger
+	docker-compose up -d
 	```
