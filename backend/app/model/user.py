@@ -10,7 +10,7 @@ class User(UserMixin, db.Model):
     uid = db.Column(db.Integer, primary_key = True, autoincrement = True)
     user_name = db.Column(db.String(64), nullable = False, unique = True)
     password_hash = db.Column(db.String(256), nullable = False)
-    is_teacher = db.Column(db.Boolean(), nullable = False, default = False)
+    is_teacher = db.Column(db.Boolean(), nullable = False, server_default = '0')
     avatar = db.Column(db.String(256), nullable = False, server_default = 'default.jpg')
     item_per_page = db.Column(db.Integer, nullable = False, server_default = '20')
 	

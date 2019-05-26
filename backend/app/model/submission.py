@@ -13,7 +13,7 @@ class Submission(db.Model):
 	result = db.Column(db.Text, nullable = True)
 	score = db.Column(db.DECIMAL(6,2), nullable = True)
 	code = db.Column(db.Text, nullable = False)
-	is_solution = db.Column(db.Boolean(), default = False, nullable = False)
+	is_solution = db.Column(db.Boolean(), nullable = False, server_default = '0')
 	submit_time = db.Column(db.DateTime(), nullable = False, default = datetime.now)
 
 	problem = db.relationship('Problem', backref = db.backref('submissions', lazy = 'dynamic'))
