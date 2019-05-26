@@ -87,7 +87,7 @@ def delete():
 def search_problem():
 	search = request.values.get('search')
 	filter_search = "%{0}%".format(search)
-	problems = Problem.query.filter(or_(Problem.title.ilike(filter_search), Problem.pid == search)).all()
+	problems = Problem.query.filter(or_(Problem.title.ilike(filter_search), Problem.pid == search)).limit(10).all()
 	return json.jsonify({
 		'problems': [serialize(problem, 'pid', 'title') for problem in problems]
 	})
@@ -97,7 +97,7 @@ def search_problem():
 def search_group():
 	search = request.values.get('search')
 	filter_search = "%{0}%".format(search)
-	groups = UserGroup.query.filter(or_(UserGroup.group_name.ilike(filter_search), UserGroup.gid == search)).all()
+	groups = UserGroup.query.filter(or_(UserGroup.group_name.ilike(filter_search), UserGroup.gid == search)).limit(10).all()
 	return json.jsonify({
 		'groups': [serialize(group, 'gid', 'group_name') for group in groups]
 	})

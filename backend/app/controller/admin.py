@@ -99,7 +99,7 @@ def userGroupDetail(gid):
 @admin_required
 def search_new_user():
 	new_user_name = request.values.get('new_user_name')
-	users = User.query.filter(User.user_name.like('%%' + new_user_name + '%%')).all()
+	users = User.query.filter(User.user_name.like('%%' + new_user_name + '%%')).limit(10).all()
 	user_array = []
 	for user in users:
 		user_array.append({'uid':user.uid, 'user_name':user.user_name})
