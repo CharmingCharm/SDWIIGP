@@ -19,7 +19,7 @@ class FormProfile(FlaskForm):
     # user_name = StringField('Username', render_kw = {'disabled':''})
     # position = StringField('User\'s Position', render_kw = {'disabled':''})
     # position = SelectField('User\'s Position', choices = [("Teacher", "Teacher"), ("Student", "Student")], render_kw = {'disabled':''})
-    item_per_page = IntegerField('Change number of items per page')
+    item_per_page = IntegerField('Items per page')
     password = PasswordField('New Password')
     check_password = PasswordField('Confirm New Password')
     old_password = PasswordField('Old Password')
